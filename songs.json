@@ -3309,5 +3309,964 @@
       "duration_sec": 327,
       "loudness_lufs": -10.2
     }
+  },
+  {
+    "id": "song_071",
+    "artist": "PSY",
+    "title": "Gangnam Style",
+    "youtube_url": "https://www.youtube.com/watch?v=9bZkp7q19f0",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        13
+      ],
+      "mood": [
+        63,
+        47,
+        54
+      ],
+      "energy": 0.95,
+      "valence": 0.9,
+      "tempo_bpm": 132,
+      "era_year": 2012,
+      "language": 4,
+      "instrumentation": [
+        13,
+        0,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.98,
+      "yt_views": 5000000000,
+      "regionality": [
+        4,
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 219,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_072",
+    "artist": "Zico",
+    "title": "Any Song",
+    "youtube_url": "https://www.youtube.com/watch?v=UuV2BmJ1p_I",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      41
+    ],
+    "tags": {
+      "subgenres": [
+        37,
+        56
+      ],
+      "mood": [
+        63,
+        47,
+        13
+      ],
+      "energy": 0.88,
+      "valence": 0.85,
+      "tempo_bpm": 125,
+      "era_year": 2020,
+      "language": 4,
+      "instrumentation": [
+        0,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 280000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 183,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_073",
+    "artist": "Big Bang",
+    "title": "Fantastic Baby",
+    "youtube_url": "https://www.youtube.com/watch?v=AAbokV76tkU",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        15
+      ],
+      "mood": [
+        48,
+        23,
+        50
+      ],
+      "energy": 0.95,
+      "valence": 0.75,
+      "tempo_bpm": 128,
+      "era_year": 2012,
+      "language": 4,
+      "instrumentation": [
+        13,
+        0,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 620000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 216,
+      "loudness_lufs": -6.8
+    }
+  },
+  {
+    "id": "song_074",
+    "artist": "EXO",
+    "title": "Growl",
+    "youtube_url": "https://www.youtube.com/watch?v=I3dezFzsNss",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        49
+      ],
+      "mood": [
+        29,
+        11,
+        55
+      ],
+      "energy": 0.82,
+      "valence": 0.7,
+      "tempo_bpm": 120,
+      "era_year": 2013,
+      "language": 4,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 280000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 203,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_075",
+    "artist": "Sunmi",
+    "title": "Gashina",
+    "youtube_url": "https://www.youtube.com/watch?v=ur0hCdne2-s",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        57
+      ],
+      "mood": [
+        27,
+        11,
+        14
+      ],
+      "energy": 0.85,
+      "valence": 0.6,
+      "tempo_bpm": 125,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        13,
+        3,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 180000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 205,
+      "loudness_lufs": -7.8
+    }
+  },
+  {
+    "id": "song_076",
+    "artist": "Seventeen",
+    "title": "Don't Wanna Cry",
+    "youtube_url": "https://www.youtube.com/watch?v=zEkg4GBQumc",
+    "clip": {
+      "start_sec": 55,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        12
+      ],
+      "mood": [
+        21,
+        37,
+        17
+      ],
+      "energy": 0.75,
+      "valence": 0.5,
+      "tempo_bpm": 124,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        13,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.84,
+      "yt_views": 320000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 232,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_077",
+    "artist": "AKMU",
+    "title": "How Can I Love the Heartbreak, You're the One I Love",
+    "youtube_url": "https://www.youtube.com/watch?v=m3DZsBw5bnE",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        44
+      ],
+      "mood": [
+        37,
+        59,
+        17
+      ],
+      "energy": 0.55,
+      "valence": 0.4,
+      "tempo_bpm": 75,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        8,
+        4,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 220000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 247,
+      "loudness_lufs": -9.2
+    }
+  },
+  {
+    "id": "song_078",
+    "artist": "Crush",
+    "title": "Beautiful",
+    "youtube_url": "https://www.youtube.com/watch?v=5u8i9lbTA3c",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        36,
+        41
+      ],
+      "mood": [
+        57,
+        65,
+        53
+      ],
+      "energy": 0.6,
+      "valence": 0.75,
+      "tempo_bpm": 85,
+      "era_year": 2014,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.79,
+      "yt_views": 95000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 198,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_079",
+    "artist": "Heize",
+    "title": "Don't Know You",
+    "youtube_url": "https://www.youtube.com/watch?v=vvkWaI91mLM",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        36,
+        2
+      ],
+      "mood": [
+        37,
+        34,
+        57
+      ],
+      "energy": 0.5,
+      "valence": 0.35,
+      "tempo_bpm": 70,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        8,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.81,
+      "yt_views": 72000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 211,
+      "loudness_lufs": -10.2
+    }
+  },
+  {
+    "id": "song_080",
+    "artist": "Hyukoh",
+    "title": "Wi Ing Wi Ing",
+    "youtube_url": "https://www.youtube.com/watch?v=KpJYVMLi7Qk",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        32
+      ],
+      "mood": [
+        29,
+        38,
+        12
+      ],
+      "energy": 0.65,
+      "valence": 0.6,
+      "tempo_bpm": 112,
+      "era_year": 2015,
+      "language": 4,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.72,
+      "yt_views": 48000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 227,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_081",
+    "artist": "Girls' Generation",
+    "title": "Gee",
+    "youtube_url": "https://www.youtube.com/watch?v=U7mPqycQ0tQ",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        19
+      ],
+      "mood": [
+        63,
+        9,
+        6
+      ],
+      "energy": 0.92,
+      "valence": 0.95,
+      "tempo_bpm": 127,
+      "era_year": 2009,
+      "language": 4,
+      "instrumentation": [
+        13,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 290000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 193,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_082",
+    "artist": "iKON",
+    "title": "Love Scenario",
+    "youtube_url": "https://www.youtube.com/watch?v=vecSVX1QYbQ",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        44
+      ],
+      "mood": [
+        44,
+        51,
+        65
+      ],
+      "energy": 0.68,
+      "valence": 0.7,
+      "tempo_bpm": 88,
+      "era_year": 2018,
+      "language": 4,
+      "instrumentation": [
+        8,
+        13,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 580000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 212,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_083",
+    "artist": "Jay Park",
+    "title": "All I Wanna Do",
+    "youtube_url": "https://www.youtube.com/watch?v=IKZEmLvK_vA",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      41
+    ],
+    "tags": {
+      "subgenres": [
+        37,
+        36
+      ],
+      "mood": [
+        57,
+        29,
+        11
+      ],
+      "energy": 0.75,
+      "valence": 0.7,
+      "tempo_bpm": 92,
+      "era_year": 2016,
+      "language": 4,
+      "instrumentation": [
+        0,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 150000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 189,
+      "loudness_lufs": -8.8
+    }
+  },
+  {
+    "id": "song_084",
+    "artist": "Taeyeon",
+    "title": "Four Seasons",
+    "youtube_url": "https://www.youtube.com/watch?v=4HG_CJzyX6A",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        44
+      ],
+      "mood": [
+        51,
+        44,
+        20
+      ],
+      "energy": 0.58,
+      "valence": 0.65,
+      "tempo_bpm": 118,
+      "era_year": 2019,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        15,
+        12
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.83,
+      "yt_views": 95000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 226,
+      "loudness_lufs": -9.2
+    }
+  },
+  {
+    "id": "song_085",
+    "artist": "GOT7",
+    "title": "Just Right",
+    "youtube_url": "https://www.youtube.com/watch?v=vrdk3IGcau8",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        12
+      ],
+      "mood": [
+        63,
+        22,
+        47
+      ],
+      "energy": 0.82,
+      "valence": 0.85,
+      "tempo_bpm": 105,
+      "era_year": 2015,
+      "language": 4,
+      "instrumentation": [
+        13,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.81,
+      "yt_views": 240000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 199,
+      "loudness_lufs": -7.8
+    }
+  },
+  {
+    "id": "song_086",
+    "artist": "Mamamoo",
+    "title": "Decalcomanie",
+    "youtube_url": "https://www.youtube.com/watch?v=o0I8YjeWfQU",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        49
+      ],
+      "mood": [
+        11,
+        27,
+        48
+      ],
+      "energy": 0.88,
+      "valence": 0.65,
+      "tempo_bpm": 128,
+      "era_year": 2016,
+      "language": 4,
+      "instrumentation": [
+        13,
+        12,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.79,
+      "yt_views": 110000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 204,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_087",
+    "artist": "Stray Kids",
+    "title": "God's Menu",
+    "youtube_url": "https://www.youtube.com/watch?v=TQTlCHxyuu8",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        56,
+        15
+      ],
+      "mood": [
+        1,
+        32,
+        48
+      ],
+      "energy": 0.95,
+      "valence": 0.6,
+      "tempo_bpm": 140,
+      "era_year": 2020,
+      "language": 4,
+      "instrumentation": [
+        0,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.86,
+      "yt_views": 480000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 191,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_088",
+    "artist": "Paul Kim",
+    "title": "Every Day, Every Moment",
+    "youtube_url": "https://www.youtube.com/watch?v=4RFzMXpJpCQ",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        44,
+        35
+      ],
+      "mood": [
+        53,
+        65,
+        56
+      ],
+      "energy": 0.45,
+      "valence": 0.75,
+      "tempo_bpm": 68,
+      "era_year": 2018,
+      "language": 4,
+      "instrumentation": [
+        8,
+        4,
+        12,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 130000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 237,
+      "loudness_lufs": -10.8
+    }
+  },
+  {
+    "id": "song_089",
+    "artist": "Bolbbalgan4",
+    "title": "Galaxy",
+    "youtube_url": "https://www.youtube.com/watch?v=9U8uA702xrE",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        44
+      ],
+      "mood": [
+        44,
+        17,
+        65
+      ],
+      "energy": 0.55,
+      "valence": 0.7,
+      "tempo_bpm": 94,
+      "era_year": 2016,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 52000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 193,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_090",
+    "artist": "Aespa",
+    "title": "Next Level",
+    "youtube_url": "https://www.youtube.com/watch?v=4TWR90KJl84",
+    "clip": {
+      "start_sec": 55,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        38,
+        15,
+        56
+      ],
+      "mood": [
+        27,
+        48,
+        26
+      ],
+      "energy": 0.92,
+      "valence": 0.7,
+      "tempo_bpm": 130,
+      "era_year": 2021,
+      "language": 4,
+      "instrumentation": [
+        13,
+        0,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 420000000,
+      "regionality": [
+        6,
+        0,
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 214,
+      "loudness_lufs": -6.8
+    }
   }
 ]
