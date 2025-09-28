@@ -1232,7 +1232,7 @@
     "id": "song_038",
     "artist": "SZA",
     "title": "Good Days",
-    "youtube_url": "https://www.youtube.com/watch?v=LILRp6kWFV8",
+    "youtube_url": "https://www.youtube.com/watch?v=0BdlKkvjEgA",
     "clip": {
       "start_sec": 60,
       "preview_sec": 30
@@ -1424,7 +1424,7 @@
     "id": "song_042",
     "artist": "J Dilla",
     "title": "Don't Cry",
-    "youtube_url": "https://www.youtube.com/watch?v=tVkOw-Vyb_U",
+    "youtube_url": "https://www.youtube.com/watch?v=x-23FpWsTKk",
     "clip": {
       "start_sec": 20,
       "preview_sec": 30
@@ -1471,7 +1471,7 @@
     "id": "song_043",
     "artist": "Björk",
     "title": "Hyperballad",
-    "youtube_url": "https://www.youtube.com/watch?v=26sP2WsA5cY",
+    "youtube_url": "https://www.youtube.com/watch?v=6CSiU0j_lFA",
     "clip": {
       "start_sec": 50,
       "preview_sec": 30
@@ -1855,7 +1855,7 @@
     "id": "song_019",
     "artist": "Caribou",
     "title": "Can't Do Without You",
-    "youtube_url": "https://www.youtube.com/watch?v=KfFW4xPW19g",
+    "youtube_url": "https://www.youtube.com/watch?v=BI2Et19vDCM",
     "clip": {
       "start_sec": 45,
       "preview_sec": 30
@@ -2137,7 +2137,7 @@
     "id": "song_025",
     "artist": "Simon & Garfunkel",
     "title": "The Sound of Silence",
-    "youtube_url": "https://www.youtube.com/watch?v=4fWyzwo1xg0",
+    "youtube_url": "https://www.youtube.com/watch?v=6ukmjBSQY-c",
     "clip": {
       "start_sec": 30,
       "preview_sec": 30
@@ -2231,7 +2231,7 @@
     "id": "song_027",
     "artist": "Tyler, The Creator",
     "title": "See You Again",
-    "youtube_url": "https://www.youtube.com/watch?v=FlRNoh8R6Y0",
+    "youtube_url": "https://www.youtube.com/watch?v=NmvVhovjJI0",
     "clip": {
       "start_sec": 50,
       "preview_sec": 30
@@ -2890,7 +2890,7 @@
     "id": "song_062",
     "artist": "Måneskin",
     "title": "Beggin'",
-    "youtube_url": "https://www.youtube.com/watch?v=RVH5dn1cxAQ",
+    "youtube_url": "https://www.youtube.com/watch?v=Xg72z08aTXY",
     "clip": {
       "start_sec": 20,
       "preview_sec": 30
@@ -3220,7 +3220,7 @@
     "id": "song_069",
     "artist": "Jay-Z",
     "title": "Empire State of Mind",
-    "youtube_url": "https://www.youtube.com/watch?v=QsZlY0Vz4-o",
+    "youtube_url": "https://www.youtube.com/watch?v=vk6014HuxcE",
     "clip": {
       "start_sec": 55,
       "preview_sec": 30
@@ -3268,7 +3268,7 @@
     "id": "song_070",
     "artist": "Childish Gambino",
     "title": "Redbone",
-    "youtube_url": "https://www.youtube.com/watch?v=Kp7eSUU9oy8",
+    "youtube_url": "https://www.youtube.com/watch?v=nRJnZsB52Es",
     "clip": {
       "start_sec": 60,
       "preview_sec": 30
@@ -3659,7 +3659,7 @@
     "id": "song_078",
     "artist": "Crush",
     "title": "Beautiful",
-    "youtube_url": "https://www.youtube.com/watch?v=5u8i9lbTA3c",
+    "youtube_url": "https://www.youtube.com/watch?v=W0cs6ciCt_k",
     "clip": {
       "start_sec": 40,
       "preview_sec": 30
@@ -3756,7 +3756,7 @@
     "artist": "Hyukoh",
     "title": "Wi Ing Wi Ing",
     "title_kor": "위잉위잉",
-    "youtube_url": "https://www.youtube.com/watch?v=KpJYVMLi7Qk",
+    "youtube_url": "https://www.youtube.com/watch?v=IUoTjkS242c",
     "clip": {
       "start_sec": 50,
       "preview_sec": 30
@@ -3903,7 +3903,7 @@
     "id": "song_083",
     "artist": "Jay Park",
     "title": "All I Wanna Do",
-    "youtube_url": "https://www.youtube.com/watch?v=IKZEmLvK_vA",
+    "youtube_url": "https://www.youtube.com/watch?v=JPTunZy4Fl8",
     "clip": {
       "start_sec": 35,
       "preview_sec": 30
@@ -4147,7 +4147,7 @@
     "artist": "Paul Kim",
     "title": "Every Day, Every Moment",
     "title_kor": "모든 날, 모든 순간",
-    "youtube_url": "https://www.youtube.com/watch?v=4RFzMXpJpCQ",
+    "youtube_url": "https://www.youtube.com/watch?v=64uidOIH2vY",
     "clip": {
       "start_sec": 30,
       "preview_sec": 30
@@ -4286,6 +4286,980 @@
     "meta": {
       "duration_sec": 214,
       "loudness_lufs": -6.8
+    }
+  },
+  {
+    "id": "song_091",
+    "artist": "Seo Taiji and Boys",
+    "title": "Come Back Home",
+    "title_kor": "컴백홈",
+    "youtube_url": "https://www.youtube.com/watch?v=q3xy4p2JTfU",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      41
+    ],
+    "tags": {
+      "subgenres": [
+        37,
+        1
+      ],
+      "mood": [
+        50,
+        2,
+        34
+      ],
+      "energy": 0.85,
+      "valence": 0.4,
+      "tempo_bpm": 95,
+      "era_year": 1995,
+      "language": 4,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 42000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 298,
+      "loudness_lufs": -11.5
+    }
+  },
+  {
+    "id": "song_092",
+    "artist": "Nell",
+    "title": "Time Spent Walking Through Memories",
+    "title_kor": "기억을 걷는 시간",
+    "youtube_url": "https://www.youtube.com/watch?v=8vL_nWjFTPk",
+    "clip": {
+      "start_sec": 60,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        32,
+        3
+      ],
+      "mood": [
+        37,
+        25,
+        12
+      ],
+      "energy": 0.55,
+      "valence": 0.4,
+      "tempo_bpm": 78,
+      "era_year": 2008,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.75,
+      "yt_views": 28000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 312,
+      "loudness_lufs": -12.8
+    }
+  },
+  {
+    "id": "song_093",
+    "artist": "Kim Kwang Seok",
+    "title": "Around Thirty",
+    "title_kor": "서른 즈음에",
+    "youtube_url": "https://www.youtube.com/watch?v=L7lED8RtdAI",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      17
+    ],
+    "tags": {
+      "subgenres": [
+        31,
+        51
+      ],
+      "mood": [
+        37,
+        51,
+        34
+      ],
+      "energy": 0.45,
+      "valence": 0.35,
+      "tempo_bpm": 84,
+      "era_year": 1994,
+      "language": 4,
+      "instrumentation": [
+        4,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 65000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 256,
+      "loudness_lufs": -14.5
+    }
+  },
+  {
+    "id": "song_094",
+    "artist": "Crying Nut",
+    "title": "Mal Dallija",
+    "title_kor": "말 달리자",
+    "youtube_url": "https://www.youtube.com/watch?v=7QhJm8-UlKw",
+    "clip": {
+      "start_sec": 20,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        51,
+        45
+      ],
+      "mood": [
+        50,
+        23,
+        63
+      ],
+      "energy": 0.92,
+      "valence": 0.75,
+      "tempo_bpm": 180,
+      "era_year": 1998,
+      "language": 4,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 18000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 187,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_095",
+    "artist": "Baek Ji Young",
+    "title": "Like Being Hit By a Bullet",
+    "title_kor": "총 맞은 것처럼",
+    "youtube_url": "https://www.youtube.com/watch?v=uSdlduWm4HM",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        44,
+        49
+      ],
+      "mood": [
+        37,
+        21,
+        45
+      ],
+      "energy": 0.65,
+      "valence": 0.3,
+      "tempo_bpm": 70,
+      "era_year": 2010,
+      "language": 4,
+      "instrumentation": [
+        12,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.86,
+      "yt_views": 48000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 244,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_096",
+    "artist": "Yoon Jong Shin",
+    "title": "Like It",
+    "title_kor": "좋니",
+    "youtube_url": "https://www.youtube.com/watch?v=b1kQvZhQ6_M",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        44
+      ],
+      "mood": [
+        65,
+        44,
+        9
+      ],
+      "energy": 0.6,
+      "valence": 0.8,
+      "tempo_bpm": 102,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.83,
+      "yt_views": 92000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 218,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_097",
+    "artist": "Buzz",
+    "title": "Coward",
+    "title_kor": "겁쟁이",
+    "youtube_url": "https://www.youtube.com/watch?v=GSXvwmamkoU",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        45,
+        51
+      ],
+      "mood": [
+        37,
+        2,
+        49
+      ],
+      "energy": 0.78,
+      "valence": 0.35,
+      "tempo_bpm": 76,
+      "era_year": 2005,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.84,
+      "yt_views": 35000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 253,
+      "loudness_lufs": -11.2
+    }
+  },
+  {
+    "id": "song_098",
+    "artist": "10cm",
+    "title": "Stalker",
+    "title_kor": "스토커",
+    "youtube_url": "https://www.youtube.com/watch?v=E4bMmWKBo8I",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      17
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        31
+      ],
+      "mood": [
+        47,
+        44,
+        65
+      ],
+      "energy": 0.62,
+      "valence": 0.7,
+      "tempo_bpm": 108,
+      "era_year": 2010,
+      "language": 4,
+      "instrumentation": [
+        4,
+        15,
+        7
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 42000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 197,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_099",
+    "artist": "Jaurim",
+    "title": "Hey Hey Hey",
+    "title_kor": "헤이헤이헤이",
+    "youtube_url": "https://www.youtube.com/watch?v=wit5HNfViIA",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        3,
+        51
+      ],
+      "mood": [
+        50,
+        48,
+        14
+      ],
+      "energy": 0.85,
+      "valence": 0.5,
+      "tempo_bpm": 138,
+      "era_year": 2013,
+      "language": 4,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.79,
+      "yt_views": 25000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 242,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_100",
+    "artist": "Lee Moon Sae",
+    "title": "When Love Passes By",
+    "title_kor": "사랑이 지나가면",
+    "youtube_url": "https://www.youtube.com/watch?v=cOq-vCErjIU",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        44,
+        45
+      ],
+      "mood": [
+        37,
+        53,
+        51
+      ],
+      "energy": 0.5,
+      "valence": 0.4,
+      "tempo_bpm": 72,
+      "era_year": 1991,
+      "language": 4,
+      "instrumentation": [
+        8,
+        12,
+        4,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 52000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 267,
+      "loudness_lufs": -13.8
+    }
+  },
+  {
+    "id": "song_101",
+    "artist": "The Black Skirts",
+    "title": "Everything",
+    "youtube_url": "https://www.youtube.com/watch?v=Aq_gsctWHtQ",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        32,
+        35
+      ],
+      "mood": [
+        17,
+        44,
+        38
+      ],
+      "energy": 0.58,
+      "valence": 0.6,
+      "tempo_bpm": 96,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [
+        4,
+        13,
+        1,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.68,
+      "yt_views": 32000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 225,
+      "loudness_lufs": -11.2
+    }
+  },
+  {
+    "id": "song_102",
+    "artist": "SG Wannabe",
+    "title": "Timeless",
+    "title_kor": "타임리스",
+    "youtube_url": "https://www.youtube.com/watch?v=0pLa8NyS4Es",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        44,
+        49
+      ],
+      "mood": [
+        53,
+        65,
+        21
+      ],
+      "energy": 0.55,
+      "valence": 0.7,
+      "tempo_bpm": 68,
+      "era_year": 2004,
+      "language": 4,
+      "instrumentation": [
+        8,
+        12,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 38000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 241,
+      "loudness_lufs": -11.8
+    }
+  },
+  {
+    "id": "song_103",
+    "artist": "Dynamic Duo",
+    "title": "Solo",
+    "title_kor": "솔로",
+    "youtube_url": "https://www.youtube.com/watch?v=9IHWH6E8oZs",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      41
+    ],
+    "tags": {
+      "subgenres": [
+        37,
+        1
+      ],
+      "mood": [
+        29,
+        57,
+        38
+      ],
+      "energy": 0.72,
+      "valence": 0.6,
+      "tempo_bpm": 88,
+      "era_year": 2013,
+      "language": 4,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 45000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 215,
+      "loudness_lufs": -9.2
+    }
+  },
+  {
+    "id": "song_104",
+    "artist": "Guckkasten",
+    "title": "Mirror",
+    "title_kor": "거울",
+
+    "youtube_url": "https://www.youtube.com/watch?v=nj2b9teoQSY",
+    "clip": {
+      "start_sec": 55,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      11
+    ],
+    "tags": {
+      "subgenres": [
+        46,
+        3
+      ],
+      "mood": [
+        24,
+        32,
+        7
+      ],
+      "energy": 0.88,
+      "valence": 0.55,
+      "tempo_bpm": 142,
+      "era_year": 2015,
+      "language": 4,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.74,
+      "yt_views": 28000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 288,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_105",
+    "artist": "Park Hyo Shin",
+    "title": "Wild Flower",
+    "title_kor": "야생화",
+    "youtube_url": "https://www.youtube.com/watch?v=OxgiiyLp5pk",
+    "clip": {
+      "start_sec": 60,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      21
+    ],
+    "tags": {
+      "subgenres": [
+        44,
+        7
+      ],
+      "mood": [
+        21,
+        24,
+        53
+      ],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 72,
+      "era_year": 2014,
+      "language": 4,
+      "instrumentation": [
+        12,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 98000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 256,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_106",
+    "artist": "Cho Yong Pil",
+    "title": "Bounce",
+    "title_kor": "바운스",
+    "youtube_url": "https://www.youtube.com/watch?v=SaVUdhEZVKg",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        12,
+        45
+      ],
+      "mood": [
+        63,
+        23,
+        47
+      ],
+      "energy": 0.85,
+      "valence": 0.85,
+      "tempo_bpm": 128,
+      "era_year": 2013,
+      "language": 4,
+      "instrumentation": [
+        13,
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 68000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 234,
+      "loudness_lufs": -8.2
+    }
+  },
+  {
+    "id": "song_107",
+    "artist": "Younha",
+    "title": "Event Horizon",
+    "title_kor": "사건의 지평선",
+    "youtube_url": "https://www.youtube.com/watch?v=BBdC1rl5sKY",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        32,
+        35
+      ],
+      "mood": [
+        34,
+        25,
+        12
+      ],
+      "energy": 0.65,
+      "valence": 0.45,
+      "tempo_bpm": 88,
+      "era_year": 2021,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.72,
+      "yt_views": 15000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 227,
+      "loudness_lufs": -10.8
+    }
+  },
+  {
+    "id": "song_108",
+    "artist": "Clazziquai Project",
+    "title": "She Is",
+    "youtube_url": "https://www.youtube.com/watch?v=zjVt73gD1fc",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      3,
+      35
+    ],
+    "tags": {
+      "subgenres": [
+        18,
+        24
+      ],
+      "mood": [
+        29,
+        57,
+        65
+      ],
+      "energy": 0.68,
+      "valence": 0.75,
+      "tempo_bpm": 115,
+      "era_year": 2004,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 28000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 206,
+      "loudness_lufs": -10.2
+    }
+  },
+  {
+    "id": "song_109",
+    "artist": "Standing Egg",
+    "title": "Old Song",
+    "title_kor": "오래된 노래",
+    "youtube_url": "https://www.youtube.com/watch?v=JVIKowQZEdk",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      17
+    ],
+    "tags": {
+      "subgenres": [
+        35,
+        44
+      ],
+      "mood": [
+        44,
+        51,
+        65
+      ],
+      "energy": 0.48,
+      "valence": 0.7,
+      "tempo_bpm": 82,
+      "era_year": 2014,
+      "language": 4,
+      "instrumentation": [
+        4,
+        8,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.71,
+      "yt_views": 38000000,
+      "regionality": [
+        6,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 212,
+      "loudness_lufs": -11.5
+    }
+  },
+  {
+    "id": "song_110",
+    "artist": "No Brain",
+    "title": "You’ve Fallen for Me",
+    "title_kor": "넌 내게 반했어",
+    "youtube_url": "https://www.youtube.com/watch?v=s4ouUGsagaE",
+    "clip": {
+        "start_sec": 35,
+        "preview_sec": 30
+    },
+    "genres": [
+        1,
+        14
+    ],
+    "tags": {
+        "subgenres": [
+        51,
+        3
+        ],
+        "mood": [
+        11,
+        23,
+        47
+        ],
+        "energy": 0.92,
+        "valence": 0.75,
+        "tempo_bpm": 172,
+        "era_year": 2000,
+        "language": 4,
+        "instrumentation": [
+        4,
+        1,
+        2,
+        15
+        ]
+    },
+    "popularity": {
+        "awareness_idx": 0.85,
+        "yt_views": 5000000,
+        "regionality": [
+        6,
+        0
+        ]
+    },
+    "meta": {
+        "duration_sec": 210,
+        "loudness_lufs": -9.0
     }
   }
 ]
