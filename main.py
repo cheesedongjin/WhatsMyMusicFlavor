@@ -1458,11 +1458,19 @@ class MusicTournamentGUI:
             canvas.itemconfigure(window_id, width=event.width)
 
         def _on_mousewheel(event):
+            delta = 0
             if event.delta:
-                step = -1 if event.delta > 0 else 1
-                canvas.yview_scroll(step, "units")
+                normalized = -event.delta / 120
+                if normalized == 0:
+                    delta = -1 if event.delta > 0 else 1
+                else:
+                    magnitude = math.ceil(abs(normalized))
+                    delta = int(math.copysign(magnitude, normalized))
             elif event.num in (4, 5):
-                canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
+                delta = -1 if event.num == 4 else 1
+
+            if delta:
+                canvas.yview_scroll(delta, "units")
             return "break"
 
         def _bind_to_mousewheel(_event):
