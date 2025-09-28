@@ -8,7 +8,7 @@ import math
 import random
 import webbrowser
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict
 import numpy as np
@@ -529,13 +529,41 @@ class SurveyEngine:
         lang = input("선택: ").strip()
         lang_map = {'1': 'ko', '2': 'en', '3': 'other', '4': None}
         preferred_language = lang_map.get(lang)
-        
+
+        # 6. 언어 집중도
+        print("\n[6단계] 특정 언어 위주로 음악을 듣는 편인가요?")
+        print("1. 거의 한국어만  2. 한국어/영어 위주  3. 영어/글로벌 위주  4. 다양하게 듣는다")
+        language_focus_choice = input("선택: ").strip()
+        global_languages = {'en', 'es', 'fr', 'instrumental'}
+        language_focus_map = {
+            '1': {'languages': {'ko'}, 'strict': True},
+            '2': {'languages': {'ko', 'en'}, 'strict': True},
+            '3': {'languages': global_languages, 'strict': True},
+            '4': {'languages': set(), 'strict': False},
+        }
+        language_focus = language_focus_map.get(language_focus_choice, {'languages': set(), 'strict': False})
+
+        # 7. 지역/씬 집중도
+        print("\n[7단계] 특정 지역 음악에 더 끌리나요?")
+        print("1. 한국 음악만 찾는다  2. 한국/아시아 음악 위주  3. 글로벌 다양성 선호  4. 잘 모르겠다")
+        regional_choice = input("선택: ").strip()
+        regional_focus_map = {
+            '1': 'k_only',
+            '2': 'k_prefer',
+            '3': 'global',
+            '4': 'neutral',
+        }
+        regional_focus = regional_focus_map.get(regional_choice, 'neutral')
+
         profile = {
             'genre_scores': dict(genre_scores),
             'preferred_era': preferred_era,
             'preferred_energy': preferred_energy,
             'preferred_popularity': preferred_popularity,
-            'preferred_language': preferred_language
+            'preferred_language': preferred_language,
+            'preferred_languages': sorted(language_focus['languages']),
+            'language_strict': language_focus['strict'],
+            'regional_focus': regional_focus
         }
         
         print("\n✓ 설문 완료!")
@@ -549,86 +577,159 @@ class CandidateSelector:
     def __init__(self, songs: List[Song], survey_profile: Dict):
         self.songs = songs
         self.profile = survey_profile
-        
-    def compute_base_score(self, song: Song) -> float:
+        self.seed_scores: Dict[str, float] = {}
+
+    def compute_base_score(self, song: Song, language_whitelist: Set[str], language_strict: bool) -> float:
         """설문 기반 초기 점수 계산"""
         score = 0.0
-        
-        # 장르 매칭 (간단화: 장르명 기반)
-        genre_match = 0.5  # 기본값
-        score += genre_match
-        
-        # 시대 매칭
+        language = song.tags.get('language')
+
+        if language_strict and language_whitelist and (not language or language not in language_whitelist):
+            return float('-inf')
+
+        if language_whitelist:
+            if language in language_whitelist:
+                score += 1.0 if language_strict else 0.6
+            else:
+                score += 0.1
+
+        preferred_language = self.profile.get('preferred_language')
+        if preferred_language:
+            if language == preferred_language:
+                score += 0.5
+            else:
+                score -= 0.1
+
+        genre_scores: Dict[str, int] = self.profile.get('genre_scores', {})
+        if genre_scores and song.genres:
+            match_weight = sum(genre_scores.get(genre, 0) for genre in song.genres if genre in genre_scores)
+            if match_weight:
+                score += 0.8 + match_weight * 0.3
+            else:
+                score += 0.2
+        else:
+            score += 0.3
+
         if self.profile.get('preferred_era'):
             song_year = song.tags.get('era_year', 2000)
             era_diff = abs(song_year - self.profile['preferred_era'])
             era_score = max(0, 1 - era_diff / 30)
             score += era_score
-        
-        # 에너지 매칭
-        if 'energy' in song.tags:
+
+        if 'energy' in song.tags and self.profile.get('preferred_energy') is not None:
             energy_diff = abs(song.tags['energy'] - self.profile['preferred_energy'])
             energy_score = 1 - energy_diff
             score += energy_score
-        
-        # 인지도 매칭
+
         awareness = song.popularity.get('awareness_idx', 0.5)
         pop_diff = abs(awareness - self.profile['preferred_popularity'])
         pop_score = 1 - pop_diff
         score += pop_score * 0.5
-        
+
+        regional_focus = self.profile.get('regional_focus', 'neutral')
+        regionality = set(song.popularity.get('regionality', []))
+        if regional_focus == 'k_only':
+            if language == 'ko' or 'kr' in regionality or 'asia' in regionality:
+                score += 1.2
+            else:
+                return float('-inf')
+        elif regional_focus == 'k_prefer':
+            if language == 'ko' or 'kr' in regionality:
+                score += 0.8
+            elif 'asia' in regionality:
+                score += 0.4
+            else:
+                score += 0.1
+        elif regional_focus == 'global':
+            if regionality & {'global', 'us', 'eu'} or language in {'en', 'es', 'fr'}:
+                score += 0.7
+            else:
+                score += 0.2
+
         return score
-    
+
     def select_candidates(self, k: int = 32) -> List[Song]:
         """상위 K개 후보 선택 (다양성 고려)"""
-        # 1차: 점수 계산
-        scored_songs = [(song, self.compute_base_score(song)) for song in self.songs]
+        language_whitelist: Set[str] = set(self.profile.get('preferred_languages') or [])
+        language_strict = bool(self.profile.get('language_strict') and language_whitelist)
+
+        if language_strict:
+            filtered = [song for song in self.songs if song.tags.get('language') in language_whitelist]
+            if filtered:
+                songs_to_score = filtered
+            else:
+                songs_to_score = self.songs
+                language_strict = False
+        else:
+            songs_to_score = self.songs
+
+        scored_songs: List[Tuple[Song, float]] = []
+        for song in songs_to_score:
+            score = self.compute_base_score(song, language_whitelist, language_strict)
+            if score != float('-inf'):
+                scored_songs.append((song, score))
+
+        if not scored_songs:
+            scored_songs = [(song, 0.0) for song in self.songs]
+
         scored_songs.sort(key=lambda x: x[1], reverse=True)
-        
-        # 2차: 상위 K*2 중에서 다양성 고려하여 K개 선택
+        self.seed_scores = {song.id: score for song, score in scored_songs}
+
         pool = scored_songs[:min(k*2, len(scored_songs))]
-        selected = []
-        
-        for song, score in pool:
+        selected: List[Song] = []
+
+        for song, _ in pool:
             if len(selected) >= k:
                 break
-            # 간단 다양성 체크: 같은 아티스트가 너무 많으면 제외
             same_artist = sum(1 for s in selected if s.artist == song.artist)
             if same_artist < 2:
                 selected.append(song)
-        
-        # 부족하면 나머지 추가
+
         while len(selected) < k and len(pool) > len(selected):
             for song, _ in pool:
                 if song not in selected:
                     selected.append(song)
                     if len(selected) >= k:
                         break
-        
+
         print(f"\n✓ {len(selected)}개 후보곡 선정 완료")
         return selected
 
+    def get_seed_scores(self) -> Dict[str, float]:
+        """시드 배치를 위해 계산된 점수를 반환"""
+        return dict(self.seed_scores)
+
+
 class BracketGenerator:
     @staticmethod
-    def create_bracket(candidates: List[Song]) -> List[List[Match]]:
-        """토너먼트 브래킷 생성 (단순 랜덤 시딩)"""
-        random.shuffle(candidates)
-        
-        rounds = []
-        current_round = []
-        
-        # 1라운드 매치 생성
-        for i in range(0, len(candidates), 2):
-            if i + 1 < len(candidates):
-                match = Match(
-                    round_num=1,
-                    match_id=f"R1-M{i//2+1}",
-                    song_a=candidates[i],
-                    song_b=candidates[i+1]
-                )
-                current_round.append(match)
-        
-        rounds.append(current_round)
+    def create_bracket(candidates: List[Song], seed_scores: Optional[Dict[str, float]] = None) -> List[List[Match]]:
+        """토너먼트 브래킷 생성 (점수 기반 시딩 지원)"""
+        if seed_scores:
+            ordered = sorted(candidates, key=lambda s: seed_scores.get(s.id, 0.0), reverse=True)
+        else:
+            ordered = candidates[:]
+            random.shuffle(ordered)
+
+        if len(ordered) % 2 == 1:
+            ordered = ordered[:-1]
+
+        rounds: List[List[Match]] = []
+        current_round: List[Match] = []
+        half = len(ordered) // 2
+
+        for i in range(half):
+            song_a = ordered[i]
+            song_b = ordered[-(i + 1)]
+            match = Match(
+                round_num=1,
+                match_id=f"R1-M{i+1}",
+                song_a=song_a,
+                song_b=song_b
+            )
+            current_round.append(match)
+
+        if current_round:
+            rounds.append(current_round)
         return rounds
 
 # ============================================================================
@@ -886,6 +987,7 @@ class MusicTournamentApp:
         self.survey_profile = {}
         self.candidates = []
         self.champion = None
+        self.seed_scores: Dict[str, float] = {}
         
     def run(self):
         """전체 프로세스 실행"""
@@ -911,13 +1013,17 @@ class MusicTournamentApp:
         print("\n3️⃣ 후보곡 선정 중...")
         selector = CandidateSelector(self.songs, self.survey_profile)
         self.candidates = selector.select_candidates(k=32)
-        
+        self.seed_scores = selector.get_seed_scores()
+
         # 4. 브래킷 생성
         print("\n4️⃣ 토너먼트 브래킷 생성 중...")
         bracket_gen = BracketGenerator()
-        bracket = bracket_gen.create_bracket(self.candidates)
-        print(f"✓ {len(bracket[0])}개 매치로 구성된 브래킷 생성 완료")
-        
+        bracket = bracket_gen.create_bracket(self.candidates, self.seed_scores)
+        if bracket and bracket[0]:
+            print(f"✓ {len(bracket[0])}개 매치로 구성된 브래킷 생성 완료")
+        else:
+            print("경기를 구성할 후보가 충분하지 않아 기본 시드를 적용합니다.")
+
         # 5. 토너먼트 진행
         print("\n5️⃣ 토너먼트 진행")
         input("\n준비되셨으면 Enter를 눌러주세요...")
@@ -978,6 +1084,20 @@ class MusicTournamentGUI:
         ("영어", '2'),
         ("기타 언어", '3'),
         ("상관없음", '4')
+    ]
+
+    LANGUAGE_FOCUS_OPTIONS = [
+        ("거의 한국어만 들어요", '1'),
+        ("한국어/영어 위주", '2'),
+        ("영어/글로벌 위주", '3'),
+        ("다양한 언어 환영", '4')
+    ]
+
+    REGIONAL_FOCUS_OPTIONS = [
+        ("한국 음악만 추천해주세요", '1'),
+        ("한국·아시아 중심", '2'),
+        ("글로벌 다양성", '3'),
+        ("잘 모르겠어요", '4')
     ]
 
     def __init__(self, songs_file: str):
@@ -1078,6 +1198,7 @@ class MusicTournamentGUI:
         self.champion: Optional[Song] = None
         self.report = {}
         self.recommendations: List[Tuple[Song, str]] = []
+        self.seed_scores: Dict[str, float] = {}
 
     def enter_fullscreen(self):
         """Try to expand the root window to full screen."""
@@ -1167,11 +1288,15 @@ class MusicTournamentGUI:
         self.energy_var = tk.StringVar(value='3')
         self.popularity_var = tk.StringVar(value='2')
         self.language_var = tk.StringVar(value='4')
+        self.language_focus_var = tk.StringVar(value='4')
+        self.regional_focus_var = tk.StringVar(value='4')
 
         build_radio_section(card, "가장 마음에 드는 음악 시대", self.ERA_OPTIONS, self.era_var)
         build_radio_section(card, "에너지 레벨", self.ENERGY_OPTIONS, self.energy_var)
         build_radio_section(card, "인지도 선호", self.POPULARITY_OPTIONS, self.popularity_var)
         build_radio_section(card, "가사 언어", self.LANGUAGE_OPTIONS, self.language_var)
+        build_radio_section(card, "언어 집중도", self.LANGUAGE_FOCUS_OPTIONS, self.language_focus_var)
+        build_radio_section(card, "국가/지역 취향", self.REGIONAL_FOCUS_OPTIONS, self.regional_focus_var)
 
         ttk.Button(card, text="토너먼트 시작", style="Accent.TButton", command=self.begin_tournament).pack(anchor="e", pady=(24, 0))
         self.status_bar_var.set("설문 응답을 바탕으로 맞춤 토너먼트를 준비합니다.")
@@ -1189,17 +1314,36 @@ class MusicTournamentGUI:
         energy_map = {'1': 0.2, '2': 0.5, '3': 0.7, '4': 0.9}
         pop_map = {'1': 0.8, '2': 0.5, '3': 0.2}
         lang_map = {'1': 'ko', '2': 'en', '3': 'other', '4': None}
+        global_languages = {'en', 'es', 'fr', 'instrumental'}
+        language_focus_map = {
+            '1': {'languages': {'ko'}, 'strict': True},
+            '2': {'languages': {'ko', 'en'}, 'strict': True},
+            '3': {'languages': global_languages, 'strict': True},
+            '4': {'languages': set(), 'strict': False},
+        }
+        regional_focus_map = {
+            '1': 'k_only',
+            '2': 'k_prefer',
+            '3': 'global',
+            '4': 'neutral',
+        }
+        language_focus = language_focus_map.get(self.language_focus_var.get(), {'languages': set(), 'strict': False})
+        regional_focus = regional_focus_map.get(self.regional_focus_var.get(), 'neutral')
 
         self.survey_profile = {
             'genre_scores': dict(genre_scores),
             'preferred_era': era_map.get(self.era_var.get()),
             'preferred_energy': energy_map.get(self.energy_var.get(), 0.5),
             'preferred_popularity': pop_map.get(self.popularity_var.get(), 0.5),
-            'preferred_language': lang_map.get(self.language_var.get())
+            'preferred_language': lang_map.get(self.language_var.get()),
+            'preferred_languages': sorted(language_focus['languages']),
+            'language_strict': language_focus['strict'],
+            'regional_focus': regional_focus
         }
 
         selector = CandidateSelector(self.songs, self.survey_profile)
         self.candidates = selector.select_candidates(k=min(32, len(self.songs)))
+        self.seed_scores = selector.get_seed_scores()
 
         if len(self.candidates) < 2:
             messagebox.showwarning("후보 부족", "토너먼트를 진행하기에 곡이 부족합니다. 데이터를 확인해주세요.")
@@ -1207,11 +1351,17 @@ class MusicTournamentGUI:
             return
 
         if len(self.candidates) % 2 == 1:
-            self.candidates = self.candidates[:-1]
+            removed = self.candidates.pop()
+            if removed:
+                self.seed_scores.pop(removed.id, None)
 
         self.engine = TournamentEngine()
         bracket_gen = BracketGenerator()
-        self.bracket = bracket_gen.create_bracket(self.candidates)
+        self.bracket = bracket_gen.create_bracket(self.candidates, self.seed_scores)
+        if not self.bracket:
+            messagebox.showwarning("브래킷 생성 실패", "토너먼트를 구성할 수 있는 매치가 부족합니다. 응답을 조정해보세요.")
+            self.show_start_view()
+            return
         self.current_round_number = 1
         self.current_round_matches = self.bracket[0] if self.bracket else []
         self.current_round_winners = []
