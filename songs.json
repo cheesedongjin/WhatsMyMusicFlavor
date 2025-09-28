@@ -288,6 +288,7 @@
     "id": "song_007",
     "artist": "IU",
     "title": "Palette",
+    "title_kor": "팔레트",
     "youtube_url": "https://www.youtube.com/watch?v=d9IxdwEFk1c",
     "clip": {
       "start_sec": 50,
@@ -382,6 +383,7 @@
     "id": "song_009",
     "artist": "Blackpink",
     "title": "DDU-DU DDU-DU",
+    "title_kor": "뚜두뚜두",
     "youtube_url": "https://www.youtube.com/watch?v=IHNzOHi8sJs",
     "clip": {
       "start_sec": 60,
@@ -3314,6 +3316,7 @@
     "id": "song_071",
     "artist": "PSY",
     "title": "Gangnam Style",
+    "title_kor": "강남스타일",
     "youtube_url": "https://www.youtube.com/watch?v=9bZkp7q19f0",
     "clip": {
       "start_sec": 40,
@@ -3363,6 +3366,7 @@
     "id": "song_072",
     "artist": "Zico",
     "title": "Any Song",
+    "title_kor": "아무노래",
     "youtube_url": "https://www.youtube.com/watch?v=UuV2BmJ1p_I",
     "clip": {
       "start_sec": 30,
@@ -3410,6 +3414,7 @@
     "id": "song_073",
     "artist": "Big Bang",
     "title": "Fantastic Baby",
+    "title_kor": "판타스틱 베이비",
     "youtube_url": "https://www.youtube.com/watch?v=AAbokV76tkU",
     "clip": {
       "start_sec": 50,
@@ -3459,6 +3464,7 @@
     "id": "song_074",
     "artist": "EXO",
     "title": "Growl",
+    "title_kor": "으르렁",
     "youtube_url": "https://www.youtube.com/watch?v=I3dezFzsNss",
     "clip": {
       "start_sec": 40,
@@ -3508,6 +3514,7 @@
     "id": "song_075",
     "artist": "Sunmi",
     "title": "Gashina",
+    "title_kor": "가시나",
     "youtube_url": "https://www.youtube.com/watch?v=ur0hCdne2-s",
     "clip": {
       "start_sec": 45,
@@ -3555,6 +3562,7 @@
     "id": "song_076",
     "artist": "Seventeen",
     "title": "Don't Wanna Cry",
+    "title_kor": "울고 싶지 않아",
     "youtube_url": "https://www.youtube.com/watch?v=zEkg4GBQumc",
     "clip": {
       "start_sec": 55,
@@ -3603,6 +3611,7 @@
     "id": "song_077",
     "artist": "AKMU",
     "title": "How Can I Love the Heartbreak, You're the One I Love",
+    "title_kor": "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지",
     "youtube_url": "https://www.youtube.com/watch?v=m3DZsBw5bnE",
     "clip": {
       "start_sec": 35,
@@ -3698,6 +3707,7 @@
     "id": "song_079",
     "artist": "Heize",
     "title": "Don't Know You",
+    "title_kor": "널 너무 모르고",
     "youtube_url": "https://www.youtube.com/watch?v=vvkWaI91mLM",
     "clip": {
       "start_sec": 30,
@@ -3745,6 +3755,7 @@
     "id": "song_080",
     "artist": "Hyukoh",
     "title": "Wi Ing Wi Ing",
+    "title_kor": "위잉위잉",
     "youtube_url": "https://www.youtube.com/watch?v=KpJYVMLi7Qk",
     "clip": {
       "start_sec": 50,
@@ -3793,6 +3804,7 @@
     "id": "song_081",
     "artist": "Girls' Generation",
     "title": "Gee",
+    "title_kor": "지",
     "youtube_url": "https://www.youtube.com/watch?v=U7mPqycQ0tQ",
     "clip": {
       "start_sec": 30,
@@ -3841,6 +3853,7 @@
     "id": "song_082",
     "artist": "iKON",
     "title": "Love Scenario",
+    "title_kor": "사랑을 했다",
     "youtube_url": "https://www.youtube.com/watch?v=vecSVX1QYbQ",
     "clip": {
       "start_sec": 40,
@@ -3937,6 +3950,7 @@
     "id": "song_084",
     "artist": "Taeyeon",
     "title": "Four Seasons",
+    "title_kor": "사계",
     "youtube_url": "https://www.youtube.com/watch?v=4HG_CJzyX6A",
     "clip": {
       "start_sec": 45,
@@ -3985,6 +3999,7 @@
     "id": "song_085",
     "artist": "GOT7",
     "title": "Just Right",
+    "title_kor": "딱 좋아",
     "youtube_url": "https://www.youtube.com/watch?v=vrdk3IGcau8",
     "clip": {
       "start_sec": 35,
@@ -4032,6 +4047,7 @@
     "id": "song_086",
     "artist": "Mamamoo",
     "title": "Decalcomanie",
+    "title_kor": "데칼코마니",
     "youtube_url": "https://www.youtube.com/watch?v=o0I8YjeWfQU",
     "clip": {
       "start_sec": 40,
@@ -4080,6 +4096,7 @@
     "id": "song_087",
     "artist": "Stray Kids",
     "title": "God's Menu",
+    "title_kor": "神메뉴",
     "youtube_url": "https://www.youtube.com/watch?v=TQTlCHxyuu8",
     "clip": {
       "start_sec": 50,
@@ -4129,6 +4146,7 @@
     "id": "song_088",
     "artist": "Paul Kim",
     "title": "Every Day, Every Moment",
+    "title_kor": "모든 날, 모든 순간",
     "youtube_url": "https://www.youtube.com/watch?v=4RFzMXpJpCQ",
     "clip": {
       "start_sec": 30,
@@ -4177,6 +4195,7 @@
     "id": "song_089",
     "artist": "Bolbbalgan4",
     "title": "Galaxy",
+    "title_kor": "우주를 줄게",
     "youtube_url": "https://www.youtube.com/watch?v=9U8uA702xrE",
     "clip": {
       "start_sec": 35,
