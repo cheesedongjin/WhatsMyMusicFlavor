@@ -364,6 +364,7 @@ class Song:
     artist: str
     title: str
     youtube_url: str
+    title_kor: Optional[str] = None
     genre_codes: List[int] = field(default_factory=list)
     genres: List[str] = field(default_factory=list)
     tags: Dict = field(default_factory=dict)
@@ -378,7 +379,12 @@ class Song:
     matches: int = 0
     
     def __str__(self):
-        return f"{self.artist} - {self.title}"
+        return f"{self.artist} - {self.get_display_title()}"
+
+    def get_display_title(self) -> str:
+        if self.title_kor:
+            return f"{self.title} ({self.title_kor})"
+        return self.title
 
 @dataclass
 class Match:
@@ -437,6 +443,7 @@ class DataLoader:
                     artist=item['artist'],
                     title=item['title'],
                     youtube_url=item.get('youtube_url', ''),
+                    title_kor=item.get('title_kor'),
                     genre_codes=genre_codes,
                     genres=genre_names,
                     tags=tags,
@@ -1673,7 +1680,7 @@ class MusicTournamentGUI:
         }
 
     def update_song_card(self, card, song: Song):
-        card["title"].set(song.title)
+        card["title"].set(song.get_display_title())
         rating = song.rating if song.rating else 1500
         card["meta"].set(f"{song.artist} · 예상 레이팅 {rating:.0f}")
 
