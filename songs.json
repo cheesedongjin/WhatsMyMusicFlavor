@@ -1200,3 +1200,17 @@
       "subgenres": ["alternative_rock", "baroque_pop"],
       "mood": ["triumphant", "grandiose", "reflective"],
       "energy": 0.78,
+      "valence": 0.65,
+      "tempo_bpm": 138,
+      "era_year": 2008,
+      "language": "en",
+      "instrumentation": ["strings", "piano", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 1200000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 242, "loudness_lufs": -8.8}
+  }
+]
