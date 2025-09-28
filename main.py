@@ -18,8 +18,56 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 # ============================================================================
-# 인덱스 정의
+# JSON 구조 & 인덱스 가이드
 # ============================================================================
+# songs.json 은 아래 Song 스키마를 따르는 객체 리스트다. 새 곡을 추가할 때는 각 항목을
+# 채우되, 정수 인덱스를 입력해야 하는 필드는 아래 매핑표를 참고한다.
+#
+# Song 객체 기본 구조 (필드 타입)
+# {
+#   "id": str,                  # 고유 ID (예: "song_001")
+#   "artist": str,             # 아티스트 이름
+#   "title": str,              # 곡 제목
+#   "youtube_url": str,        # 미리듣기 링크 (선택)
+#   "clip": {                  # 선택: 미리듣기 구간 정보
+#       "start_sec": float,    # 재생 시작 위치(초)
+#       "preview_sec": float   # 미리듣기 길이(초)
+#   },
+#   "genres": List[int],        # 기본 장르 코드 목록 (0-base)
+#   "tags": {
+#       "subgenres": List[int],      # 세부 장르 코드 (0-base)
+#       "mood": List[int],           # 무드 코드 (0-base)
+#       "energy": float,             # 0.0~1.0 에너지 스코어
+#       "valence": float,            # 0.0~1.0 명/암 스코어
+#       "tempo_bpm": float,          # BPM
+#       "era_year": int,             # 대표 연도
+#       "language": int,             # 언어 코드 (0-base)
+#       "instrumentation": List[int] # 편성 코드 (0-base)
+#   },
+#   "popularity": {
+#       "awareness_idx": float,      # 0.0~1.0 인지도 지표
+#       "yt_views": int,             # 유튜브 조회수
+#       "regionality": List[int]     # 인기 지역 코드 (0-base)
+#   },
+#   "meta": {                        # 추가 메타데이터 (선택)
+#       "duration_sec": float,
+#       "loudness_lufs": float
+#   }
+# }
+#
+# 인덱스 기반 필드 ↔ 상수 테이블 매핑 (모든 인덱스는 0부터 시작)
+# ┌────────────────────────────┬───────────────────────────┬─────────────────────────────┐
+# │ JSON 경로                  │ 의미                        │ 참조 상수                     │
+# ├────────────────────────────┼───────────────────────────┼─────────────────────────────┤
+# │ Song.genres[*]             │ 기본 장르 코드             │ 별도 장르 코드 테이블 관리     │
+# │ tags.subgenres[*]          │ 세부 장르 코드             │ SUBGENRES                    │
+# │ tags.mood[*]               │ 무드 코드                  │ MOODS                        │
+# │ tags.language              │ 단일 언어 코드             │ LANGUAGES                    │
+# │ tags.instrumentation[*]    │ 편성/악기 코드             │ INSTRUMENTATIONS             │
+# │ popularity.regionality[*]  │ 인기 지역 코드             │ REGIONALITIES                │
+# └────────────────────────────┴───────────────────────────┴─────────────────────────────┘
+# DataLoader.load_songs()가 로딩 시 위 인덱스들을 문자열/리스트로 복호화하므로 JSON에서는
+# 항상 0-base 정수 값만 제공하면 된다.
 
 SUBGENRES: List[str] = [
     "alt_pop",
