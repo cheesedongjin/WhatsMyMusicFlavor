@@ -988,6 +988,8 @@ class MusicTournamentGUI:
         self.root.minsize(960, 680)
         self.root.configure(bg="#eef2ff")
 
+        self.enter_fullscreen()
+
         self.style = ttk.Style(self.root)
         self.setup_styles()
 
@@ -1373,7 +1375,6 @@ class MusicTournamentGUI:
 
     def show_results_view(self):
         self.clear_content()
-        self.enter_fullscreen()
 
         container = ttk.Frame(self.content_frame, style="Primary.TFrame")
         container.pack(fill="both", expand=True)
