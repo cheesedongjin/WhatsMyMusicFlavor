@@ -20,20 +20,20 @@ from tkinter import ttk, messagebox
 # ============================================================================
 # JSON 구조 & 인덱스 가이드
 # ============================================================================
-# songs.json 은 아래 Song 스키마를 따르는 객체 리스트다. 새 곡을 추가할 때는 각 항목을
-# 채우되, 정수 인덱스를 입력해야 하는 필드는 아래 매핑표를 참고한다.
+# songs.json 은 Song 객체들의 리스트로 구성된다. 새 곡을 추가할 때는 각 항목을
+# 채우되, 인덱스를 요구하는 필드는 아래 매핑표를 참고한다.
 #
-# Song 객체 기본 구조 (필드 타입)
+# Song 객체 기본 구조:
 # {
 #   "id": str,                  # 고유 ID (예: "song_001")
-#   "artist": str,             # 아티스트 이름
-#   "title": str,              # 곡 제목
-#   "youtube_url": str,        # 미리듣기 링크 (선택)
-#   "clip": {                  # 선택: 미리듣기 구간 정보
-#       "start_sec": float,    # 재생 시작 위치(초)
-#       "preview_sec": float   # 미리듣기 길이(초)
+#   "artist": str,              # 아티스트 이름
+#   "title": str,               # 곡 제목
+#   "youtube_url": str,         # 미리듣기 링크 (선택)
+#   "clip": {                   # 미리듣기 구간 정보 (선택)
+#       "start_sec": float,     # 시작 위치(초)
+#       "preview_sec": float    # 미리듣기 길이(초)
 #   },
-#   "genres": List[int],        # 기본 장르 코드 목록 (0-base)
+#   "genres": List[int],        # 기본 장르 코드 (0-base)
 #   "tags": {
 #       "subgenres": List[int],      # 세부 장르 코드 (0-base)
 #       "mood": List[int],           # 무드 코드 (0-base)
@@ -55,19 +55,71 @@ from tkinter import ttk, messagebox
 #   }
 # }
 #
-# 인덱스 기반 필드 ↔ 상수 테이블 매핑 (모든 인덱스는 0부터 시작)
-# ┌────────────────────────────┬───────────────────────────┬─────────────────────────────┐
-# │ JSON 경로                  │ 의미                        │ 참조 상수                     │
-# ├────────────────────────────┼───────────────────────────┼─────────────────────────────┤
-# │ Song.genres[*]             │ 기본 장르 코드             │ GENRES                        │
-# │ tags.subgenres[*]          │ 세부 장르 코드             │ SUBGENRES                    │
-# │ tags.mood[*]               │ 무드 코드                  │ MOODS                        │
-# │ tags.language              │ 단일 언어 코드             │ LANGUAGES                    │
-# │ tags.instrumentation[*]    │ 편성/악기 코드             │ INSTRUMENTATIONS             │
-# │ popularity.regionality[*]  │ 인기 지역 코드             │ REGIONALITIES                │
-# └────────────────────────────┴───────────────────────────┴─────────────────────────────┘
+# --------------------------------------------------------------------------
+# 인덱스 매핑 규칙 (JSON에서는 반드시 0-base 정수 사용)
+# --------------------------------------------------------------------------
+# Song.genres[*]           → GENRES
+# tags.subgenres[*]        → SUBGENRES
+# tags.mood[*]             → MOODS
+# tags.language            → LANGUAGES
+# tags.instrumentation[*]  → INSTRUMENTATIONS
+# popularity.regionality[*]→ REGIONALITIES
+#
+# DataLoader.load_songs()가 로드 시 인덱스를 문자열로 복호화한다.
+#
+# --------------------------------------------------------------------------
+# 주요 코드 매핑 예시
+# --------------------------------------------------------------------------
 # DataLoader.load_songs()가 로딩 시 위 인덱스들을 문자열/리스트로 복호화하므로 JSON에서는
 # 항상 0-base 정수 값만 제공하면 된다.
+#
+# Song.genres[*] - 기본 장르 코드 (GENRE_CODE_TABLE 기반, 0은 사용 안 함)
+# 1: Rock, 2: Pop, 3: Electronic, 4: Hip Hop, 5: Jazz, 6: Classical, 10: Progressive Rock,
+# 11: Art Rock, 12: Grunge, 13: Psychedelic Rock, 14: Alternative Rock, 17: Indie Folk,
+# 19: Classic Rock, 20: Dance Pop, 21: K-Indie Pop, 22: R&B Pop, 23: Synth Pop,
+# 24: Electropop, 26: Alt R&B, 27: Art Pop, 28: Flamenco Pop, 30: French House,
+# 32: IDM, 33: Future Bass, 34: Trip Hop, 35: Downtempo, 36: Dance / Electronic,
+# 40: Trap, 41: K-Hip Hop, 45: Alternative Hip Hop, 46: Funk Hip Hop, 50: Modal Jazz,
+# 51: Jazz Hop, 60: Romantic Classical
+
+# tags.subgenres[*] - 세부 장르 코드 (SUBGENRES)
+# 0: alt_pop, 1: alternative_hip_hop, 2: alternative_r&b, 3: alternative_rock, 4: ambient,
+# 5: art_pop, 6: blues_rock, 7: chamber_pop, 8: chillhop, 9: contemporary_jazz,
+# 10: cool_jazz, 11: dance, 12: dance_pop, 13: disco_pop, 14: downtempo, 15: edm_pop,
+# 16: electro_house, 17: electronic, 18: electronica, 19: electropop, 20: experimental,
+# 21: experimental_electronic, 22: experimental_pop, 23: flamenco_pop, 24: french_house,
+# 25: funk, 26: future_bass, 27: grunge, 28: hard_rock, 29: hip_hop, 30: idm,
+# 31: indie_folk, 32: indie_rock, 33: instrumental_hip_hop, 34: jazz_hop, 35: k_indie,
+# 36: k_r&b, 37: korean_hip_hop, 38: kpop, 39: lo_fi, 40: modal_jazz, 41: neo_soul,
+# 42: opera_rock, 43: piano_solo, 44: pop_ballad, 45: pop_rock, 46: progressive_rock,
+# 47: psychedelic_pop, 48: psychedelic_rock, 49: r&b, 50: r&b_pop, 51: rock,
+# 52: romantic_classical, 53: soft_rock, 54: synth_pop, 55: synthwave, 56: trap,
+# 57: trap_pop, 58: trip_hop, 59: uk_garage, 60: west_coast_hip_hop
+
+# tags.mood[*] - 무드 코드 (MOODS)
+# 0: abstract, 1: aggressive, 2: angst, 3: atmospheric, 4: avant_garde, 5: bold,
+# 6: bright, 7: building, 8: celebratory, 9: cheerful, 10: complex, 11: confident,
+# 12: contemplative, 13: danceable, 14: dark, 15: defiant, 16: dramatic, 17: dreamy,
+# 18: driving, 19: dynamic, 20: elegant, 21: emotional, 22: empowering, 23: energetic,
+# 24: epic, 25: ethereal, 26: euphoric, 27: fierce, 28: funky, 29: groovy, 30: haunting,
+# 31: hopeful, 32: intense, 33: intimate, 34: introspective, 35: ironic, 36: luxurious,
+# 37: melancholic, 38: mellow, 39: minimalist, 40: modern, 41: mysterious, 42: mystical,
+# 43: nocturnal, 44: nostalgic, 45: passionate, 46: peaceful, 47: playful, 48: powerful,
+# 49: raw, 50: rebellious, 51: reflective, 52: relaxed, 53: romantic, 54: satirical,
+# 55: seductive, 56: serene, 57: smooth, 58: sophisticated, 59: soulful, 60: surreal,
+# 61: trippy, 62: unsettling, 63: upbeat, 64: uplifting, 65: warm, 66: whimsical,
+# 67: youthful
+
+# tags.language - 언어 코드 (LANGUAGES)
+# 0: en, 1: es, 2: fr, 3: instrumental, 4: ko
+
+# tags.instrumentation[*] - 편성/악기 코드 (INSTRUMENTATIONS)
+# 0: 808, 1: bass, 2: drums, 3: electronic_beats, 4: guitar, 5: keyboards, 6: palmas,
+# 7: percussion, 8: piano, 9: recorder, 10: samples, 11: saxophone, 12: strings,
+# 13: synth, 14: trumpet, 15: vocals, 16: vocoder
+
+# popularity.regionality[*] - 인기 지역 코드 (REGIONALITIES)
+# 0: asia, 1: es, 2: eu, 3: fr, 4: global, 5: jp, 6: kr, 7: latam, 8: us
 
 GENRE_CODE_TABLE: Dict[int, str] = {
     1: "Rock",
