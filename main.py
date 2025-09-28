@@ -18,6 +18,189 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 # ============================================================================
+# 인덱스 정의
+# ============================================================================
+
+SUBGENRES: List[str] = [
+    "alt_pop",
+    "alternative_hip_hop",
+    "alternative_r&b",
+    "alternative_rock",
+    "ambient",
+    "art_pop",
+    "blues_rock",
+    "chamber_pop",
+    "chillhop",
+    "contemporary_jazz",
+    "cool_jazz",
+    "dance",
+    "dance_pop",
+    "disco_pop",
+    "downtempo",
+    "edm_pop",
+    "electro_house",
+    "electronic",
+    "electronica",
+    "electropop",
+    "experimental",
+    "experimental_electronic",
+    "experimental_pop",
+    "flamenco_pop",
+    "french_house",
+    "funk",
+    "future_bass",
+    "grunge",
+    "hard_rock",
+    "hip_hop",
+    "idm",
+    "indie_folk",
+    "indie_rock",
+    "instrumental_hip_hop",
+    "jazz_hop",
+    "k_indie",
+    "k_r&b",
+    "korean_hip_hop",
+    "kpop",
+    "lo_fi",
+    "modal_jazz",
+    "neo_soul",
+    "opera_rock",
+    "piano_solo",
+    "pop_ballad",
+    "pop_rock",
+    "progressive_rock",
+    "psychedelic_pop",
+    "psychedelic_rock",
+    "r&b",
+    "r&b_pop",
+    "rock",
+    "romantic_classical",
+    "soft_rock",
+    "synth_pop",
+    "synthwave",
+    "trap",
+    "trap_pop",
+    "trip_hop",
+    "uk_garage",
+    "west_coast_hip_hop",
+]
+
+MOODS: List[str] = [
+    "abstract",
+    "aggressive",
+    "angst",
+    "atmospheric",
+    "avant_garde",
+    "bold",
+    "bright",
+    "building",
+    "celebratory",
+    "cheerful",
+    "complex",
+    "confident",
+    "contemplative",
+    "danceable",
+    "dark",
+    "defiant",
+    "dramatic",
+    "dreamy",
+    "driving",
+    "dynamic",
+    "elegant",
+    "emotional",
+    "empowering",
+    "energetic",
+    "epic",
+    "ethereal",
+    "euphoric",
+    "fierce",
+    "funky",
+    "groovy",
+    "haunting",
+    "hopeful",
+    "intense",
+    "intimate",
+    "introspective",
+    "ironic",
+    "luxurious",
+    "melancholic",
+    "mellow",
+    "minimalist",
+    "modern",
+    "mysterious",
+    "mystical",
+    "nocturnal",
+    "nostalgic",
+    "passionate",
+    "peaceful",
+    "playful",
+    "powerful",
+    "raw",
+    "rebellious",
+    "reflective",
+    "relaxed",
+    "romantic",
+    "satirical",
+    "seductive",
+    "serene",
+    "smooth",
+    "sophisticated",
+    "soulful",
+    "surreal",
+    "trippy",
+    "unsettling",
+    "upbeat",
+    "uplifting",
+    "warm",
+    "whimsical",
+    "youthful",
+]
+
+LANGUAGES: List[str] = ["en", "es", "fr", "instrumental", "ko"]
+
+INSTRUMENTATIONS: List[str] = [
+    "808",
+    "bass",
+    "drums",
+    "electronic_beats",
+    "guitar",
+    "keyboards",
+    "palmas",
+    "percussion",
+    "piano",
+    "recorder",
+    "samples",
+    "saxophone",
+    "strings",
+    "synth",
+    "trumpet",
+    "vocals",
+    "vocoder",
+]
+
+REGIONALITIES: List[str] = [
+    "asia",
+    "es",
+    "eu",
+    "fr",
+    "global",
+    "jp",
+    "kr",
+    "latam",
+    "us",
+]
+
+
+def _decode_index_list(values: List[int], lookup: List[str]) -> List[str]:
+    return [lookup[v] for v in values if isinstance(v, int) and 0 <= v < len(lookup)]
+
+
+def _decode_index(value: int, lookup: List[str]) -> Optional[str]:
+    if isinstance(value, int) and 0 <= value < len(lookup):
+        return lookup[value]
+    return None
+
+# ============================================================================
 # 데이터 모델
 # ============================================================================
 
@@ -73,14 +256,32 @@ class DataLoader:
             
             songs = []
             for item in data:
+                tags_raw = item.get('tags', {})
+                tags = dict(tags_raw)
+                if 'subgenres' in tags:
+                    tags['subgenres'] = _decode_index_list(tags.get('subgenres', []), SUBGENRES)
+                if 'mood' in tags:
+                    tags['mood'] = _decode_index_list(tags.get('mood', []), MOODS)
+                if 'language' in tags:
+                    decoded_lang = _decode_index(tags.get('language'), LANGUAGES)
+                    if decoded_lang is not None:
+                        tags['language'] = decoded_lang
+                if 'instrumentation' in tags:
+                    tags['instrumentation'] = _decode_index_list(tags.get('instrumentation', []), INSTRUMENTATIONS)
+
+                popularity_raw = item.get('popularity', {})
+                popularity = dict(popularity_raw)
+                if 'regionality' in popularity:
+                    popularity['regionality'] = _decode_index_list(popularity.get('regionality', []), REGIONALITIES)
+
                 song = Song(
                     id=item['id'],
                     artist=item['artist'],
                     title=item['title'],
                     youtube_url=item.get('youtube_url', ''),
                     genres=item.get('genres', []),
-                    tags=item.get('tags', {}),
-                    popularity=item.get('popularity', {}),
+                    tags=tags,
+                    popularity=popularity,
                     meta=item.get('meta', {}),
                     clip=item.get('clip', {})
                 )
