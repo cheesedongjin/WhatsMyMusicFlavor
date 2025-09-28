@@ -1848,5 +1848,1466 @@
       "duration_sec": 206,
       "loudness_lufs": -7.8
     }
+  },
+  {
+    "id": "song_019",
+    "artist": "Caribou",
+    "title": "Can't Do Without You",
+    "youtube_url": "https://www.youtube.com/watch?v=KfFW4xPW19g",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      3,
+      35
+    ],
+    "tags": {
+      "subgenres": [
+        24,
+        18
+      ],
+      "mood": [
+        44,
+        29,
+        26
+      ],
+      "energy": 0.82,
+      "valence": 0.8,
+      "tempo_bpm": 125,
+      "era_year": 2014,
+      "language": 0,
+      "instrumentation": [
+        13,
+        10,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.58,
+      "yt_views": 42000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 166,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_020",
+    "artist": "Amy Winehouse",
+    "title": "Back to Black",
+    "youtube_url": "https://www.youtube.com/watch?v=TJAfLE39ZZ8",
+    "clip": {
+      "start_sec": 25,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        41,
+        49
+      ],
+      "mood": [
+        37,
+        59,
+        34
+      ],
+      "energy": 0.55,
+      "valence": 0.3,
+      "tempo_bpm": 98,
+      "era_year": 2006,
+      "language": 0,
+      "instrumentation": [
+        12,
+        2,
+        1,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.86,
+      "yt_views": 680000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 241,
+      "loudness_lufs": -11.8
+    }
+  },
+  {
+    "id": "song_021",
+    "artist": "Metallica",
+    "title": "Enter Sandman",
+    "youtube_url": "https://www.youtube.com/watch?v=CD-E-LDc384",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      10
+    ],
+    "tags": {
+      "subgenres": [
+        28,
+        51
+      ],
+      "mood": [
+        32,
+        14,
+        48
+      ],
+      "energy": 0.95,
+      "valence": 0.4,
+      "tempo_bpm": 123,
+      "era_year": 1991,
+      "language": 0,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 850000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 331,
+      "loudness_lufs": -8.2
+    }
+  },
+  {
+    "id": "song_022",
+    "artist": "Dua Lipa",
+    "title": "Levitating",
+    "youtube_url": "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        13,
+        12
+      ],
+      "mood": [
+        63,
+        26,
+        23
+      ],
+      "energy": 0.9,
+      "valence": 0.9,
+      "tempo_bpm": 103,
+      "era_year": 2020,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 920000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 203,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_023",
+    "artist": "Coldplay",
+    "title": "Viva La Vida",
+    "youtube_url": "https://www.youtube.com/watch?v=dvgZkm1xWPE",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        45,
+        3
+      ],
+      "mood": [
+        24,
+        22,
+        7
+      ],
+      "energy": 0.75,
+      "valence": 0.65,
+      "tempo_bpm": 138,
+      "era_year": 2008,
+      "language": 0,
+      "instrumentation": [
+        12,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 1200000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 242,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_024",
+    "artist": "Zedd",
+    "title": "Clarity",
+    "youtube_url": "https://www.youtube.com/watch?v=IxxstCcJlsc",
+    "clip": {
+      "start_sec": 60,
+      "preview_sec": 30
+    },
+    "genres": [
+      3,
+      33
+    ],
+    "tags": {
+      "subgenres": [
+        15,
+        19
+      ],
+      "mood": [
+        21,
+        64,
+        18
+      ],
+      "energy": 0.88,
+      "valence": 0.7,
+      "tempo_bpm": 128,
+      "era_year": 2012,
+      "language": 0,
+      "instrumentation": [
+        13,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.84,
+      "yt_views": 480000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 251,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_025",
+    "artist": "Simon & Garfunkel",
+    "title": "The Sound of Silence",
+    "youtube_url": "https://www.youtube.com/watch?v=4fWyzwo1xg0",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      17
+    ],
+    "tags": {
+      "subgenres": [
+        31,
+        51
+      ],
+      "mood": [
+        34,
+        12,
+        25
+      ],
+      "energy": 0.4,
+      "valence": 0.35,
+      "tempo_bpm": 100,
+      "era_year": 1964,
+      "language": 0,
+      "instrumentation": [
+        4,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 720000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 199,
+      "loudness_lufs": -16.5
+    }
+  },
+  {
+    "id": "song_026",
+    "artist": "Shakira",
+    "title": "Hips Don't Lie",
+    "youtube_url": "https://www.youtube.com/watch?v=DUT5rEU6pqM",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      28
+    ],
+    "tags": {
+      "subgenres": [
+        45,
+        29
+      ],
+      "mood": [
+        63,
+        13,
+        23
+      ],
+      "energy": 0.92,
+      "valence": 0.9,
+      "tempo_bpm": 100,
+      "era_year": 2006,
+      "language": 0,
+      "instrumentation": [
+        2,
+        7,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 1100000000,
+      "regionality": [
+        4,
+        7,
+        2
+      ]
+    },
+    "meta": {
+      "duration_sec": 218,
+      "loudness_lufs": -7.8
+    }
+  },
+  {
+    "id": "song_027",
+    "artist": "Tyler, The Creator",
+    "title": "See You Again",
+    "youtube_url": "https://www.youtube.com/watch?v=FlRNoh8R6Y0",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      45
+    ],
+    "tags": {
+      "subgenres": [
+        1,
+        41
+      ],
+      "mood": [
+        44,
+        57,
+        17
+      ],
+      "energy": 0.6,
+      "valence": 0.75,
+      "tempo_bpm": 96,
+      "era_year": 2017,
+      "language": 0,
+      "instrumentation": [
+        13,
+        8,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 180000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 180,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_028",
+    "artist": "Cigarettes After Sex",
+    "title": "Apocalypse",
+    "youtube_url": "https://www.youtube.com/watch?v=sElE_BfQ67s",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        17,
+        4
+      ],
+      "mood": [
+        33,
+        53,
+        25
+      ],
+      "energy": 0.25,
+      "valence": 0.45,
+      "tempo_bpm": 112,
+      "era_year": 2017,
+      "language": 0,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.71,
+      "yt_views": 320000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 230,
+      "loudness_lufs": -14.2
+    }
+  },
+  {
+    "id": "song_029",
+    "artist": "Talking Heads",
+    "title": "Once in a Lifetime",
+    "youtube_url": "https://www.youtube.com/watch?v=5IsSpAOD6K8",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        3,
+        20
+      ],
+      "mood": [
+        62,
+        61,
+        66
+      ],
+      "energy": 0.7,
+      "valence": 0.6,
+      "tempo_bpm": 92,
+      "era_year": 1980,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15,
+        7
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.79,
+      "yt_views": 95000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 259,
+      "loudness_lufs": -12.8
+    }
+  },
+  {
+    "id": "song_051",
+    "artist": "Arctic Monkeys",
+    "title": "Do I Wanna Know?",
+    "youtube_url": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        32,
+        3
+      ],
+      "mood": [
+        55,
+        14,
+        29
+      ],
+      "energy": 0.75,
+      "valence": 0.45,
+      "tempo_bpm": 85,
+      "era_year": 2013,
+      "language": 0,
+      "instrumentation": [
+        1,
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 1300000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 272,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_052",
+    "artist": "Avicii",
+    "title": "Wake Me Up",
+    "youtube_url": "https://www.youtube.com/watch?v=IcrbM1l_BoI",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      3,
+      36
+    ],
+    "tags": {
+      "subgenres": [
+        15,
+        25
+      ],
+      "mood": [
+        64,
+        31,
+        23
+      ],
+      "energy": 0.85,
+      "valence": 0.75,
+      "tempo_bpm": 124,
+      "era_year": 2013,
+      "language": 0,
+      "instrumentation": [
+        13,
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 2200000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 247,
+      "loudness_lufs": -6.8
+    }
+  },
+  {
+    "id": "song_053",
+    "artist": "Lana Del Rey",
+    "title": "Video Games",
+    "youtube_url": "https://www.youtube.com/watch?v=cE6wxDqdOV0",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      27
+    ],
+    "tags": {
+      "subgenres": [
+        7,
+        0
+      ],
+      "mood": [
+        37,
+        44,
+        53
+      ],
+      "energy": 0.35,
+      "valence": 0.4,
+      "tempo_bpm": 61,
+      "era_year": 2011,
+      "language": 0,
+      "instrumentation": [
+        12,
+        8,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 380000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 279,
+      "loudness_lufs": -12.5
+    }
+  },
+  {
+    "id": "song_054",
+    "artist": "AC/DC",
+    "title": "Back in Black",
+    "youtube_url": "https://www.youtube.com/watch?v=pAgnJDJN4VA",
+    "clip": {
+      "start_sec": 20,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      10
+    ],
+    "tags": {
+      "subgenres": [
+        28,
+        51
+      ],
+      "mood": [
+        48,
+        1,
+        11
+      ],
+      "energy": 0.95,
+      "valence": 0.65,
+      "tempo_bpm": 94,
+      "era_year": 1980,
+      "language": 0,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 1400000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 255,
+      "loudness_lufs": -10.2
+    }
+  },
+  {
+    "id": "song_055",
+    "artist": "Oasis",
+    "title": "Wonderwall",
+    "youtube_url": "https://www.youtube.com/watch?v=bx1Bh8ZvH84",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        3,
+        45
+      ],
+      "mood": [
+        44,
+        31,
+        51
+      ],
+      "energy": 0.6,
+      "valence": 0.7,
+      "tempo_bpm": 87,
+      "era_year": 1995,
+      "language": 0,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 680000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 258,
+      "loudness_lufs": -11.8
+    }
+  },
+  {
+    "id": "song_056",
+    "artist": "OutKast",
+    "title": "Hey Ya!",
+    "youtube_url": "https://www.youtube.com/watch?v=PWgvGjAhvIw",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      46
+    ],
+    "tags": {
+      "subgenres": [
+        25,
+        29
+      ],
+      "mood": [
+        63,
+        23,
+        47
+      ],
+      "energy": 0.88,
+      "valence": 0.85,
+      "tempo_bpm": 160,
+      "era_year": 2003,
+      "language": 0,
+      "instrumentation": [
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 420000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 235,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_057",
+    "artist": "Joji",
+    "title": "Slow Dancing in the Dark",
+    "youtube_url": "https://www.youtube.com/watch?v=K3Qzzggn--s",
+    "clip": {
+      "start_sec": 55,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        2,
+        0
+      ],
+      "mood": [
+        37,
+        34,
+        21
+      ],
+      "energy": 0.55,
+      "valence": 0.35,
+      "tempo_bpm": 88,
+      "era_year": 2018,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 520000000,
+      "regionality": [
+        4,
+        0
+      ]
+    },
+    "meta": {
+      "duration_sec": 209,
+      "loudness_lufs": -9.2
+    }
+  },
+  {
+    "id": "song_058",
+    "artist": "Doja Cat",
+    "title": "Say So",
+    "youtube_url": "https://www.youtube.com/watch?v=pok8H_KF1FA",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      20
+    ],
+    "tags": {
+      "subgenres": [
+        13,
+        12
+      ],
+      "mood": [
+        29,
+        63,
+        47
+      ],
+      "energy": 0.8,
+      "valence": 0.85,
+      "tempo_bpm": 111,
+      "era_year": 2019,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 780000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 237,
+      "loudness_lufs": -7.8
+    }
+  },
+  {
+    "id": "song_059",
+    "artist": "Eurythmics",
+    "title": "Sweet Dreams (Are Made of This)",
+    "youtube_url": "https://www.youtube.com/watch?v=qeMFqkcPYcg",
+    "clip": {
+      "start_sec": 25,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      23
+    ],
+    "tags": {
+      "subgenres": [
+        54,
+        17
+      ],
+      "mood": [
+        30,
+        14,
+        41
+      ],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 128,
+      "era_year": 1983,
+      "language": 0,
+      "instrumentation": [
+        13,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 530000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 216,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_060",
+    "artist": "Marvin Gaye",
+    "title": "What's Going On",
+    "youtube_url": "https://www.youtube.com/watch?v=H-kA3UtBj4M",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        41,
+        51
+      ],
+      "mood": [
+        57,
+        59,
+        12
+      ],
+      "energy": 0.5,
+      "valence": 0.55,
+      "tempo_bpm": 98,
+      "era_year": 1971,
+      "language": 0,
+      "instrumentation": [
+        12,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.84,
+      "yt_views": 95000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 232,
+      "loudness_lufs": -15.2
+    }
+  },
+  {
+    "id": "song_061",
+    "artist": "Calvin Harris",
+    "title": "Summer",
+    "youtube_url": "https://www.youtube.com/watch?v=ebXbLfLACGM",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      3,
+      36
+    ],
+    "tags": {
+      "subgenres": [
+        15,
+        16
+      ],
+      "mood": [
+        26,
+        63,
+        8
+      ],
+      "energy": 0.92,
+      "valence": 0.9,
+      "tempo_bpm": 128,
+      "era_year": 2014,
+      "language": 0,
+      "instrumentation": [
+        13,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.86,
+      "yt_views": 950000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 223,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_062",
+    "artist": "Måneskin",
+    "title": "Beggin'",
+    "youtube_url": "https://www.youtube.com/watch?v=RVH5dn1cxAQ",
+    "clip": {
+      "start_sec": 20,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        45,
+        25
+      ],
+      "mood": [
+        23,
+        48,
+        15
+      ],
+      "energy": 0.9,
+      "valence": 0.7,
+      "tempo_bpm": 134,
+      "era_year": 2021,
+      "language": 0,
+      "instrumentation": [
+        1,
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 680000000,
+      "regionality": [
+        4,
+        2
+      ]
+    },
+    "meta": {
+      "duration_sec": 211,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_063",
+    "artist": "Bruno Mars",
+    "title": "24K Magic",
+    "youtube_url": "https://www.youtube.com/watch?v=UqyT8IEBkvY",
+    "clip": {
+      "start_sec": 25,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      22
+    ],
+    "tags": {
+      "subgenres": [
+        25,
+        49
+      ],
+      "mood": [
+        28,
+        11,
+        36
+      ],
+      "energy": 0.85,
+      "valence": 0.88,
+      "tempo_bpm": 107,
+      "era_year": 2016,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 1400000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 226,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_064",
+    "artist": "Eminem",
+    "title": "Lose Yourself",
+    "youtube_url": "https://www.youtube.com/watch?v=_Yhyp-_hX2s",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      40
+    ],
+    "tags": {
+      "subgenres": [
+        60,
+        29
+      ],
+      "mood": [
+        32,
+        15,
+        1
+      ],
+      "energy": 0.9,
+      "valence": 0.5,
+      "tempo_bpm": 171,
+      "era_year": 2002,
+      "language": 0,
+      "instrumentation": [
+        8,
+        4,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 1700000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 326,
+      "loudness_lufs": -8.8
+    }
+  },
+  {
+    "id": "song_065",
+    "artist": "Louis Armstrong",
+    "title": "What a Wonderful World",
+    "youtube_url": "https://www.youtube.com/watch?v=VqhCQZaH4Vs",
+    "clip": {
+      "start_sec": 20,
+      "preview_sec": 30
+    },
+    "genres": [
+      5,
+      50
+    ],
+    "tags": {
+      "subgenres": [
+        40,
+        51
+      ],
+      "mood": [
+        65,
+        56,
+        31
+      ],
+      "energy": 0.3,
+      "valence": 0.85,
+      "tempo_bpm": 72,
+      "era_year": 1967,
+      "language": 0,
+      "instrumentation": [
+        14,
+        12,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 280000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 139,
+      "loudness_lufs": -18.5
+    }
+  },
+  {
+    "id": "song_066",
+    "artist": "Travis Scott",
+    "title": "SICKO MODE",
+    "youtube_url": "https://www.youtube.com/watch?v=6ONRf7h3Mdk",
+    "clip": {
+      "start_sec": 60,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      40
+    ],
+    "tags": {
+      "subgenres": [
+        56,
+        29
+      ],
+      "mood": [
+        14,
+        32,
+        48
+      ],
+      "energy": 0.88,
+      "valence": 0.55,
+      "tempo_bpm": 155,
+      "era_year": 2018,
+      "language": 0,
+      "instrumentation": [
+        0,
+        13,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 820000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 312,
+      "loudness_lufs": -7.8
+    }
+  },
+  {
+    "id": "song_067",
+    "artist": "Hozier",
+    "title": "Take Me to Church",
+    "youtube_url": "https://www.youtube.com/watch?v=PVjiKRfKpPI",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      17
+    ],
+    "tags": {
+      "subgenres": [
+        31,
+        51
+      ],
+      "mood": [
+        32,
+        45,
+        7
+      ],
+      "energy": 0.75,
+      "valence": 0.4,
+      "tempo_bpm": 129,
+      "era_year": 2013,
+      "language": 0,
+      "instrumentation": [
+        4,
+        2,
+        8,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 1200000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 241,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_068",
+    "artist": "The Smiths",
+    "title": "There Is a Light That Never Goes Out",
+    "youtube_url": "https://www.youtube.com/watch?v=siO6dkqidc4",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [
+      1,
+      14
+    ],
+    "tags": {
+      "subgenres": [
+        3,
+        32
+      ],
+      "mood": [
+        37,
+        53,
+        17
+      ],
+      "energy": 0.65,
+      "valence": 0.45,
+      "tempo_bpm": 82,
+      "era_year": 1986,
+      "language": 0,
+      "instrumentation": [
+        4,
+        1,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 95000000,
+      "regionality": [
+        4
+      ]
+    },
+    "meta": {
+      "duration_sec": 244,
+      "loudness_lufs": -13.2
+    }
+  },
+  {
+    "id": "song_069",
+    "artist": "Jay-Z",
+    "title": "Empire State of Mind",
+    "youtube_url": "https://www.youtube.com/watch?v=QsZlY0Vz4-o",
+    "clip": {
+      "start_sec": 55,
+      "preview_sec": 30
+    },
+    "genres": [
+      4,
+      40
+    ],
+    "tags": {
+      "subgenres": [
+        60,
+        49
+      ],
+      "mood": [
+        22,
+        11,
+        24
+      ],
+      "energy": 0.78,
+      "valence": 0.75,
+      "tempo_bpm": 87,
+      "era_year": 2009,
+      "language": 0,
+      "instrumentation": [
+        8,
+        12,
+        2,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 680000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 276,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_070",
+    "artist": "Childish Gambino",
+    "title": "Redbone",
+    "youtube_url": "https://www.youtube.com/watch?v=Kp7eSUU9oy8",
+    "clip": {
+      "start_sec": 60,
+      "preview_sec": 30
+    },
+    "genres": [
+      2,
+      26
+    ],
+    "tags": {
+      "subgenres": [
+        2,
+        25
+      ],
+      "mood": [
+        29,
+        57,
+        55
+      ],
+      "energy": 0.55,
+      "valence": 0.65,
+      "tempo_bpm": 158,
+      "era_year": 2016,
+      "language": 0,
+      "instrumentation": [
+        13,
+        1,
+        4,
+        15
+      ]
+    },
+    "popularity": {
+      "awareness_idx": 0.81,
+      "yt_views": 420000000,
+      "regionality": [
+        4,
+        8
+      ]
+    },
+    "meta": {
+      "duration_sec": 327,
+      "loudness_lufs": -10.2
+    }
   }
 ]
