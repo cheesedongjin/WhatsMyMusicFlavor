@@ -7,6 +7,7 @@ import json
 import math
 import random
 import webbrowser
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict
@@ -1073,35 +1074,17 @@ class MusicTournamentGUI:
 # 실행
 # ============================================================================
 
-if __name__ == "__main__":
-    # 샘플 데이터 생성 (실제로는 songs.json 파일 사용)
-    sample_data = [
-        {
-            "id": f"song_{i:03d}",
-            "artist": f"Artist {i}",
-            "title": f"Song Title {i}",
-            "youtube_url": f"https://youtube.com/watch?v=example{i}",
-            "genres": [random.randint(0, 5)],
-            "tags": {
-                "energy": random.random(),
-                "era_year": random.randint(1970, 2023)
-            },
-            "popularity": {
-                "awareness_idx": random.random()
-            }
-        }
-        for i in range(1, 101)
-    ]
-    
-    # 샘플 데이터 저장
-    with open('songs.json', 'w', encoding='utf-8') as f:
-        json.dump(sample_data, f, ensure_ascii=False, indent=2)
-    
-    print("샘플 데이터 생성 완료: songs.json")
-    print("\n실행 방법:")
-    print("1. songs.json 파일을 실제 곡 데이터로 수정")
-    print("2. python main.py 실행 (GUI 버전)")
+def main():
+    songs_file = Path("songs.json")
 
-    gui = MusicTournamentGUI('songs.json')
+    if not songs_file.exists():
+        print("✗ songs.json 파일을 찾을 수 없습니다. 프로젝트 루트에 파일을 추가해주세요.")
+        return
+
+    gui = MusicTournamentGUI(str(songs_file))
     gui.run()
+
+
+if __name__ == "__main__":
+    main()
     
