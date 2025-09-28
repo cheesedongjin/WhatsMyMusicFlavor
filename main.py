@@ -8,7 +8,7 @@ import math
 import random
 import webbrowser
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set
+from typing import List, Dict, Tuple, Optional, Set, Any
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict
 import numpy as np
@@ -931,50 +931,286 @@ class ResultAnalyzer:
 # ============================================================================
 
 class RecommendationEngine:
-    def __init__(self, all_songs: List[Song], participated_songs: List[Song]):
+    """토너먼트 결과를 활용해 맞춤 추천을 생성한다."""
+
+    LANGUAGE_DISPLAY = {
+        'en': '영어',
+        'es': '스페인어',
+        'fr': '프랑스어',
+        'instrumental': '연주곡',
+        'ko': '한국어',
+    }
+
+    REGION_DISPLAY = {
+        'asia': '아시아',
+        'es': '스페인',
+        'eu': '유럽',
+        'fr': '프랑스',
+        'global': '글로벌',
+        'jp': '일본',
+        'kr': '한국',
+        'latam': '라틴 아메리카',
+        'us': '미국',
+    }
+
+    def __init__(self, all_songs: List[Song], participated_songs: List[Song], survey_profile: Optional[Dict] = None):
         self.all_songs = all_songs
         self.participated = set(s.id for s in participated_songs)
-    
-    def generate_recommendations(self, top_songs: List[Song], n: int = 10) -> List[Tuple[Song, str]]:
-        """추천곡 생성"""
+        self.profile = survey_profile or {}
+        self.language_whitelist: Set[str] = set(self.profile.get('preferred_languages') or [])
+        self.language_strict: bool = bool(self.profile.get('language_strict') and self.language_whitelist)
+        self.preferred_language: Optional[str] = self.profile.get('preferred_language')
+        self.regional_focus: str = self.profile.get('regional_focus', 'neutral')
+        self.selector = CandidateSelector(all_songs, self.profile)
+
+    def generate_recommendations(
+        self,
+        top_songs: List[Song],
+        n_core: int = 7,
+        n_fresh: int = 3
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """설문 결과와 토너먼트 상위 곡을 기반으로 추천을 생성한다."""
+
         if not top_songs:
-            return []
-        
-        recommendations = []
+            return {'core': [], 'fresh': []}
+
         top_winners = top_songs[:3]
-        
-        # 불참곡 중에서 추천
         candidates = [s for s in self.all_songs if s.id not in self.participated]
-        
-        for song in candidates[:n]:
-            # 간단한 유사도: 같은 장르가 있으면 추천
-            reason = "다양한 스타일 탐색"
 
-            for winner in top_winners:
-                shared_genres = sorted(set(song.genres) & set(winner.genres))
-                if shared_genres:
-                    highlight = ", ".join(shared_genres[:2])
-                    reason = f"{winner}와 비슷한 {highlight}"
+        scored_entries: List[Dict[str, Any]] = []
+        for song in candidates:
+            base_score = self.selector.compute_base_score(song, self.language_whitelist, self.language_strict)
+            if base_score == float('-inf'):
+                continue
+
+            similarity_score, anchor, shared_tags = self._analyze_similarity(song, top_winners)
+
+            if base_score <= 0 and similarity_score <= 0:
+                continue
+
+            language_note = self._describe_language_fit(song)
+            region_note = self._describe_region_fit(song)
+            freshness_score, freshness_note = self._freshness_profile(song)
+
+            scored_entries.append({
+                'song': song,
+                'score': base_score + similarity_score,
+                'freshness': freshness_score,
+                'anchor': anchor,
+                'shared_tags': shared_tags,
+                'language_note': language_note,
+                'region_note': region_note,
+                'freshness_note': freshness_note,
+            })
+
+        if not scored_entries:
+            return {'core': [], 'fresh': []}
+
+        scored_entries.sort(key=lambda item: (item['score'], item['freshness']), reverse=True)
+
+        core_recs: List[Dict[str, Any]] = []
+        used_ids: Set[str] = set()
+        for entry in scored_entries:
+            if len(core_recs) >= n_core:
+                break
+            formatted = self._format_entry(entry, category='core')
+            core_recs.append(formatted)
+            used_ids.add(entry['song'].id)
+
+        fresh_candidates = [
+            entry for entry in scored_entries
+            if entry['song'].id not in used_ids and entry['freshness'] >= 0.45 and entry['score'] > 0
+        ]
+        fresh_candidates.sort(key=lambda item: (item['freshness'], item['score']), reverse=True)
+
+        fresh_recs: List[Dict[str, Any]] = []
+        for entry in fresh_candidates[:n_fresh]:
+            formatted = self._format_entry(entry, category='fresh')
+            fresh_recs.append(formatted)
+            used_ids.add(entry['song'].id)
+
+        if len(fresh_recs) < n_fresh:
+            remaining = [entry for entry in scored_entries if entry['song'].id not in used_ids]
+            for entry in remaining:
+                if len(fresh_recs) >= n_fresh:
                     break
+                formatted = self._format_entry(entry, category='fresh')
+                fresh_recs.append(formatted)
+                used_ids.add(entry['song'].id)
 
-            recommendations.append((song, reason))
-        
-        return recommendations[:n]
-    
-    def show_recommendations(self, recommendations: List[Tuple[Song, str]]):
+        return {'core': core_recs, 'fresh': fresh_recs}
+
+    def show_recommendations(self, recommendations: Dict[str, List[Dict[str, Any]]]):
         """추천 결과 출력"""
         print("\n" + "="*60)
         print("💡 추천 곡 목록")
         print("="*60)
-        
-        if not recommendations:
+
+        core = recommendations.get('core', []) if recommendations else []
+        fresh = recommendations.get('fresh', []) if recommendations else []
+
+        if not core and not fresh:
             print("추천할 곡이 없습니다.")
             return
-        
-        for i, (song, reason) in enumerate(recommendations, 1):
-            print(f"\n{i}. {song}")
-            print(f"   이유: {reason}")
-            print(f"   링크: {song.youtube_url}")
+
+        if core:
+            print("\n🎯 취향 저격 추천")
+            for idx, entry in enumerate(core, 1):
+                song = entry['song']
+                reason = entry['reason']
+                print(f"\n{idx}. {song}")
+                print(f"   이유: {reason}")
+                print(f"   링크: {song.youtube_url}")
+
+        if fresh:
+            print("\n🌱 새롭게 시도해볼 곡")
+            for idx, entry in enumerate(fresh, 1):
+                song = entry['song']
+                reason = entry['reason']
+                print(f"\n{idx}. {song}")
+                print(f"   이유: {reason}")
+                print(f"   링크: {song.youtube_url}")
+
+    def _analyze_similarity(self, song: Song, winners: List[Song]) -> Tuple[float, Optional[Song], List[str]]:
+        """상위 곡과의 유사도를 계산한다."""
+
+        best_score = 0.0
+        best_anchor: Optional[Song] = None
+        best_tags: List[str] = []
+
+        song_genres = set(song.genres or [])
+        song_subgenres = set(song.tags.get('subgenres', []))
+
+        for winner in winners:
+            shared_genres = sorted(song_genres & set(winner.genres or []))
+            shared_subgenres = sorted(song_subgenres & set(winner.tags.get('subgenres', [])))
+
+            similarity = 0.0
+            if shared_genres:
+                similarity += 0.8 + 0.25 * len(shared_genres)
+            if shared_subgenres:
+                similarity += 0.4 + 0.1 * len(shared_subgenres)
+
+            song_energy = song.tags.get('energy')
+            winner_energy = winner.tags.get('energy')
+            if isinstance(song_energy, (int, float)) and isinstance(winner_energy, (int, float)):
+                energy_diff = abs(song_energy - winner_energy)
+                similarity += max(0.0, 0.5 - energy_diff)
+
+            song_valence = song.tags.get('valence')
+            winner_valence = winner.tags.get('valence')
+            if isinstance(song_valence, (int, float)) and isinstance(winner_valence, (int, float)):
+                valence_diff = abs(song_valence - winner_valence)
+                similarity += max(0.0, 0.3 - valence_diff)
+
+            if similarity > best_score:
+                best_score = similarity
+                best_anchor = winner
+                highlight = shared_subgenres or shared_genres
+                best_tags = highlight[:2]
+
+        return best_score, best_anchor, best_tags
+
+    def _describe_language_fit(self, song: Song) -> Optional[str]:
+        language = song.tags.get('language')
+        if not language:
+            return None
+
+        display = self.LANGUAGE_DISPLAY.get(language, language)
+
+        if self.language_strict and language in self.language_whitelist:
+            return f"{display} 가사 선호를 정확히 반영"
+
+        if self.language_whitelist and language in self.language_whitelist:
+            return f"{display} 트랙도 즐겨 듣는 편"
+
+        if self.preferred_language and language == self.preferred_language:
+            return f"{display} 중심 취향을 고려"
+
+        if not self.language_whitelist and not self.preferred_language and language:
+            return None
+
+        return None
+
+    def _describe_region_fit(self, song: Song) -> Optional[str]:
+        regionality = set(song.popularity.get('regionality', []))
+        language = song.tags.get('language')
+
+        if self.regional_focus in {'k_only', 'k_prefer'}:
+            if language == 'ko':
+                return "한국어 곡 중심 취향을 반영"
+            if 'kr' in regionality:
+                return "한국 씬에서 주목받는 곡"
+            if 'asia' in regionality:
+                return "아시아 씬과 연결된 사운드"
+
+        if self.regional_focus == 'global':
+            for code in ['global', 'us', 'eu', 'latam']:
+                if code in regionality:
+                    region_name = self.REGION_DISPLAY.get(code, code)
+                    return f"{region_name} 트렌드를 느낄 수 있는 곡"
+
+        return None
+
+    def _freshness_profile(self, song: Song) -> Tuple[float, Optional[str]]:
+        era_year = song.tags.get('era_year')
+        awareness = song.popularity.get('awareness_idx')
+
+        freshness = 0.0
+        note: Optional[str] = None
+
+        if isinstance(era_year, (int, float)):
+            year = int(era_year)
+            if year >= 2020:
+                freshness += 0.7
+                note = f"{year}년대 최신 감각"
+            elif year >= 2015:
+                freshness += 0.5
+                note = f"{year}년 이후 발표된 비교적 최신곡"
+            elif year >= 2010:
+                freshness += 0.3
+                note = f"{year}년대의 감성을 담은 곡"
+
+        if isinstance(awareness, (int, float)) and awareness < 0.4:
+            freshness += 0.2
+            if not note:
+                note = "아직 널리 알려지지 않은 보석"
+
+        return min(freshness, 1.0), note
+
+    def _format_entry(self, entry: Dict[str, Any], category: str) -> Dict[str, Any]:
+        song = entry['song']
+        anchor: Optional[Song] = entry.get('anchor')
+        shared_tags: List[str] = entry.get('shared_tags') or []
+        parts: List[str] = []
+
+        if anchor:
+            if shared_tags:
+                highlight = ", ".join(shared_tags)
+                parts.append(f"{anchor}와 닮은 {highlight}")
+            else:
+                parts.append(f"{anchor}의 무드를 잇는 트랙")
+
+        language_note = entry.get('language_note')
+        if language_note:
+            parts.append(language_note)
+
+        region_note = entry.get('region_note')
+        if region_note:
+            parts.append(region_note)
+
+        freshness_note = entry.get('freshness_note')
+        if freshness_note and (category == 'fresh' or entry.get('freshness', 0) >= 0.5):
+            parts.append(freshness_note)
+
+        unique_parts = list(dict.fromkeys(parts))
+        reason = " / ".join(unique_parts) if unique_parts else "토너먼트 기록 기반으로 엄선했어요"
+
+        return {
+            'song': song,
+            'reason': reason,
+            'category': category,
+        }
 
 # ============================================================================
 # 메인 애플리케이션
@@ -1038,7 +1274,7 @@ class MusicTournamentApp:
         
         # 7. 추천
         print("\n7️⃣ 추천곡 생성 중...")
-        recommender = RecommendationEngine(self.songs, self.candidates)
+        recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
         recommendations = recommender.generate_recommendations(report['top_songs'])
         recommender.show_recommendations(recommendations)
         
@@ -1197,7 +1433,7 @@ class MusicTournamentGUI:
         self.total_matches = 0
         self.champion: Optional[Song] = None
         self.report = {}
-        self.recommendations: List[Tuple[Song, str]] = []
+        self.recommendations: Dict[str, List[Dict[str, Any]]] = {'core': [], 'fresh': []}
         self.seed_scores: Dict[str, float] = {}
 
     def enter_fullscreen(self):
@@ -1536,7 +1772,7 @@ class MusicTournamentGUI:
 
         analyzer = ResultAnalyzer(self.engine.match_history, self.candidates)
         self.report = analyzer.generate_report(self.champion)
-        recommender = RecommendationEngine(self.songs, self.candidates)
+        recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
         self.recommendations = recommender.generate_recommendations(self.report['top_songs'])
 
         highlight = ttk.Frame(container, style="Highlight.TFrame", padding=32)
@@ -1639,21 +1875,40 @@ class MusicTournamentGUI:
         scrollable_frame.bind("<Leave>", _unbind_from_mousewheel)
         scrollable_frame.bind("<Destroy>", _unbind_from_mousewheel)
 
-        if not self.recommendations:
+        core_recs = self.recommendations.get('core', []) if self.recommendations else []
+        fresh_recs = self.recommendations.get('fresh', []) if self.recommendations else []
+
+        if not core_recs and not fresh_recs:
             ttk.Label(scrollable_frame, text="추천할 곡이 없습니다.", style="Subtle.TLabel").pack(anchor="w", pady=12)
         else:
-            for i, (song, reason) in enumerate(self.recommendations, 1):
-                item = ttk.Frame(scrollable_frame, style="Card.TFrame")
-                item.pack(fill="x", pady=8)
-                ttk.Label(item, text=f"{i}. {song}", style="Body.TLabel").pack(anchor="w")
-                ttk.Label(item, text=reason, style="Subtle.TLabel").pack(anchor="w")
-                link_label = tk.Label(item, text="YouTube에서 듣기 ↗", font=("Pretendard", 11, "underline"),
-                                     fg="#2563eb", bg="#ffffff", cursor="hand2")
-                link_label.pack(anchor="w", pady=(4, 0))
-                if song.youtube_url:
-                    link_label.bind("<Button-1>", lambda _event, url=song.youtube_url: webbrowser.open(url))
-                else:
-                    link_label.configure(text="링크 정보가 없습니다", fg="#9ca3af", cursor="arrow")
+            def render_section(title: str, entries: List[Dict[str, Any]]):
+                ttk.Label(scrollable_frame, text=title, style="CardSubtitle.TLabel").pack(anchor="w", pady=(8, 4))
+                for idx, entry in enumerate(entries, 1):
+                    song = entry['song']
+                    reason = entry['reason']
+                    item = ttk.Frame(scrollable_frame, style="Card.TFrame")
+                    item.pack(fill="x", pady=6)
+                    ttk.Label(item, text=f"{idx}. {song}", style="Body.TLabel").pack(anchor="w")
+                    ttk.Label(item, text=reason, style="Subtle.TLabel", wraplength=620, justify="left").pack(anchor="w")
+                    link_label = tk.Label(
+                        item,
+                        text="YouTube에서 듣기 ↗",
+                        font=("Pretendard", 11, "underline"),
+                        fg="#2563eb",
+                        bg="#ffffff",
+                        cursor="hand2"
+                    )
+                    link_label.pack(anchor="w", pady=(4, 0))
+                    if song.youtube_url:
+                        link_label.bind("<Button-1>", lambda _event, url=song.youtube_url: webbrowser.open(url))
+                    else:
+                        link_label.configure(text="링크 정보가 없습니다", fg="#9ca3af", cursor="arrow")
+
+            if core_recs:
+                render_section("🎯 취향 저격 트랙", core_recs)
+
+            if fresh_recs:
+                render_section("🌱 새롭게 시도해볼 곡", fresh_recs)
 
         ttk.Button(container, text="처음으로 돌아가기", style="Ghost.TButton", command=self.show_start_view).pack(pady=(0, 12))
         self.status_bar_var.set("결과를 확인하고 추천곡을 감상해보세요.")
