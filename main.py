@@ -973,6 +973,20 @@ class MusicTournamentGUI:
         self.style.configure("CardHighlight.TLabel", background="#312e81", foreground="#ede9fe", font=("Pretendard", 24, "bold"))
         self.style.configure("CardHighlightBody.TLabel", background="#312e81", foreground="#e0e7ff", font=("Pretendard", 12))
 
+        # 설문 라디오 버튼은 선택 상태가 명확히 보이도록 별도 스타일을 사용한다.
+        self.style.configure(
+            "Survey.TRadiobutton",
+            background="#ffffff",
+            foreground="#374151",
+            font=("Pretendard", 12),
+            indicatormargin=6,
+        )
+        self.style.map(
+            "Survey.TRadiobutton",
+            foreground=[("selected", "#312e81")],
+            indicatorcolor=[("selected", "#4f46e5")],
+        )
+
         self.style.configure("Accent.TButton", padding=12, font=("Pretendard", 12, "bold"), foreground="#ffffff", background="#6366f1")
         self.style.map("Accent.TButton", background=[("active", "#4f46e5"), ("pressed", "#4338ca")])
         self.style.configure("Soft.TButton", padding=12, font=("Pretendard", 12), foreground="#ffffff", background="#0ea5e9")
@@ -1070,9 +1084,9 @@ class MusicTournamentGUI:
             self.genre_vars.append((var, (g1, g2)))
             options = ttk.Frame(row, style="Card.TFrame")
             options.pack(anchor="w", pady=(6, 0))
-            ttk.Radiobutton(options, text=f"{g1} 선호", variable=var, value='1', style="Body.TLabel").pack(side="left", padx=(0, 16))
-            ttk.Radiobutton(options, text=f"{g2} 선호", variable=var, value='2', style="Body.TLabel").pack(side="left", padx=(0, 16))
-            ttk.Radiobutton(options, text="잘 모르겠음", variable=var, value='s', style="Body.TLabel").pack(side="left")
+            ttk.Radiobutton(options, text=f"{g1} 선호", variable=var, value='1', style="Survey.TRadiobutton").pack(side="left", padx=(0, 16))
+            ttk.Radiobutton(options, text=f"{g2} 선호", variable=var, value='2', style="Survey.TRadiobutton").pack(side="left", padx=(0, 16))
+            ttk.Radiobutton(options, text="잘 모르겠음", variable=var, value='s', style="Survey.TRadiobutton").pack(side="left")
 
         def build_radio_section(parent, title, options, var):
             section = ttk.Frame(parent, style="Card.TFrame")
@@ -1081,7 +1095,7 @@ class MusicTournamentGUI:
             radios = ttk.Frame(section, style="Card.TFrame")
             radios.pack(anchor="w", pady=(6, 0))
             for text, value in options:
-                ttk.Radiobutton(radios, text=text, variable=var, value=value, style="Body.TLabel").pack(side="left", padx=(0, 16))
+                ttk.Radiobutton(radios, text=text, variable=var, value=value, style="Survey.TRadiobutton").pack(side="left", padx=(0, 16))
 
         self.era_var = tk.StringVar(value='2')
         self.energy_var = tk.StringVar(value='3')
