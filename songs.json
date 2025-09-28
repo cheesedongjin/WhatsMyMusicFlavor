@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "song_001",
+    "artist": "Queen",
+    "title": "Bohemian Rhapsody",
+    "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+    "clip": {"start_sec": 120, "preview_sec": 30},
+    "genres": [1, 11],
+    "tags": {
+      "subgenres": ["progressive_rock", "opera_rock"],
+      "mood": ["dramatic", "epic", "emotional"],
+      "energy": 0.8,
+      "valence": 0.6,
+      "tempo_bpm": 144,
+      "era_year": 1975,
+      "language": "en",
+      "instrumentation": ["piano", "guitar", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 1800000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 354, "loudness_lufs": -11.5}
+  },
+  {
+    "id": "song_002",
+    "artist": "BTS",
+    "title": "Dynamite",
+    "youtube_url": "https://www.youtube.com/watch?v=gdZLi9oWNZg",
+    "clip": {"start_sec": 48, "preview_sec": 30},
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": ["kpop", "disco_pop"],
+      "mood": ["upbeat", "cheerful", "energetic"],
+      "energy": 0.9,
+      "valence": 0.95,
+      "tempo_bpm": 114,
+      "era_year": 2020,
+      "language": "en",
+      "instrumentation": ["synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 1500000000,
+      "regionality": ["global", "kr", "us"]
+    },
+    "meta": {"duration_sec": 199, "loudness_lufs": -6.2}
+  },
+  {
+    "id": "song_003",
+    "artist": "Radiohead",
+    "title": "Creep",
+    "youtube_url": "https://www.youtube.com/watch?v=XFkzRNyygfk",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [1, 11],
+    "tags": {
+      "subgenres": ["alternative_rock", "grunge"],
+      "mood": ["melancholic", "introspective", "raw"],
+      "energy": 0.7,
+      "valence": 0.3,
+      "tempo_bpm": 92,
+      "era_year": 1992,
+      "language": "en",
+      "instrumentation": ["guitar", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 450000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 238, "loudness_lufs": -10.8}
+  },
+  {
+    "id": "song_004",
+    "artist": "Daft Punk",
+    "title": "One More Time",
+    "youtube_url": "https://www.youtube.com/watch?v=FGBhQbmPwH8",
+    "clip": {"start_sec": 30, "preview_sec": 30},
+    "genres": [3, 30],
+    "tags": {
+      "subgenres": ["french_house", "dance"],
+      "mood": ["euphoric", "celebratory", "uplifting"],
+      "energy": 0.95,
+      "valence": 0.9,
+      "tempo_bpm": 123,
+      "era_year": 2000,
+      "language": "en",
+      "instrumentation": ["synth", "vocoder", "drums", "bass"]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 280000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 320, "loudness_lufs": -8.5}
+  },
+  {
+    "id": "song_005",
+    "artist": "Kendrick Lamar",
+    "title": "HUMBLE.",
+    "youtube_url": "https://www.youtube.com/watch?v=tvTRZJ-4EyI",
+    "clip": {"start_sec": 25, "preview_sec": 30},
+    "genres": [4, 40],
+    "tags": {
+      "subgenres": ["west_coast_hip_hop", "trap"],
+      "mood": ["confident", "aggressive", "bold"],
+      "energy": 0.85,
+      "valence": 0.5,
+      "tempo_bpm": 150,
+      "era_year": 2017,
+      "language": "en",
+      "instrumentation": ["808", "synth", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.8,
+      "yt_views": 950000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 177, "loudness_lufs": -7.2}
+  },
+  {
+    "id": "song_006",
+    "artist": "Miles Davis",
+    "title": "So What",
+    "youtube_url": "https://www.youtube.com/watch?v=zqNTltOGh5c",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [5, 50],
+    "tags": {
+      "subgenres": ["modal_jazz", "cool_jazz"],
+      "mood": ["sophisticated", "relaxed", "contemplative"],
+      "energy": 0.4,
+      "valence": 0.6,
+      "tempo_bpm": 138,
+      "era_year": 1959,
+      "language": "instrumental",
+      "instrumentation": ["trumpet", "saxophone", "piano", "bass", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.65,
+      "yt_views": 45000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 562, "loudness_lufs": -18.5}
+  },
+  {
+    "id": "song_007",
+    "artist": "IU",
+    "title": "Palette",
+    "youtube_url": "https://www.youtube.com/watch?v=d9IxdwEFk1c",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": ["k_indie", "pop_ballad"],
+      "mood": ["nostalgic", "reflective", "warm"],
+      "energy": 0.5,
+      "valence": 0.7,
+      "tempo_bpm": 96,
+      "era_year": 2017,
+      "language": "ko",
+      "instrumentation": ["guitar", "piano", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.9,
+      "yt_views": 185000000,
+      "regionality": ["kr", "asia"]
+    },
+    "meta": {"duration_sec": 217, "loudness_lufs": -9.8}
+  },
+  {
+    "id": "song_008",
+    "artist": "Nirvana",
+    "title": "Smells Like Teen Spirit",
+    "youtube_url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+    "clip": {"start_sec": 24, "preview_sec": 30},
+    "genres": [1, 12],
+    "tags": {
+      "subgenres": ["grunge", "alternative_rock"],
+      "mood": ["rebellious", "angst", "raw"],
+      "energy": 0.95,
+      "valence": 0.4,
+      "tempo_bpm": 117,
+      "era_year": 1991,
+      "language": "en",
+      "instrumentation": ["guitar", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 1400000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 301, "loudness_lufs": -9.2}
+  },
+  {
+    "id": "song_009",
+    "artist": "Blackpink",
+    "title": "DDU-DU DDU-DU",
+    "youtube_url": "https://www.youtube.com/watch?v=IHNzOHi8sJs",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": ["kpop", "edm_pop", "trap"],
+      "mood": ["fierce", "confident", "powerful"],
+      "energy": 0.92,
+      "valence": 0.65,
+      "tempo_bpm": 145,
+      "era_year": 2018,
+      "language": "ko",
+      "instrumentation": ["synth", "808", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 2000000000,
+      "regionality": ["global", "kr", "asia"]
+    },
+    "meta": {"duration_sec": 209, "loudness_lufs": -5.8}
+  },
+  {
+    "id": "song_010",
+    "artist": "The Weeknd",
+    "title": "Blinding Lights",
+    "youtube_url": "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
+    "clip": {"start_sec": 35, "preview_sec": 30},
+    "genres": [2, 23],
+    "tags": {
+      "subgenres": ["synthwave", "synth_pop"],
+      "mood": ["nostalgic", "euphoric", "driving"],
+      "energy": 0.88,
+      "valence": 0.75,
+      "tempo_bpm": 171,
+      "era_year": 2019,
+      "language": "en",
+      "instrumentation": ["synth", "drums", "bass", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 1100000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 200, "loudness_lufs": -7.1}
+  },
+  {
+    "id": "song_011",
+    "artist": "Aphex Twin",
+    "title": "Windowlicker",
+    "youtube_url": "https://www.youtube.com/watch?v=UBS4Gi1y_nc",
+    "clip": {"start_sec": 180, "preview_sec": 30},
+    "genres": [3, 32],
+    "tags": {
+      "subgenres": ["idm", "experimental_electronic"],
+      "mood": ["surreal", "complex", "unsettling"],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 132,
+      "era_year": 1999,
+      "language": "en",
+      "instrumentation": ["synth", "drums", "vocoder"]
+    },
+    "popularity": {
+      "awareness_idx": 0.45,
+      "yt_views": 28000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 375, "loudness_lufs": -10.2}
+  },
+  {
+    "id": "song_012",
+    "artist": "Billie Eilish",
+    "title": "bad guy",
+    "youtube_url": "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+    "clip": {"start_sec": 20, "preview_sec": 30},
+    "genres": [2, 24],
+    "tags": {
+      "subgenres": ["alt_pop", "electropop"],
+      "mood": ["dark", "playful", "minimalist"],
+      "energy": 0.65,
+      "valence": 0.55,
+      "tempo_bpm": 135,
+      "era_year": 2019,
+      "language": "en",
+      "instrumentation": ["bass", "synth", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 1300000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 194, "loudness_lufs": -11.3}
+  },
+  {
+    "id": "song_013",
+    "artist": "Chopin",
+    "title": "Nocturne Op.9 No.2",
+    "youtube_url": "https://www.youtube.com/watch?v=9E6b3swbnWg",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [6, 60],
+    "tags": {
+      "subgenres": ["romantic_classical", "piano_solo"],
+      "mood": ["serene", "romantic", "elegant"],
+      "energy": 0.3,
+      "valence": 0.7,
+      "tempo_bpm": 58,
+      "era_year": 1832,
+      "language": "instrumental",
+      "instrumentation": ["piano"]
+    },
+    "popularity": {
+      "awareness_idx": 0.75,
+      "yt_views": 95000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 276, "loudness_lufs": -20.5}
+  },
+  {
+    "id": "song_014",
+    "artist": "Tame Impala",
+    "title": "The Less I Know The Better",
+    "youtube_url": "https://www.youtube.com/watch?v=sBzrzS1Ag_g",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [1, 13],
+    "tags": {
+      "subgenres": ["psychedelic_rock", "indie_rock"],
+      "mood": ["groovy", "dreamy", "melancholic"],
+      "energy": 0.75,
+      "valence": 0.6,
+      "tempo_bpm": 116,
+      "era_year": 2015,
+      "language": "en",
+      "instrumentation": ["synth", "bass", "guitar", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.72,
+      "yt_views": 520000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 216, "loudness_lufs": -9.5}
+  },
+  {
+    "id": "song_015",
+    "artist": "Epik High",
+    "title": "Born Hater",
+    "youtube_url": "https://www.youtube.com/watch?v=3s1jaFDrp5M",
+    "clip": {"start_sec": 70, "preview_sec": 30},
+    "genres": [4, 41],
+    "tags": {
+      "subgenres": ["korean_hip_hop", "alternative_hip_hop"],
+      "mood": ["defiant", "intense", "dark"],
+      "energy": 0.8,
+      "valence": 0.45,
+      "tempo_bpm": 88,
+      "era_year": 2014,
+      "language": "ko",
+      "instrumentation": ["bass", "drums", "synth", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.68,
+      "yt_views": 52000000,
+      "regionality": ["kr", "asia"]
+    },
+    "meta": {"duration_sec": 272, "loudness_lufs": -8.2}
+  },
+  {
+    "id": "song_016",
+    "artist": "Pink Floyd",
+    "title": "Comfortably Numb",
+    "youtube_url": "https://www.youtube.com/watch?v=_FrOQC-zEog",
+    "clip": {"start_sec": 200, "preview_sec": 30},
+    "genres": [1, 11],
+    "tags": {
+      "subgenres": ["progressive_rock", "psychedelic_rock"],
+      "mood": ["introspective", "ethereal", "epic"],
+      "energy": 0.65,
+      "valence": 0.5,
+      "tempo_bpm": 63,
+      "era_year": 1979,
+      "language": "en",
+      "instrumentation": ["guitar", "synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 280000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 382, "loudness_lufs": -13.8}
+  },
+  {
+    "id": "song_017",
+    "artist": "Porter Robinson",
+    "title": "Shelter",
+    "youtube_url": "https://www.youtube.com/watch?v=fzQ6gRAEoy0",
+    "clip": {"start_sec": 45, "preview_sec": 30},
+    "genres": [3, 33],
+    "tags": {
+      "subgenres": ["future_bass", "electronic"],
+      "mood": ["emotional", "uplifting", "nostalgic"],
+      "energy": 0.8,
+      "valence": 0.75,
+      "tempo_bpm": 128,
+      "era_year": 2016,
+      "language": "en",
+      "instrumentation": ["synth", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.55,
+      "yt_views": 95000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 215, "loudness_lufs": -7.8}
+  },
+  {
+    "id": "song_018",
+    "artist": "Ariana Grande",
+    "title": "7 rings",
+    "youtube_url": "https://www.youtube.com/watch?v=QYh6mYIJG2Y",
+    "clip": {"start_sec": 30, "preview_sec": 30},
+    "genres": [2, 22],
+    "tags": {
+      "subgenres": ["trap_pop", "r&b"],
+      "mood": ["confident", "luxurious", "bold"],
+      "energy": 0.78,
+      "valence": 0.65,
+      "tempo_bpm": 138,
+      "era_year": 2008,
+      "language": "en",
+      "instrumentation": ["strings", "piano", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 1200000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 242, "loudness_lufs": -8.8}
+  },
+  {
+    "id": "song_030",
+    "artist": "Massive Attack",
+    "title": "Teardrop",
+    "youtube_url": "https://www.youtube.com/watch?v=u7K72X4eo_s",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [3, 34],
+    "tags": {
+      "subgenres": ["trip_hop", "downtempo"],
+      "mood": ["haunting", "atmospheric", "melancholic"],
+      "energy": 0.4,
+      "valence": 0.35,
+      "tempo_bpm": 80,
+      "era_year": 1998,
+      "language": "en",
+      "instrumentation": ["synth", "guitar", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.68,
+      "yt_views": 125000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 329, "loudness_lufs": -12.5}
+  },
+  {
+    "id": "song_031",
+    "artist": "Rosalía",
+    "title": "Malamente",
+    "youtube_url": "https://www.youtube.com/watch?v=Rht7rBHuXW8",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [2, 28],
+    "tags": {
+      "subgenres": ["flamenco_pop", "experimental_pop"],
+      "mood": ["intense", "passionate", "avant_garde"],
+      "energy": 0.85,
+      "valence": 0.6,
+      "tempo_bpm": 162,
+      "era_year": 2018,
+      "language": "es",
+      "instrumentation": ["palmas", "vocals", "electronic_beats"]
+    },
+    "popularity": {
+      "awareness_idx": 0.62,
+      "yt_views": 180000000,
+      "regionality": ["es", "latam", "global"]
+    },
+    "meta": {"duration_sec": 163, "loudness_lufs": -7.5}
+  },
+  {
+    "id": "song_032",
+    "artist": "Frank Ocean",
+    "title": "Nights",
+    "youtube_url": "https://www.youtube.com/watch?v=r4l9bFqgMaQ",
+    "clip": {"start_sec": 180, "preview_sec": 30},
+    "genres": [2, 26],
+    "tags": {
+      "subgenres": ["alternative_r&b", "experimental"],
+      "mood": ["introspective", "dynamic", "nocturnal"],
+      "energy": 0.75,
+      "valence": 0.55,
+      "tempo_bpm": 127,
+      "era_year": 2016,
+      "language": "en",
+      "instrumentation": ["synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.77,
+      "yt_views": 92000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 307, "loudness_lufs": -9.2}
+  },
+  {
+    "id": "song_033",
+    "artist": "DEAN",
+    "title": "Instagram",
+    "youtube_url": "https://www.youtube.com/watch?v=wKyMIrBClYw",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [2, 26],
+    "tags": {
+      "subgenres": ["k_r&b", "alternative_r&b"],
+      "mood": ["smooth", "confident", "modern"],
+      "energy": 0.68,
+      "valence": 0.7,
+      "tempo_bpm": 95,
+      "era_year": 2016,
+      "language": "ko",
+      "instrumentation": ["synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.71,
+      "yt_views": 68000000,
+      "regionality": ["kr", "asia"]
+    },
+    "meta": {"duration_sec": 185, "loudness_lufs": -8.9}
+  },
+  {
+    "id": "song_034",
+    "artist": "Fleetwood Mac",
+    "title": "Dreams",
+    "youtube_url": "https://www.youtube.com/watch?v=mrZRURcb1cM",
+    "clip": {"start_sec": 30, "preview_sec": 30},
+    "genres": [1, 19],
+    "tags": {
+      "subgenres": ["soft_rock", "pop_rock"],
+      "mood": ["dreamy", "nostalgic", "smooth"],
+      "energy": 0.55,
+      "valence": 0.6,
+      "tempo_bpm": 119,
+      "era_year": 1977,
+      "language": "en",
+      "instrumentation": ["guitar", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 380000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 257, "loudness_lufs": -13.2}
+  },
+  {
+    "id": "song_035",
+    "artist": "Boards of Canada",
+    "title": "Roygbiv",
+    "youtube_url": "https://www.youtube.com/watch?v=yT0gRc2c2wQ",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [3, 35],
+    "tags": {
+      "subgenres": ["idm", "ambient", "electronica"],
+      "mood": ["nostalgic", "peaceful", "abstract"],
+      "energy": 0.45,
+      "valence": 0.65,
+      "tempo_bpm": 128,
+      "era_year": 1998,
+      "language": "instrumental",
+      "instrumentation": ["synth", "samples"]
+    },
+    "popularity": {
+      "awareness_idx": 0.42,
+      "yt_views": 15000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 141, "loudness_lufs": -14.8}
+  },
+  {
+    "id": "song_036",
+    "artist": "Red Velvet",
+    "title": "Psycho",
+    "youtube_url": "https://www.youtube.com/watch?v=uR8Mrt1IpXg",
+    "clip": {"start_sec": 55, "preview_sec": 30},
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": ["kpop", "r&b_pop"],
+      "mood": ["seductive", "dark", "complex"],
+      "energy": 0.72,
+      "valence": 0.58,
+      "tempo_bpm": 140,
+      "era_year": 2019,
+      "language": "ko",
+      "instrumentation": ["synth", "bass", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 450000000,
+      "regionality": ["kr", "asia", "global"]
+    },
+    "meta": {"duration_sec": 210, "loudness_lufs": -7.8}
+  },
+  {
+    "id": "song_037",
+    "artist": "Led Zeppelin",
+    "title": "Stairway to Heaven",
+    "youtube_url": "https://www.youtube.com/watch?v=QkF3oxziUI4",
+    "clip": {"start_sec": 240, "preview_sec": 30},
+    "genres": [1, 10],
+    "tags": {
+      "subgenres": ["hard_rock", "progressive_rock"],
+      "mood": ["epic", "mystical", "building"],
+      "energy": 0.85,
+      "valence": 0.6,
+      "tempo_bpm": 82,
+      "era_year": 1971,
+      "language": "en",
+      "instrumentation": ["guitar", "drums", "bass", "vocals", "recorder"]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 320000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 482, "loudness_lufs": -12.5}
+  },
+  {
+    "id": "song_038",
+    "artist": "SZA",
+    "title": "Good Days",
+    "youtube_url": "https://www.youtube.com/watch?v=LILRp6kWFV8",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [2, 26],
+    "tags": {
+      "subgenres": ["neo_soul", "r&b"],
+      "mood": ["hopeful", "reflective", "peaceful"],
+      "energy": 0.5,
+      "valence": 0.7,
+      "tempo_bpm": 121,
+      "era_year": 2020,
+      "language": "en",
+      "instrumentation": ["guitar", "synth", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 185000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 279, "loudness_lufs": -9.5}
+  },
+  {
+    "id": "song_039",
+    "artist": "The Beatles",
+    "title": "Come Together",
+    "youtube_url": "https://www.youtube.com/watch?v=45cYwDMibGo",
+    "clip": {"start_sec": 30, "preview_sec": 30},
+    "genres": [1, 19],
+    "tags": {
+      "subgenres": ["rock", "blues_rock"],
+      "mood": ["groovy", "mysterious", "funky"],
+      "energy": 0.7,
+      "valence": 0.65,
+      "tempo_bpm": 83,
+      "era_year": 1969,
+      "language": "en",
+      "instrumentation": ["bass", "guitar", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 290000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 259, "loudness_lufs": -14.2}
+  },
+  {
+    "id": "song_040",
+    "artist": "BadBadNotGood",
+    "title": "Time Moves Slow",
+    "youtube_url": "https://www.youtube.com/watch?v=UWIIPX_5rbM",
+    "clip": {"start_sec": 70, "preview_sec": 30},
+    "genres": [5, 51],
+    "tags": {
+      "subgenres": ["contemporary_jazz", "neo_soul"],
+      "mood": ["smooth", "contemplative", "mellow"],
+      "energy": 0.45,
+      "valence": 0.6,
+      "tempo_bpm": 74,
+      "era_year": 2016,
+      "language": "en",
+      "instrumentation": ["saxophone", "keyboards", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.38,
+      "yt_views": 28000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 303, "loudness_lufs": -11.8}
+  },
+  {
+    "id": "song_041",
+    "artist": "TWICE",
+    "title": "Feel Special",
+    "youtube_url": "https://www.youtube.com/watch?v=3ymwOvzhwHs",
+    "clip": {"start_sec": 65, "preview_sec": 30},
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": ["kpop", "dance_pop"],
+      "mood": ["empowering", "uplifting", "bright"],
+      "energy": 0.85,
+      "valence": 0.8,
+      "tempo_bpm": 128,
+      "era_year": 2019,
+      "language": "ko",
+      "instrumentation": ["synth", "bass", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 520000000,
+      "regionality": ["kr", "asia", "global"]
+    },
+    "meta": {"duration_sec": 206, "loudness_lufs": -6.8}
+  },
+  {
+    "id": "song_042",
+    "artist": "J Dilla",
+    "title": "Don't Cry",
+    "youtube_url": "https://www.youtube.com/watch?v=tVkOw-Vyb_U",
+    "clip": {"start_sec": 20, "preview_sec": 30},
+    "genres": [4, 45],
+    "tags": {
+      "subgenres": ["instrumental_hip_hop", "lo_fi"],
+      "mood": ["nostalgic", "melancholic", "soulful"],
+      "energy": 0.4,
+      "valence": 0.45,
+      "tempo_bpm": 88,
+      "era_year": 2006,
+      "language": "instrumental",
+      "instrumentation": ["samples", "drums", "bass"]
+    },
+    "popularity": {
+      "awareness_idx": 0.52,
+      "yt_views": 18000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 153, "loudness_lufs": -13.5}
+  },
+  {
+    "id": "song_043",
+    "artist": "Björk",
+    "title": "Hyperballad",
+    "youtube_url": "https://www.youtube.com/watch?v=26sP2WsA5cY",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [2, 27],
+    "tags": {
+      "subgenres": ["art_pop", "electronic", "experimental"],
+      "mood": ["ethereal", "whimsical", "intense"],
+      "energy": 0.75,
+      "valence": 0.65,
+      "tempo_bpm": 121,
+      "era_year": 1995,
+      "language": "en",
+      "instrumentation": ["synth", "strings", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.58,
+      "yt_views": 25000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 317, "loudness_lufs": -10.8}
+  },
+  {
+    "id": "song_044",
+    "artist": "Anderson .Paak",
+    "title": "Come Down",
+    "youtube_url": "https://www.youtube.com/watch?v=ferZnZ0_rSM",
+    "clip": {"start_sec": 35, "preview_sec": 30},
+    "genres": [4, 46],
+    "tags": {
+      "subgenres": ["neo_soul", "funk", "hip_hop"],
+      "mood": ["groovy", "energetic", "playful"],
+      "energy": 0.82,
+      "valence": 0.75,
+      "tempo_bpm": 103,
+      "era_year": 2016,
+      "language": "en",
+      "instrumentation": ["drums", "bass", "synth", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.64,
+      "yt_views": 65000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 248, "loudness_lufs": -8.8}
+  },
+  {
+    "id": "song_045",
+    "artist": "Nujabes",
+    "title": "Feather",
+    "youtube_url": "https://www.youtube.com/watch?v=jfFTT3iz740",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [4, 45],
+    "tags": {
+      "subgenres": ["jazz_hop", "chillhop"],
+      "mood": ["peaceful", "uplifting", "contemplative"],
+      "energy": 0.5,
+      "valence": 0.7,
+      "tempo_bpm": 90,
+      "era_year": 2005,
+      "language": "en",
+      "instrumentation": ["piano", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.56,
+      "yt_views": 82000000,
+      "regionality": ["global", "jp"]
+    },
+    "meta": {"duration_sec": 175, "loudness_lufs": -12.2}
+  },
+  {
+    "id": "song_046",
+    "artist": "MGMT",
+    "title": "Electric Feel",
+    "youtube_url": "https://www.youtube.com/watch?v=MmZexg8sxyk",
+    "clip": {"start_sec": 45, "preview_sec": 30},
+    "genres": [1, 13],
+    "tags": {
+      "subgenres": ["psychedelic_pop", "indie_rock"],
+      "mood": ["groovy", "trippy", "playful"],
+      "energy": 0.78,
+      "valence": 0.75,
+      "tempo_bpm": 106,
+      "era_year": 2007,
+      "language": "en",
+      "instrumentation": ["synth", "guitar", "bass", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 180000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 229, "loudness_lufs": -9.5}
+  },
+  {
+    "id": "song_047",
+    "artist": "NewJeans",
+    "title": "Ditto",
+    "youtube_url": "https://www.youtube.com/watch?v=Rrf8uQFvICE",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": ["kpop", "uk_garage"],
+      "mood": ["nostalgic", "youthful", "dreamy"],
+      "energy": 0.68,
+      "valence": 0.72,
+      "tempo_bpm": 126,
+      "era_year": 2022,
+      "language": "ko",
+      "instrumentation": ["synth", "bass", "vocals", "percussion"]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 320000000,
+      "regionality": ["kr", "asia", "global"]
+    },
+    "meta": {"duration_sec": 186, "loudness_lufs": -7.5}
+  },
+  {
+    "id": "song_048",
+    "artist": "Gorillaz",
+    "title": "Feel Good Inc.",
+    "youtube_url": "https://www.youtube.com/watch?v=HyHNuVaZJ-k",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": ["alternative_rock", "hip_hop", "electronic"],
+      "mood": ["dark", "groovy", "satirical"],
+      "energy": 0.8,
+      "valence": 0.55,
+      "tempo_bpm": 138,
+      "era_year": 2005,
+      "language": "en",
+      "instrumentation": ["bass", "synth", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 740000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 222, "loudness_lufs": -8.2}
+  },
+  {
+    "id": "song_049",
+    "artist": "Bon Iver",
+    "title": "Holocene",
+    "youtube_url": "https://www.youtube.com/watch?v=TWcyIpul8OE",
+    "clip": {"start_sec": 80, "preview_sec": 30},
+    "genres": [1, 17],
+    "tags": {
+      "subgenres": ["indie_folk", "chamber_pop"],
+      "mood": ["contemplative", "ethereal", "intimate"],
+      "energy": 0.4,
+      "valence": 0.5,
+      "tempo_bpm": 76,
+      "era_year": 2011,
+      "language": "en",
+      "instrumentation": ["guitar", "piano", "vocals", "strings"]
+    },
+    "popularity": {
+      "awareness_idx": 0.62,
+      "yt_views": 52000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 336, "loudness_lufs": -13.8}
+  },
+  {
+    "id": "song_050",
+    "artist": "Stromae",
+    "title": "Alors on danse",
+    "youtube_url": "https://www.youtube.com/watch?v=VHoT4N43jK8",
+    "clip": {"start_sec": 35, "preview_sec": 30},
+    "genres": [3, 36],
+    "tags": {
+      "subgenres": ["electro_house", "hip_hop"],
+      "mood": ["melancholic", "danceable", "ironic"],
+      "energy": 0.85,
+      "valence": 0.5,
+      "tempo_bpm": 128,
+      "era_year": 2009,
+      "language": "fr",
+      "instrumentation": ["synth", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.74,
+      "yt_views": 520000000,
+      "regionality": ["fr", "eu", "global"]
+    },
+    "meta": {"duration_sec": 206, "loudness_lufs": -7.8}
+  }
+]
+      "valence": 0.7,
+      "tempo_bpm": 140,
+      "era_year": 2019,
+      "language": "en",
+      "instrumentation": ["808", "vocals", "strings"]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 850000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 179, "loudness_lufs": -6.5}
+  },
+  {
+    "id": "song_019",
+    "artist": "Mac Miller",
+    "title": "Self Care",
+    "youtube_url": "https://www.youtube.com/watch?v=SsKT0s5J8ko",
+    "clip": {"start_sec": 60, "preview_sec": 30},
+    "genres": [4, 42],
+    "tags": {
+      "subgenres": ["alternative_hip_hop", "psychedelic_rap"],
+      "mood": ["introspective", "melancholic", "dreamy"],
+      "energy": 0.55,
+      "valence": 0.4,
+      "tempo_bpm": 81,
+      "era_year": 2018,
+      "language": "en",
+      "instrumentation": ["synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.7,
+      "yt_views": 220000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 351, "loudness_lufs": -9.8}
+  },
+  {
+    "id": "song_020",
+    "artist": "Adele",
+    "title": "Rolling in the Deep",
+    "youtube_url": "https://www.youtube.com/watch?v=rYEDA3JcQqw",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [2, 25],
+    "tags": {
+      "subgenres": ["soul_pop", "blues_rock"],
+      "mood": ["powerful", "emotional", "vengeful"],
+      "energy": 0.82,
+      "valence": 0.45,
+      "tempo_bpm": 105,
+      "era_year": 2010,
+      "language": "en",
+      "instrumentation": ["piano", "drums", "guitar", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 2300000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 228, "loudness_lufs": -7.2}
+  },
+  {
+    "id": "song_021",
+    "artist": "Zion.T",
+    "title": "Yanghwa BRDG",
+    "youtube_url": "https://www.youtube.com/watch?v=uLUvHUzd4UA",
+    "clip": {"start_sec": 55, "preview_sec": 30},
+    "genres": [2, 26],
+    "tags": {
+      "subgenres": ["k_r&b", "soul"],
+      "mood": ["emotional", "nostalgic", "heartfelt"],
+      "energy": 0.5,
+      "valence": 0.45,
+      "tempo_bpm": 88,
+      "era_year": 2013,
+      "language": "ko",
+      "instrumentation": ["guitar", "piano", "bass", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.75,
+      "yt_views": 48000000,
+      "regionality": ["kr", "asia"]
+    },
+    "meta": {"duration_sec": 243, "loudness_lufs": -10.5}
+  },
+  {
+    "id": "song_022",
+    "artist": "OutKast",
+    "title": "Ms. Jackson",
+    "youtube_url": "https://www.youtube.com/watch?v=MYxAiK6VnXw",
+    "clip": {"start_sec": 30, "preview_sec": 30},
+    "genres": [4, 43],
+    "tags": {
+      "subgenres": ["southern_hip_hop", "funk"],
+      "mood": ["apologetic", "groovy", "storytelling"],
+      "energy": 0.75,
+      "valence": 0.6,
+      "tempo_bpm": 100,
+      "era_year": 2000,
+      "language": "en",
+      "instrumentation": ["bass", "guitar", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 180000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 270, "loudness_lufs": -9.5}
+  },
+  {
+    "id": "song_023",
+    "artist": "Arctic Monkeys",
+    "title": "Do I Wanna Know?",
+    "youtube_url": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": ["indie_rock", "garage_rock"],
+      "mood": ["sultry", "questioning", "dark"],
+      "energy": 0.72,
+      "valence": 0.5,
+      "tempo_bpm": 85,
+      "era_year": 2013,
+      "language": "en",
+      "instrumentation": ["guitar", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 950000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 272, "loudness_lufs": -8.9}
+  },
+  {
+    "id": "song_024",
+    "artist": "FKA twigs",
+    "title": "Cellophane",
+    "youtube_url": "https://www.youtube.com/watch?v=YkLjqFpBh84",
+    "clip": {"start_sec": 70, "preview_sec": 30},
+    "genres": [2, 27],
+    "tags": {
+      "subgenres": ["art_pop", "experimental_r&b"],
+      "mood": ["vulnerable", "haunting", "intimate"],
+      "energy": 0.35,
+      "valence": 0.25,
+      "tempo_bpm": 68,
+      "era_year": 2019,
+      "language": "en",
+      "instrumentation": ["piano", "strings", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.48,
+      "yt_views": 38000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 274, "loudness_lufs": -12.8}
+  },
+  {
+    "id": "song_025",
+    "artist": "Metallica",
+    "title": "Enter Sandman",
+    "youtube_url": "https://www.youtube.com/watch?v=CD-E-LDc384",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [1, 15],
+    "tags": {
+      "subgenres": ["heavy_metal", "thrash_metal"],
+      "mood": ["dark", "aggressive", "menacing"],
+      "energy": 0.95,
+      "valence": 0.35,
+      "tempo_bpm": 123,
+      "era_year": 1991,
+      "language": "en",
+      "instrumentation": ["guitar", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 650000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 331, "loudness_lufs": -8.5}
+  },
+  {
+    "id": "song_026",
+    "artist": "OASIS",
+    "title": "Wonderwall",
+    "youtube_url": "https://www.youtube.com/watch?v=bx1Bh8ZvH84",
+    "clip": {"start_sec": 50, "preview_sec": 30},
+    "genres": [1, 16],
+    "tags": {
+      "subgenres": ["britpop", "alternative_rock"],
+      "mood": ["nostalgic", "hopeful", "anthem"],
+      "energy": 0.65,
+      "valence": 0.7,
+      "tempo_bpm": 87,
+      "era_year": 1995,
+      "language": "en",
+      "instrumentation": ["acoustic_guitar", "drums", "bass", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 480000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 258, "loudness_lufs": -10.2}
+  },
+  {
+    "id": "song_027",
+    "artist": "Sigur Rós",
+    "title": "Hoppípolla",
+    "youtube_url": "https://www.youtube.com/watch?v=mZTb8WxEW78",
+    "clip": {"start_sec": 90, "preview_sec": 30},
+    "genres": [1, 17],
+    "tags": {
+      "subgenres": ["post_rock", "ambient"],
+      "mood": ["euphoric", "cinematic", "uplifting"],
+      "energy": 0.6,
+      "valence": 0.85,
+      "tempo_bpm": 138,
+      "era_year": 2005,
+      "language": "is",
+      "instrumentation": ["piano", "strings", "vocals", "drums"]
+    },
+    "popularity": {
+      "awareness_idx": 0.58,
+      "yt_views": 78000000,
+      "regionality": ["global"]
+    },
+    "meta": {"duration_sec": 265, "loudness_lufs": -11.5}
+  },
+  {
+    "id": "song_028",
+    "artist": "Tyler, The Creator",
+    "title": "EARFQUAKE",
+    "youtube_url": "https://www.youtube.com/watch?v=HmAsUQEFYGI",
+    "clip": {"start_sec": 35, "preview_sec": 30},
+    "genres": [4, 44],
+    "tags": {
+      "subgenres": ["alternative_hip_hop", "neo_soul"],
+      "mood": ["yearning", "passionate", "funky"],
+      "energy": 0.7,
+      "valence": 0.65,
+      "tempo_bpm": 148,
+      "era_year": 2019,
+      "language": "en",
+      "instrumentation": ["synth", "bass", "drums", "vocals"]
+    },
+    "popularity": {
+      "awareness_idx": 0.73,
+      "yt_views": 310000000,
+      "regionality": ["global", "us"]
+    },
+    "meta": {"duration_sec": 191, "loudness_lufs": -8.5}
+  },
+  {
+    "id": "song_029",
+    "artist": "Coldplay",
+    "title": "Viva La Vida",
+    "youtube_url": "https://www.youtube.com/watch?v=dvgZkm1xWPE",
+    "clip": {"start_sec": 40, "preview_sec": 30},
+    "genres": [1, 18],
+    "tags": {
+      "subgenres": ["alternative_rock", "baroque_pop"],
+      "mood": ["triumphant", "grandiose", "reflective"],
+      "energy": 0.78,
