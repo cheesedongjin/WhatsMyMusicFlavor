@@ -1025,6 +1025,18 @@ class MusicTournamentGUI:
         self.report = {}
         self.recommendations: List[Tuple[Song, str]] = []
 
+    def enter_fullscreen(self):
+        """Try to expand the root window to full screen."""
+        try:
+            self.root.state("zoomed")
+        except tk.TclError:
+            try:
+                self.root.attributes("-zoomed", True)
+            except tk.TclError:
+                screen_width = self.root.winfo_screenwidth()
+                screen_height = self.root.winfo_screenheight()
+                self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+
     def clear_content(self):
         for child in self.content_frame.winfo_children():
             child.destroy()
@@ -1309,6 +1321,7 @@ class MusicTournamentGUI:
 
     def show_results_view(self):
         self.clear_content()
+        self.enter_fullscreen()
 
         container = ttk.Frame(self.content_frame, style="Primary.TFrame")
         container.pack(fill="both", expand=True)
@@ -1372,11 +1385,54 @@ class MusicTournamentGUI:
         recommend_card.pack(fill="both", expand=True, padx=12, pady=(0, 24))
         ttk.Label(recommend_card, text="맞춤 추천", style="CardTitle.TLabel").pack(anchor="w")
 
+        scroll_container = ttk.Frame(recommend_card, style="Card.TFrame")
+        scroll_container.pack(fill="both", expand=True, pady=(12, 0))
+
+        canvas = tk.Canvas(scroll_container, background="#ffffff", highlightthickness=0, bd=0)
+        canvas.pack(side="left", fill="both", expand=True)
+
+        scrollbar = ttk.Scrollbar(scroll_container, orient="vertical", command=canvas.yview)
+        scrollbar.pack(side="right", fill="y")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        scrollable_frame = ttk.Frame(canvas, style="Card.TFrame")
+        window_id = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+
+        def _on_frame_configure(_event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def _on_canvas_configure(event):
+            canvas.itemconfigure(window_id, width=event.width)
+
+        def _on_mousewheel(event):
+            if event.delta:
+                step = -1 if event.delta > 0 else 1
+                canvas.yview_scroll(step, "units")
+            elif event.num in (4, 5):
+                canvas.yview_scroll(-1 if event.num == 4 else 1, "units")
+            return "break"
+
+        def _bind_to_mousewheel(_event):
+            canvas.bind_all("<MouseWheel>", _on_mousewheel)
+            canvas.bind_all("<Button-4>", _on_mousewheel)
+            canvas.bind_all("<Button-5>", _on_mousewheel)
+
+        def _unbind_from_mousewheel(_event):
+            canvas.unbind_all("<MouseWheel>")
+            canvas.unbind_all("<Button-4>")
+            canvas.unbind_all("<Button-5>")
+
+        scrollable_frame.bind("<Configure>", _on_frame_configure)
+        canvas.bind("<Configure>", _on_canvas_configure)
+        scrollable_frame.bind("<Enter>", _bind_to_mousewheel)
+        scrollable_frame.bind("<Leave>", _unbind_from_mousewheel)
+        scrollable_frame.bind("<Destroy>", _unbind_from_mousewheel)
+
         if not self.recommendations:
-            ttk.Label(recommend_card, text="추천할 곡이 없습니다.", style="Subtle.TLabel").pack(anchor="w", pady=12)
+            ttk.Label(scrollable_frame, text="추천할 곡이 없습니다.", style="Subtle.TLabel").pack(anchor="w", pady=12)
         else:
             for i, (song, reason) in enumerate(self.recommendations, 1):
-                item = ttk.Frame(recommend_card, style="Card.TFrame")
+                item = ttk.Frame(scrollable_frame, style="Card.TFrame")
                 item.pack(fill="x", pady=8)
                 ttk.Label(item, text=f"{i}. {song}", style="Body.TLabel").pack(anchor="w")
                 ttk.Label(item, text=reason, style="Subtle.TLabel").pack(anchor="w")
