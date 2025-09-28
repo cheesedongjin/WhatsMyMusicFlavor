@@ -59,7 +59,7 @@ from tkinter import ttk, messagebox
 # ┌────────────────────────────┬───────────────────────────┬─────────────────────────────┐
 # │ JSON 경로                  │ 의미                        │ 참조 상수                     │
 # ├────────────────────────────┼───────────────────────────┼─────────────────────────────┤
-# │ Song.genres[*]             │ 기본 장르 코드             │ 별도 장르 코드 테이블 관리     │
+# │ Song.genres[*]             │ 기본 장르 코드             │ GENRES                        │
 # │ tags.subgenres[*]          │ 세부 장르 코드             │ SUBGENRES                    │
 # │ tags.mood[*]               │ 무드 코드                  │ MOODS                        │
 # │ tags.language              │ 단일 언어 코드             │ LANGUAGES                    │
@@ -68,6 +68,60 @@ from tkinter import ttk, messagebox
 # └────────────────────────────┴───────────────────────────┴─────────────────────────────┘
 # DataLoader.load_songs()가 로딩 시 위 인덱스들을 문자열/리스트로 복호화하므로 JSON에서는
 # 항상 0-base 정수 값만 제공하면 된다.
+
+GENRE_CODE_TABLE: Dict[int, str] = {
+    1: "Rock",
+    2: "Pop",
+    3: "Electronic",
+    4: "Hip Hop",
+    5: "Jazz",
+    6: "Classical",
+    10: "Progressive Rock",
+    11: "Art Rock",
+    12: "Grunge",
+    13: "Psychedelic Rock",
+    14: "Alternative Rock",
+    17: "Indie Folk",
+    19: "Classic Rock",
+    20: "Dance Pop",
+    21: "K-Indie Pop",
+    22: "R&B Pop",
+    23: "Synth Pop",
+    24: "Electropop",
+    26: "Alt R&B",
+    27: "Art Pop",
+    28: "Flamenco Pop",
+    30: "French House",
+    32: "IDM",
+    33: "Future Bass",
+    34: "Trip Hop",
+    35: "Downtempo",
+    36: "Dance / Electronic",
+    40: "Trap",
+    41: "K-Hip Hop",
+    45: "Alternative Hip Hop",
+    46: "Funk Hip Hop",
+    50: "Modal Jazz",
+    51: "Jazz Hop",
+    60: "Romantic Classical",
+}
+
+MAX_GENRE_CODE = max(GENRE_CODE_TABLE)
+GENRES: List[str] = ["Unknown"] * (MAX_GENRE_CODE + 1)
+for code, name in GENRE_CODE_TABLE.items():
+    GENRES[code] = name
+
+
+def decode_genre_names(codes: List[int]) -> List[str]:
+    """Return deduplicated, human-friendly names for the given genre codes."""
+    names: List[str] = []
+    for code in codes:
+        if isinstance(code, int) and 0 <= code < len(GENRES):
+            name = GENRES[code]
+            if name != "Unknown" and name not in names:
+                names.append(name)
+    return names
+
 
 SUBGENRES: List[str] = [
     "alt_pop",
@@ -258,7 +312,8 @@ class Song:
     artist: str
     title: str
     youtube_url: str
-    genres: List[int]
+    genre_codes: List[int] = field(default_factory=list)
+    genres: List[str] = field(default_factory=list)
     tags: Dict = field(default_factory=dict)
     popularity: Dict = field(default_factory=dict)
     meta: Dict = field(default_factory=dict)
@@ -322,12 +377,16 @@ class DataLoader:
                 if 'regionality' in popularity:
                     popularity['regionality'] = _decode_index_list(popularity.get('regionality', []), REGIONALITIES)
 
+                genre_codes = [code for code in item.get('genres', []) if isinstance(code, int)]
+                genre_names = decode_genre_names(genre_codes)
+
                 song = Song(
                     id=item['id'],
                     artist=item['artist'],
                     title=item['title'],
                     youtube_url=item.get('youtube_url', ''),
-                    genres=item.get('genres', []),
+                    genre_codes=genre_codes,
+                    genres=genre_names,
                     tags=tags,
                     popularity=popularity,
                     meta=item.get('meta', {}),
@@ -737,12 +796,14 @@ class RecommendationEngine:
         for song in candidates[:n]:
             # 간단한 유사도: 같은 장르가 있으면 추천
             reason = "다양한 스타일 탐색"
-            
+
             for winner in top_winners:
-                if set(song.genres) & set(winner.genres):
-                    reason = f"{winner} 와 유사한 장르"
+                shared_genres = sorted(set(song.genres) & set(winner.genres))
+                if shared_genres:
+                    highlight = ", ".join(shared_genres[:2])
+                    reason = f"{winner}와 비슷한 {highlight}"
                     break
-            
+
             recommendations.append((song, reason))
         
         return recommendations[:n]
@@ -1156,7 +1217,9 @@ class MusicTournamentGUI:
         if song.tags.get('energy') is not None:
             details.append(f"에너지 {song.tags['energy']*100:.0f}%")
         if song.genres:
-            details.append(f"장르 코드 {', '.join(map(str, song.genres[:3]))}")
+            details.append(f"장르 {', '.join(song.genres[:2])}")
+        elif song.genre_codes:
+            details.append(f"장르 코드 {', '.join(map(str, song.genre_codes[:3]))}")
         card["tag"].set(" · ".join(details))
 
         link_label = card["link"]
