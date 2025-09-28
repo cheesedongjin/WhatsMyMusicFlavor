@@ -6,12 +6,15 @@
 import json
 import math
 import random
+import webbrowser
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict
 import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
+import tkinter as tk
+from tkinter import ttk, messagebox
 
 # ============================================================================
 # 데이터 모델
@@ -345,7 +348,31 @@ class TournamentEngine:
             # 건너뛰기: 랜덤 선택
             match.winner = random.choice([match.song_a, match.song_b])
             return match.winner
-    
+
+    def resolve_match(self, match: Match, choice: str) -> Optional[Song]:
+        """GUI 등 외부 입력으로 매치 결과 처리"""
+        choice = choice.upper()
+
+        if choice not in ['A', 'B', 'T', 'S']:
+            raise ValueError("choice must be one of 'A', 'B', 'T', 'S'")
+
+        match.choice = choice
+        match.timestamp = datetime.now().isoformat()
+
+        self.update_ratings(match.song_a, match.song_b, choice)
+        self.match_history.append(match)
+
+        if choice == 'A':
+            match.winner = match.song_a
+        elif choice == 'B':
+            match.winner = match.song_b
+        elif choice == 'T':
+            match.winner = match.song_a if match.song_a.rating <= match.song_b.rating else match.song_b
+        else:
+            match.winner = random.choice([match.song_a, match.song_b])
+
+        return match.winner
+
     def run_tournament(self, bracket: List[List[Match]]) -> Song:
         """전체 토너먼트 진행"""
         print("\n" + "="*60)
@@ -552,6 +579,497 @@ class MusicTournamentApp:
         print("="*60)
 
 # ============================================================================
+# GUI 애플리케이션
+# ============================================================================
+
+class MusicTournamentGUI:
+    GENRE_PAIRS = [
+        ("Rock", "Pop"),
+        ("Hip-Hop", "Electronic"),
+        ("Jazz", "Classical"),
+        ("K-Pop", "Indie")
+    ]
+
+    ERA_OPTIONS = [
+        ("1970s-1980s", '1'),
+        ("1990s-2000s", '2'),
+        ("2010s 이후", '3'),
+        ("상관없음", '4')
+    ]
+
+    ENERGY_OPTIONS = [
+        ("차분한 무드", '1'),
+        ("보통 에너지", '2'),
+        ("활기찬 느낌", '3'),
+        ("강렬한 사운드", '4')
+    ]
+
+    POPULARITY_OPTIONS = [
+        ("유명한 히트곡", '1'),
+        ("적당히 알려진 곡", '2'),
+        ("숨은 명곡", '3')
+    ]
+
+    LANGUAGE_OPTIONS = [
+        ("한국어", '1'),
+        ("영어", '2'),
+        ("기타 언어", '3'),
+        ("상관없음", '4')
+    ]
+
+    def __init__(self, songs_file: str):
+        self.songs_file = songs_file
+        self.root = tk.Tk()
+        self.root.title("Whats My Music Flavor · 토너먼트 취향 테스트")
+        self.root.geometry("1024x720")
+        self.root.minsize(960, 680)
+        self.root.configure(bg="#eef2ff")
+
+        self.style = ttk.Style(self.root)
+        self.setup_styles()
+
+        self.valid = True
+        loader = DataLoader()
+        self.songs = loader.load_songs(self.songs_file)
+
+        if not self.songs or not loader.validate_songs(self.songs):
+            messagebox.showerror("데이터 오류", "곡 데이터를 불러오지 못했습니다. songs.json 파일을 확인해주세요.")
+            self.root.destroy()
+            self.valid = False
+            return
+
+        self.build_base_layout()
+        self.reset_state()
+        self.status_bar_var.set(f"{len(self.songs)}곡 데이터를 성공적으로 불러왔어요.")
+
+    def setup_styles(self):
+        self.style.theme_use("clam")
+        self.style.configure("Primary.TFrame", background="#eef2ff")
+        self.style.configure("Hero.TFrame", background="#ffffff")
+        self.style.configure("Card.TFrame", background="#ffffff", relief="flat", borderwidth=0)
+        self.style.configure("Highlight.TFrame", background="#312e81", relief="flat", borderwidth=0)
+        self.style.configure("Title.TLabel", background="#eef2ff", foreground="#1f2937", font=("Pretendard", 26, "bold"))
+        self.style.configure("HeroTitle.TLabel", background="#ffffff", foreground="#1f2937", font=("Pretendard", 28, "bold"))
+        self.style.configure("Brand.TLabel", background="#eef2ff", foreground="#4c1d95", font=("Pretendard", 18, "bold"))
+        self.style.configure("Subtitle.TLabel", background="#eef2ff", foreground="#4b5563", font=("Pretendard", 14))
+        self.style.configure("Body.TLabel", background="#ffffff", foreground="#374151", font=("Pretendard", 12))
+        self.style.configure("BodyPrimary.TLabel", background="#eef2ff", foreground="#374151", font=("Pretendard", 12))
+        self.style.configure("Subtle.TLabel", background="#ffffff", foreground="#6b7280", font=("Pretendard", 11))
+        self.style.configure("Badge.TLabel", background="#eef2ff", foreground="#4c1d95", font=("Pretendard", 11, "bold"))
+        self.style.configure("Footer.TLabel", background="#eef2ff", foreground="#6b7280", font=("Pretendard", 10))
+        self.style.configure("CardTitle.TLabel", background="#ffffff", foreground="#111827", font=("Pretendard", 18, "bold"))
+        self.style.configure("CardSubtitle.TLabel", background="#ffffff", foreground="#c7d2fe", font=("Pretendard", 12))
+        self.style.configure("CardHighlight.TLabel", background="#312e81", foreground="#ede9fe", font=("Pretendard", 24, "bold"))
+        self.style.configure("CardHighlightBody.TLabel", background="#312e81", foreground="#e0e7ff", font=("Pretendard", 12))
+
+        self.style.configure("Accent.TButton", padding=12, font=("Pretendard", 12, "bold"), foreground="#ffffff", background="#6366f1")
+        self.style.map("Accent.TButton", background=[("active", "#4f46e5"), ("pressed", "#4338ca")])
+        self.style.configure("Soft.TButton", padding=12, font=("Pretendard", 12), foreground="#ffffff", background="#0ea5e9")
+        self.style.map("Soft.TButton", background=[("active", "#0284c7"), ("pressed", "#0369a1")])
+        self.style.configure("Ghost.TButton", padding=12, font=("Pretendard", 12), foreground="#4b5563", background="#ffffff")
+        self.style.map("Ghost.TButton", background=[("active", "#e5e7eb"), ("pressed", "#d1d5db")])
+
+    def build_base_layout(self):
+        self.main_frame = ttk.Frame(self.root, style="Primary.TFrame", padding=32)
+        self.main_frame.pack(fill="both", expand=True)
+
+        header = ttk.Frame(self.main_frame, style="Primary.TFrame")
+        header.pack(fill="x", pady=(0, 24))
+        ttk.Label(header, text="Whats My Music Flavor", style="Brand.TLabel").pack(anchor="w")
+        ttk.Label(header, text="나만의 음악 토너먼트", style="Title.TLabel").pack(anchor="w", pady=(8, 0))
+
+        self.content_frame = ttk.Frame(self.main_frame, style="Primary.TFrame")
+        self.content_frame.pack(fill="both", expand=True)
+
+        self.status_bar_var = tk.StringVar(value="")
+        self.status_bar = ttk.Label(self.main_frame, textvariable=self.status_bar_var, style="Footer.TLabel", anchor="w")
+        self.status_bar.pack(fill="x", pady=(24, 0))
+
+    def reset_state(self):
+        self.survey_profile = {}
+        self.candidates = []
+        self.engine: Optional[TournamentEngine] = None
+        self.bracket: List[List[Match]] = []
+        self.current_round_number = 1
+        self.current_round_matches: List[Match] = []
+        self.current_round_winners: List[Song] = []
+        self.current_match_index = 0
+        self.active_match: Optional[Match] = None
+        self.total_matches = 0
+        self.champion: Optional[Song] = None
+        self.report = {}
+        self.recommendations: List[Tuple[Song, str]] = []
+
+    def clear_content(self):
+        for child in self.content_frame.winfo_children():
+            child.destroy()
+
+    def show_start_view(self):
+        self.reset_state()
+        self.clear_content()
+
+        hero = ttk.Frame(self.content_frame, style="Hero.TFrame", padding=48)
+        hero.pack(expand=True, fill="both", pady=12)
+
+        ttk.Label(hero, text="당신의 음악 취향을 시각적으로 발견해보세요", style="HeroTitle.TLabel", wraplength=680).pack(anchor="w")
+        ttk.Label(
+            hero,
+            text="장르 선호부터 토너먼트 챔피언 선정, 추천곡까지 한 번에 경험할 수 있는 인터랙티브 테스트입니다.",
+            style="Body.TLabel",
+            wraplength=700,
+            padding=(0, 20)
+        ).pack(anchor="w")
+
+        highlights = ttk.Frame(hero, style="Hero.TFrame")
+        highlights.pack(anchor="w", pady=(0, 24))
+        for text in [
+            "🎧 간단한 설문으로 나만의 음악 DNA 분석",
+            "⚔️ 두 곡 중 하나를 선택하며 즐기는 토너먼트",
+            "✨ 토너먼트 기록 기반 맞춤 추천 리스트"
+        ]:
+            row = ttk.Frame(highlights, style="Hero.TFrame")
+            row.pack(anchor="w", pady=6)
+            ttk.Label(row, text=text, style="Body.TLabel").pack(anchor="w")
+
+        ttk.Button(hero, text="지금 시작하기", style="Accent.TButton", command=self.show_survey_view).pack(anchor="w", pady=(12, 0))
+        self.status_bar_var.set("간단한 설문부터 시작해볼까요?")
+
+    def show_survey_view(self):
+        self.clear_content()
+
+        container = ttk.Frame(self.content_frame, style="Primary.TFrame")
+        container.pack(fill="both", expand=True)
+
+        card = ttk.Frame(container, style="Card.TFrame", padding=32)
+        card.pack(fill="both", expand=True, padx=12, pady=12)
+
+        ttk.Label(card, text="나의 음악 스타일 진단", style="CardTitle.TLabel").pack(anchor="w")
+        ttk.Label(card, text="선호에 가장 가까운 선택지를 골라주세요. 토너먼트에 활용됩니다.", style="Subtle.TLabel").pack(anchor="w", pady=(4, 24))
+
+        genre_section = ttk.Frame(card, style="Card.TFrame")
+        genre_section.pack(fill="x", pady=(0, 24))
+        ttk.Label(genre_section, text="장르 밸런스", style="Body.TLabel").pack(anchor="w", pady=(0, 8))
+
+        self.genre_vars = []
+        for idx, (g1, g2) in enumerate(self.GENRE_PAIRS, 1):
+            row = ttk.Frame(genre_section, style="Card.TFrame")
+            row.pack(fill="x", pady=6)
+            ttk.Label(row, text=f"{idx}. {g1} vs {g2}", style="Subtle.TLabel").pack(anchor="w")
+            var = tk.StringVar(value="")
+            self.genre_vars.append((var, (g1, g2)))
+            options = ttk.Frame(row, style="Card.TFrame")
+            options.pack(anchor="w", pady=(6, 0))
+            ttk.Radiobutton(options, text=f"{g1} 선호", variable=var, value='1', style="Body.TLabel").pack(side="left", padx=(0, 16))
+            ttk.Radiobutton(options, text=f"{g2} 선호", variable=var, value='2', style="Body.TLabel").pack(side="left", padx=(0, 16))
+            ttk.Radiobutton(options, text="잘 모르겠음", variable=var, value='s', style="Body.TLabel").pack(side="left")
+
+        def build_radio_section(parent, title, options, var):
+            section = ttk.Frame(parent, style="Card.TFrame")
+            section.pack(fill="x", pady=12)
+            ttk.Label(section, text=title, style="Body.TLabel").pack(anchor="w")
+            radios = ttk.Frame(section, style="Card.TFrame")
+            radios.pack(anchor="w", pady=(6, 0))
+            for text, value in options:
+                ttk.Radiobutton(radios, text=text, variable=var, value=value, style="Body.TLabel").pack(side="left", padx=(0, 16))
+
+        self.era_var = tk.StringVar(value='2')
+        self.energy_var = tk.StringVar(value='3')
+        self.popularity_var = tk.StringVar(value='2')
+        self.language_var = tk.StringVar(value='4')
+
+        build_radio_section(card, "가장 마음에 드는 음악 시대", self.ERA_OPTIONS, self.era_var)
+        build_radio_section(card, "에너지 레벨", self.ENERGY_OPTIONS, self.energy_var)
+        build_radio_section(card, "인지도 선호", self.POPULARITY_OPTIONS, self.popularity_var)
+        build_radio_section(card, "가사 언어", self.LANGUAGE_OPTIONS, self.language_var)
+
+        ttk.Button(card, text="토너먼트 시작", style="Accent.TButton", command=self.begin_tournament).pack(anchor="e", pady=(24, 0))
+        self.status_bar_var.set("설문 응답을 바탕으로 맞춤 토너먼트를 준비합니다.")
+
+    def begin_tournament(self):
+        genre_scores = defaultdict(int)
+        for var, (g1, g2) in self.genre_vars:
+            choice = var.get()
+            if choice == '1':
+                genre_scores[g1] += 1
+            elif choice == '2':
+                genre_scores[g2] += 1
+
+        era_map = {'1': 1980, '2': 2000, '3': 2015, '4': None}
+        energy_map = {'1': 0.2, '2': 0.5, '3': 0.7, '4': 0.9}
+        pop_map = {'1': 0.8, '2': 0.5, '3': 0.2}
+        lang_map = {'1': 'ko', '2': 'en', '3': 'other', '4': None}
+
+        self.survey_profile = {
+            'genre_scores': dict(genre_scores),
+            'preferred_era': era_map.get(self.era_var.get()),
+            'preferred_energy': energy_map.get(self.energy_var.get(), 0.5),
+            'preferred_popularity': pop_map.get(self.popularity_var.get(), 0.5),
+            'preferred_language': lang_map.get(self.language_var.get())
+        }
+
+        selector = CandidateSelector(self.songs, self.survey_profile)
+        self.candidates = selector.select_candidates(k=min(32, len(self.songs)))
+
+        if len(self.candidates) < 2:
+            messagebox.showwarning("후보 부족", "토너먼트를 진행하기에 곡이 부족합니다. 데이터를 확인해주세요.")
+            self.show_start_view()
+            return
+
+        if len(self.candidates) % 2 == 1:
+            self.candidates = self.candidates[:-1]
+
+        self.engine = TournamentEngine()
+        bracket_gen = BracketGenerator()
+        self.bracket = bracket_gen.create_bracket(self.candidates)
+        self.current_round_number = 1
+        self.current_round_matches = self.bracket[0] if self.bracket else []
+        self.current_round_winners = []
+        self.current_match_index = 0
+        self.total_matches = max(1, len(self.candidates) - 1)
+        self.progress_value = 0
+
+        self.status_bar_var.set("토너먼트를 준비 중입니다.")
+        self.show_match_view()
+
+    def show_match_view(self):
+        self.clear_content()
+
+        container = ttk.Frame(self.content_frame, style="Primary.TFrame")
+        container.pack(fill="both", expand=True)
+
+        ttk.Label(container, text="토너먼트 진행", style="Title.TLabel").pack(anchor="w")
+        self.status_var = tk.StringVar(value="")
+        ttk.Label(container, textvariable=self.status_var, style="BodyPrimary.TLabel").pack(anchor="w", pady=(6, 16))
+
+        self.progress_bar = ttk.Progressbar(container, maximum=100, value=0, length=520)
+        self.progress_bar.pack(fill="x", pady=(0, 24))
+
+        cards = ttk.Frame(container, style="Primary.TFrame")
+        cards.pack(fill="both", expand=True)
+        cards.columnconfigure(0, weight=1)
+        cards.columnconfigure(1, weight=1)
+
+        self.card_a = self.create_song_card(cards, "A 곡")
+        self.card_a["frame"].grid(row=0, column=0, sticky="nsew", padx=(0, 12))
+
+        self.card_b = self.create_song_card(cards, "B 곡")
+        self.card_b["frame"].grid(row=0, column=1, sticky="nsew", padx=(12, 0))
+
+        self.helper_var = tk.StringVar(value="마음에 드는 곡을 선택하세요.")
+        ttk.Label(container, textvariable=self.helper_var, style="BodyPrimary.TLabel").pack(anchor="center", pady=(24, 12))
+
+        button_frame = ttk.Frame(container, style="Primary.TFrame")
+        button_frame.pack(pady=(0, 24))
+        button_frame.columnconfigure(0, weight=1)
+        button_frame.columnconfigure(1, weight=1)
+
+        ttk.Button(button_frame, text="A 곡 선택", style="Accent.TButton", command=lambda: self.on_choice('A')).grid(row=0, column=0, padx=8, pady=6, sticky="ew")
+        ttk.Button(button_frame, text="B 곡 선택", style="Accent.TButton", command=lambda: self.on_choice('B')).grid(row=0, column=1, padx=8, pady=6, sticky="ew")
+        ttk.Button(button_frame, text="둘 다 좋아요", style="Soft.TButton", command=lambda: self.on_choice('T')).grid(row=1, column=0, padx=8, pady=6, sticky="ew")
+        ttk.Button(button_frame, text="건너뛰기", style="Ghost.TButton", command=lambda: self.on_choice('S')).grid(row=1, column=1, padx=8, pady=6, sticky="ew")
+
+        self.status_bar_var.set("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
+        self.display_current_match()
+
+    def create_song_card(self, parent, label_text: str):
+        frame = ttk.Frame(parent, style="Card.TFrame", padding=24)
+        ttk.Label(frame, text=label_text, style="Badge.TLabel").pack(anchor="w")
+
+        title_var = tk.StringVar(value="")
+        ttk.Label(frame, textvariable=title_var, style="CardTitle.TLabel", wraplength=360).pack(anchor="w", pady=(12, 4))
+
+        meta_var = tk.StringVar(value="")
+        ttk.Label(frame, textvariable=meta_var, style="Body.TLabel", wraplength=360).pack(anchor="w")
+
+        tag_var = tk.StringVar(value="")
+        ttk.Label(frame, textvariable=tag_var, style="Subtle.TLabel", wraplength=360).pack(anchor="w", pady=(8, 0))
+
+        link_label = tk.Label(frame, text="", font=("Pretendard", 11, "underline"), fg="#2563eb", bg="#ffffff", cursor="hand2")
+        link_label.pack(anchor="w", pady=(12, 0))
+
+        return {
+            "frame": frame,
+            "title": title_var,
+            "meta": meta_var,
+            "tag": tag_var,
+            "link": link_label
+        }
+
+    def update_song_card(self, card, song: Song):
+        card["title"].set(song.title)
+        rating = song.rating if song.rating else 1500
+        card["meta"].set(f"{song.artist} · 예상 레이팅 {rating:.0f}")
+
+        details = []
+        if song.tags.get('era_year'):
+            details.append(f"{song.tags['era_year']}년대")
+        if song.tags.get('energy') is not None:
+            details.append(f"에너지 {song.tags['energy']*100:.0f}%")
+        if song.genres:
+            details.append(f"장르 코드 {', '.join(map(str, song.genres[:3]))}")
+        card["tag"].set(" · ".join(details))
+
+        link_label = card["link"]
+        link_label.unbind("<Button-1>")
+        if song.youtube_url:
+            link_label.configure(text="YouTube에서 듣기 ↗", fg="#2563eb", cursor="hand2")
+            link_label.bind("<Button-1>", lambda _event, url=song.youtube_url: webbrowser.open(url))
+        else:
+            link_label.configure(text="링크 정보가 없습니다", fg="#9ca3af", cursor="arrow")
+
+    def display_current_match(self):
+        if not self.current_round_matches:
+            self.finish_tournament(self.current_round_winners[0] if self.current_round_winners else None)
+            return
+
+        if self.current_match_index >= len(self.current_round_matches):
+            self.prepare_next_round()
+            return
+
+        self.active_match = self.current_round_matches[self.current_match_index]
+        match = self.active_match
+        self.status_var.set(f"라운드 {self.current_round_number} · 매치 {self.current_match_index + 1}/{len(self.current_round_matches)}")
+        self.helper_var.set(f"{match.song_a.artist} vs {match.song_b.artist}")
+        self.update_song_card(self.card_a, match.song_a)
+        self.update_song_card(self.card_b, match.song_b)
+
+        progress_ratio = len(self.engine.match_history) / self.total_matches if self.total_matches else 0
+        self.progress_bar.configure(value=progress_ratio * 100)
+
+    def on_choice(self, choice: str):
+        if not self.active_match or not self.engine:
+            return
+
+        winner = self.engine.resolve_match(self.active_match, choice)
+        if winner:
+            self.current_round_winners.append(winner)
+
+        self.current_match_index += 1
+        progress_ratio = len(self.engine.match_history) / self.total_matches if self.total_matches else 0
+        self.progress_bar.configure(value=progress_ratio * 100)
+        self.display_current_match()
+
+    def prepare_next_round(self):
+        winners = self.current_round_winners
+        if not winners:
+            self.finish_tournament(None)
+            return
+
+        if len(winners) == 1:
+            self.finish_tournament(winners[0])
+            return
+
+        self.current_round_number += 1
+        next_round = []
+        for i in range(0, len(winners), 2):
+            if i + 1 < len(winners):
+                match = Match(
+                    round_num=self.current_round_number,
+                    match_id=f"R{self.current_round_number}-M{i//2 + 1}",
+                    song_a=winners[i],
+                    song_b=winners[i + 1]
+                )
+                next_round.append(match)
+
+        self.current_round_matches = next_round
+        self.current_round_winners = []
+        self.current_match_index = 0
+        self.display_current_match()
+
+    def finish_tournament(self, champion: Optional[Song]):
+        self.champion = champion
+        self.show_results_view()
+
+    def show_results_view(self):
+        self.clear_content()
+
+        container = ttk.Frame(self.content_frame, style="Primary.TFrame")
+        container.pack(fill="both", expand=True)
+
+        if not self.champion or not self.engine:
+            ttk.Label(container, text="토너먼트 결과가 존재하지 않습니다.", style="BodyPrimary.TLabel").pack(pady=24)
+            ttk.Button(container, text="처음으로", style="Ghost.TButton", command=self.show_start_view).pack()
+            return
+
+        analyzer = ResultAnalyzer(self.engine.match_history, self.candidates)
+        self.report = analyzer.generate_report(self.champion)
+        recommender = RecommendationEngine(self.songs, self.candidates)
+        self.recommendations = recommender.generate_recommendations(self.report['top_songs'])
+
+        highlight = ttk.Frame(container, style="Highlight.TFrame", padding=32)
+        highlight.pack(fill="x", padx=12, pady=(0, 24))
+
+        ttk.Label(highlight, text="우승 곡", style="CardSubtitle.TLabel").pack(anchor="w")
+        ttk.Label(highlight, text=str(self.champion), style="CardHighlight.TLabel").pack(anchor="w", pady=(8, 6))
+        ttk.Label(
+            highlight,
+            text=f"최종 레이팅 {self.champion.rating:.1f} · 전적 {self.champion.wins}승 {self.champion.losses}패",
+            style="CardHighlightBody.TLabel"
+        ).pack(anchor="w")
+
+        link = tk.Label(highlight, text="YouTube에서 우승 곡 감상하기 ↗", font=("Pretendard", 12, "underline"),
+                        fg="#c4b5fd", bg="#312e81", cursor="hand2")
+        link.pack(anchor="w", pady=(12, 0))
+        if self.champion.youtube_url:
+            link.bind("<Button-1>", lambda _event, url=self.champion.youtube_url: webbrowser.open(url))
+        else:
+            link.configure(text="YouTube 링크 정보가 없습니다", fg="#a78bfa", cursor="arrow")
+
+        grid = ttk.Frame(container, style="Primary.TFrame")
+        grid.pack(fill="both", expand=True)
+        grid.columnconfigure(0, weight=1)
+        grid.columnconfigure(1, weight=1)
+
+        top_card = ttk.Frame(grid, style="Card.TFrame", padding=24)
+        top_card.grid(row=0, column=0, sticky="nsew", padx=(0, 12), pady=(0, 24))
+        ttk.Label(top_card, text="상위 플레이리스트", style="CardTitle.TLabel").pack(anchor="w")
+
+        for i, song in enumerate(self.report['top_songs'], 1):
+            item = ttk.Frame(top_card, style="Card.TFrame")
+            item.pack(fill="x", pady=6)
+            ttk.Label(item, text=f"{i}. {song}", style="Body.TLabel").pack(anchor="w")
+            ttk.Label(item, text=f"레이팅 {song.rating:.1f} · 전적 {song.wins}승 {song.losses}패", style="Subtle.TLabel").pack(anchor="w")
+
+        stats_card = ttk.Frame(grid, style="Card.TFrame", padding=24)
+        stats_card.grid(row=0, column=1, sticky="nsew", padx=(12, 0), pady=(0, 24))
+        ttk.Label(stats_card, text="매치 통계", style="CardTitle.TLabel").pack(anchor="w")
+
+        stats = self.report['choice_distribution']
+        ttk.Label(stats_card, text=f"총 매치: {self.report['total_matches']}", style="Body.TLabel").pack(anchor="w", pady=(8, 2))
+        ttk.Label(stats_card, text=f"A 선택: {stats.get('A', 0)}", style="Subtle.TLabel").pack(anchor="w")
+        ttk.Label(stats_card, text=f"B 선택: {stats.get('B', 0)}", style="Subtle.TLabel").pack(anchor="w")
+        ttk.Label(stats_card, text=f"둘 다: {stats.get('T', 0)}", style="Subtle.TLabel").pack(anchor="w")
+        ttk.Label(stats_card, text=f"건너뛰기: {stats.get('S', 0)}", style="Subtle.TLabel").pack(anchor="w")
+
+        recommend_card = ttk.Frame(container, style="Card.TFrame", padding=24)
+        recommend_card.pack(fill="both", expand=True, padx=12, pady=(0, 24))
+        ttk.Label(recommend_card, text="맞춤 추천", style="CardTitle.TLabel").pack(anchor="w")
+
+        if not self.recommendations:
+            ttk.Label(recommend_card, text="추천할 곡이 없습니다.", style="Subtle.TLabel").pack(anchor="w", pady=12)
+        else:
+            for i, (song, reason) in enumerate(self.recommendations, 1):
+                item = ttk.Frame(recommend_card, style="Card.TFrame")
+                item.pack(fill="x", pady=8)
+                ttk.Label(item, text=f"{i}. {song}", style="Body.TLabel").pack(anchor="w")
+                ttk.Label(item, text=reason, style="Subtle.TLabel").pack(anchor="w")
+                link_label = tk.Label(item, text="YouTube에서 듣기 ↗", font=("Pretendard", 11, "underline"),
+                                     fg="#2563eb", bg="#ffffff", cursor="hand2")
+                link_label.pack(anchor="w", pady=(4, 0))
+                if song.youtube_url:
+                    link_label.bind("<Button-1>", lambda _event, url=song.youtube_url: webbrowser.open(url))
+                else:
+                    link_label.configure(text="링크 정보가 없습니다", fg="#9ca3af", cursor="arrow")
+
+        ttk.Button(container, text="처음으로 돌아가기", style="Ghost.TButton", command=self.show_start_view).pack(pady=(0, 12))
+        self.status_bar_var.set("결과를 확인하고 추천곡을 감상해보세요.")
+
+    def run(self):
+        if not self.valid:
+            return
+        self.show_start_view()
+        self.root.mainloop()
+# ============================================================================
 # 실행
 # ============================================================================
 
@@ -582,9 +1100,8 @@ if __name__ == "__main__":
     print("샘플 데이터 생성 완료: songs.json")
     print("\n실행 방법:")
     print("1. songs.json 파일을 실제 곡 데이터로 수정")
-    print("2. python music_tournament.py 실행")
-    
-    # 앱 실행
-    app = MusicTournamentApp('songs.json')
-    app.run()
+    print("2. python main.py 실행 (GUI 버전)")
+
+    gui = MusicTournamentGUI('songs.json')
+    gui.run()
     
