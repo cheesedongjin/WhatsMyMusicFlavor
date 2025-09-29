@@ -282,7 +282,7 @@
       ],
       "energy": 0.5,
       "valence": 0.7,
-      "tempo_bpm": 96,
+      "tempo_bpm": 102,
       "era_year": 2017,
       "language": 4,
       "instrumentation": [
@@ -474,7 +474,7 @@
       ]
     },
     "meta": {
-      "duration_sec": 375,
+      "duration_sec": 368,
       "loudness_lufs": -10.2
     }
   },
@@ -729,7 +729,7 @@
       ]
     },
     "meta": {
-      "duration_sec": 215,
+      "duration_sec": 219,
       "loudness_lufs": -7.8
     }
   },
@@ -755,7 +755,7 @@
       "energy": 0.78,
       "valence": 0.65,
       "tempo_bpm": 138,
-      "era_year": 2008,
+      "era_year": 2019,
       "language": 0,
       "instrumentation": [
         12,
@@ -947,7 +947,7 @@
       ]
     },
     "meta": {
-      "duration_sec": 185,
+      "duration_sec": 255,
       "loudness_lufs": -8.9
     }
   },
@@ -5797,7 +5797,7 @@
       "energy": 0.85,
       "valence": 0.8,
       "tempo_bpm": 128,
-      "era_year": 2017,
+      "era_year": 2019,
       "language": 0,
       "instrumentation": [13, 2, 15]
     },
