@@ -113,11 +113,13 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! We especially encourage contributions to improve the `songs.json` file, including fixing errors in existing song data and adding new songs to enhance the music catalog. Please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Make your changes and commit (`git commit -m "Add your feature"`).
+3. Make your changes and commit (`git commit -m "Add your feature or song update"`).
+   - For `songs.json` updates, ensure the JSON structure adheres to the format specified in [JSON Structure](#json-structure).
+   - Validate new or updated song entries to include required fields (e.g., `id`, `artist`, `title`) and correct index codes.
 4. Push to the branch (`git push origin feature/your-feature`).
 5. Open a Pull Request.
 
