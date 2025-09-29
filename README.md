@@ -17,24 +17,104 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 - **Extensible Song Database**: Uses a JSON-based song catalog with detailed metadata (genres, moods, instrumentation, etc.).
 - **Error Handling**: Robust validation of song data and user inputs to ensure a smooth experience.
 
-## Installation
+# Installation
 
-To run WhatsMyMusicFlavor locally:
+## Windows
 
 1. Clone the repository:
+
+   ```powershell
+   git clone https://github.com/cheesedongjin/WhatsMyMusicFlavor.git
+   ```
+2. Navigate to the project directory:
+
+   ```powershell
+   cd WhatsMyMusicFlavor
+   ```
+3. (Optional) Create and activate a virtual environment:
+
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   ```
+4. Install dependencies:
+
+   ```powershell
+   pip install PyQt6 numpy scikit-learn
+   ```
+5. Ensure a `songs.json` file exists in the project root.
+6. Run the application:
+
+   ```powershell
+   python main.py
+   ```
+
+---
+
+## macOS
+
+1. Clone the repository:
+
    ```bash
    git clone https://github.com/cheesedongjin/WhatsMyMusicFlavor.git
    ```
 2. Navigate to the project directory:
+
    ```bash
    cd WhatsMyMusicFlavor
    ```
-3. Install dependencies:
+3. (Optional) Create and activate a virtual environment:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+4. Install dependencies:
+
    ```bash
    pip install PyQt6 numpy scikit-learn
    ```
-4. Ensure a `songs.json` file exists in the project root with the required song data structure (see [JSON Structure](#json-structure)).
-5. Run the application:
+5. Ensure a `songs.json` file exists in the project root.
+6. Run the application:
+
+   ```bash
+   python main.py
+   ```
+
+---
+
+## Linux (Ubuntu/Debian example)
+
+1. Make sure Python and pip are installed:
+
+   ```bash
+   sudo apt update
+   sudo apt install python3 python3-pip python3-venv git
+   ```
+2. Clone the repository:
+
+   ```bash
+   git clone https://github.com/cheesedongjin/WhatsMyMusicFlavor.git
+   ```
+3. Navigate to the project directory:
+
+   ```bash
+   cd WhatsMyMusicFlavor
+   ```
+4. (Optional) Create and activate a virtual environment:
+
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+5. Install dependencies:
+
+   ```bash
+   pip install PyQt6 numpy scikit-learn
+   ```
+6. Ensure a `songs.json` file exists in the project root.
+7. Run the application:
+
    ```bash
    python main.py
    ```
