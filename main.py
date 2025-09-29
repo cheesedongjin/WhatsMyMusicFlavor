@@ -16,10 +16,10 @@ import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
+    QFrame,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -1730,34 +1730,48 @@ class MusicTournamentGUI(QMainWindow):
         super().__init__()
         self.songs_file = songs_file
         self.setWindowTitle("Whats My Music Flavor · 토너먼트 취향 테스트")
-        self.resize(960, 720)
+        self.resize(1000, 760)
 
         central = QWidget()
+        central.setObjectName("CentralWidget")
         self.setCentralWidget(central)
         main_layout = QVBoxLayout(central)
-        main_layout.setContentsMargins(24, 24, 24, 24)
-        main_layout.setSpacing(16)
+        main_layout.setContentsMargins(32, 32, 32, 32)
+        main_layout.setSpacing(20)
 
-        title_label = QLabel("Whats My Music Flavor")
-        title_font = QFont("Pretendard", 18)
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        subtitle_label = QLabel("나만의 음악 토너먼트")
-        subtitle_font = QFont("Pretendard", 26)
-        subtitle_font.setBold(True)
-        subtitle_label.setFont(subtitle_font)
-        main_layout.addWidget(title_label)
-        main_layout.addWidget(subtitle_label)
+        header = QFrame()
+        header.setObjectName("HeaderCard")
+        header_layout = QVBoxLayout(header)
+        header_layout.setContentsMargins(28, 24, 28, 24)
+        header_layout.setSpacing(8)
 
-        self.content_widget = QWidget()
-        self.content_layout = QVBoxLayout(self.content_widget)
-        self.content_layout.setContentsMargins(0, 0, 0, 0)
-        self.content_layout.setSpacing(16)
+        overline = QLabel("WHATS MY MUSIC FLAVOR")
+        overline.setObjectName("OverlineLabel")
+        header_layout.addWidget(overline)
+
+        title_label = QLabel("토너먼트 취향 테스트")
+        title_label.setObjectName("HeroTitle")
+        header_layout.addWidget(title_label)
+
+        subtitle_label = QLabel("설문부터 추천까지, AI가 당신의 음악 취향을 찾아드립니다.")
+        subtitle_label.setObjectName("HeroSubtitle")
+        subtitle_label.setWordWrap(True)
+        header_layout.addWidget(subtitle_label)
+
+        main_layout.addWidget(header)
+
+        self.content_frame = QFrame()
+        self.content_frame.setObjectName("ContentFrame")
+        self.content_layout = QVBoxLayout(self.content_frame)
+        self.content_layout.setContentsMargins(24, 24, 24, 24)
+        self.content_layout.setSpacing(20)
         self.content_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        main_layout.addWidget(self.content_widget, 1)
+        main_layout.addWidget(self.content_frame, 1)
 
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
+
+        self.apply_modern_theme()
 
         loader = DataLoader()
         self.songs = loader.load_songs(self.songs_file)
@@ -1772,6 +1786,175 @@ class MusicTournamentGUI(QMainWindow):
 
     def update_status(self, message: str):
         self.status_bar.showMessage(message)
+
+    def apply_modern_theme(self):
+        self.setStyleSheet(
+            """
+QMainWindow {
+    background-color: #020617;
+}
+QWidget {
+    background-color: transparent;
+    color: #e2e8f0;
+    font-family: 'Pretendard', 'Segoe UI', sans-serif;
+    font-size: 15px;
+}
+QWidget#CentralWidget {
+    background-color: #0f172a;
+    border-radius: 28px;
+}
+QFrame#HeaderCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #1e293b, stop:1 #0f172a);
+    border-radius: 24px;
+}
+QFrame#ContentFrame {
+    background-color: rgba(15, 23, 42, 0.65);
+    border-radius: 24px;
+    padding: 12px;
+}
+QFrame#ContentSection {
+    background-color: rgba(15, 23, 42, 0.9);
+    border-radius: 20px;
+}
+QLabel#OverlineLabel {
+    color: #38bdf8;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+QLabel#HeroTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+QLabel#HeroSubtitle {
+    color: #cbd5f5;
+    font-size: 16px;
+    line-height: 1.4em;
+}
+QLabel#SectionTitle {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+QLabel#SectionSubtitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+QLabel#BodyLabel {
+    color: #cbd5f5;
+    line-height: 1.5em;
+}
+QLabel#ChampionTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #38bdf8;
+}
+QLabel#MatchStatusLabel {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+QLabel#SongTitle {
+    font-size: 17px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+QLabel#MetaLabel {
+    color: #94a3b8;
+}
+QLabel[role="helper"] {
+    color: #94a3b8;
+}
+QGroupBox {
+    background-color: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    margin-top: 12px;
+    padding: 20px;
+}
+QGroupBox::title {
+    color: #38bdf8;
+    font-weight: 600;
+    margin-left: 12px;
+    padding: 0 6px;
+}
+QGroupBox#SongCard {
+    padding-top: 28px;
+}
+QPushButton {
+    background-color: rgba(148, 163, 184, 0.18);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    color: #e2e8f0;
+    font-weight: 600;
+    min-height: 42px;
+}
+QPushButton:hover {
+    background-color: rgba(148, 163, 184, 0.32);
+}
+QPushButton:pressed {
+    background-color: rgba(148, 163, 184, 0.4);
+}
+QPushButton[variant="primary"] {
+    background-color: #38bdf8;
+    color: #0f172a;
+}
+QPushButton[variant="primary"]:hover {
+    background-color: #0ea5e9;
+}
+QPushButton[variant="primary"]:pressed {
+    background-color: #0284c7;
+}
+QStatusBar {
+    background-color: #0b1120;
+    color: #94a3b8;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
+}
+QProgressBar {
+    background-color: rgba(148, 163, 184, 0.16);
+    border: none;
+    border-radius: 10px;
+    height: 20px;
+}
+QProgressBar::chunk {
+    border-radius: 10px;
+    background-color: #38bdf8;
+}
+QScrollArea {
+    border: none;
+    background: transparent;
+}
+QScrollArea > QWidget > QWidget {
+    background: transparent;
+}
+QScrollBar:vertical {
+    background: transparent;
+    width: 12px;
+    margin: 8px 0 8px 0;
+}
+QScrollBar::handle:vertical {
+    background: rgba(148, 163, 184, 0.5);
+    border-radius: 6px;
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+}
+QRadioButton {
+    spacing: 8px;
+    color: #e2e8f0;
+}
+QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+}
+            """
+        )
 
 
     def reset_state(self):
@@ -1802,18 +1985,39 @@ class MusicTournamentGUI(QMainWindow):
         self.reset_state()
         self.clear_content()
 
-        widget = QWidget()
+        widget = QFrame()
+        widget.setObjectName("ContentSection")
         layout = QVBoxLayout(widget)
-        layout.setSpacing(12)
-        layout.addWidget(QLabel("당신의 음악 취향을 발견해보세요"))
-        intro = QLabel("간단한 설문과 토너먼트를 통해 나만의 플레이리스트를 만들어보세요.")
+        layout.setContentsMargins(32, 32, 32, 32)
+        layout.setSpacing(18)
+
+        title = QLabel("당신의 음악 취향을 발견해보세요")
+        title.setObjectName("SectionTitle")
+        layout.addWidget(title)
+
+        intro = QLabel("간단한 설문과 토너먼트를 통해 나만의 플레이리스트를 완성해보세요.")
+        intro.setObjectName("BodyLabel")
         intro.setWordWrap(True)
         layout.addWidget(intro)
 
+        highlights = [
+            ("🎧", "선호 장르와 무드를 분석해 한 눈에 정리된 취향 리포트를 제공합니다."),
+            ("🚀", "토너먼트 결과를 바탕으로 새로운 추천곡까지 이어지는 경험을 만나보세요."),
+        ]
+        for icon, text in highlights:
+            bullet = QLabel(f"{icon} {text}")
+            bullet.setObjectName("BodyLabel")
+            bullet.setProperty("role", "helper")
+            bullet.setWordWrap(True)
+            layout.addWidget(bullet)
+
         start_button = QPushButton("지금 시작하기")
+        start_button.setProperty("variant", "primary")
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        start_button.setMinimumHeight(48)
         start_button.clicked.connect(self.show_survey_view)
         layout.addWidget(start_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        layout.addStretch(1)
 
         self.content_layout.addWidget(widget)
         self.update_status("간단한 설문부터 시작해볼까요?")
@@ -1823,14 +2027,28 @@ class MusicTournamentGUI(QMainWindow):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        form = QWidget()
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        form = QFrame()
+        form.setObjectName("ContentSection")
         form_layout = QVBoxLayout(form)
-        form_layout.setSpacing(12)
+        form_layout.setContentsMargins(32, 32, 32, 32)
+        form_layout.setSpacing(18)
+
+        header = QLabel("취향 탐색 설문")
+        header.setObjectName("SectionTitle")
+        form_layout.addWidget(header)
+
+        description = QLabel("선호하는 음악 스타일을 알려주시면 더 정교한 토너먼트를 준비해드릴게요.")
+        description.setObjectName("BodyLabel")
+        description.setWordWrap(True)
+        form_layout.addWidget(description)
+        form_layout.addSpacing(4)
 
         self.genre_groups: List[Tuple[QButtonGroup, Tuple[str, str]]] = []
         for idx, (g1, g2) in enumerate(self.GENRE_PAIRS, 1):
             box = QGroupBox(f"{idx}. {g1} vs {g2}")
             box_layout = QHBoxLayout(box)
+            box_layout.setSpacing(16)
             group = QButtonGroup(box)
             for text, value in ((f"{g1} 선호", "1"), (f"{g2} 선호", "2"), ("잘 모르겠음", "s")):
                 btn = QRadioButton(text)
@@ -1849,6 +2067,7 @@ class MusicTournamentGUI(QMainWindow):
         self.regional_focus_group = self.build_radio_section(form_layout, "국가/지역 취향", self.REGIONAL_FOCUS_OPTIONS, default="4")
 
         start_button = QPushButton("토너먼트 시작")
+        start_button.setProperty("variant", "primary")
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
         start_button.clicked.connect(self.begin_tournament)
         form_layout.addWidget(start_button, alignment=Qt.AlignmentFlag.AlignRight)
@@ -1860,7 +2079,9 @@ class MusicTournamentGUI(QMainWindow):
 
     def build_radio_section(self, layout: QVBoxLayout, title: str, options: List[Tuple[str, str]], default: Optional[str] = None) -> QButtonGroup:
         box = QGroupBox(title)
+        box.setObjectName("OptionGroup")
         box_layout = QHBoxLayout(box)
+        box_layout.setSpacing(16)
         group = QButtonGroup(box)
         for text, value in options:
             btn = QRadioButton(text)
@@ -1951,12 +2172,18 @@ class MusicTournamentGUI(QMainWindow):
     def show_match_view(self):
         self.clear_content()
 
-        container = QWidget()
+        container = QFrame()
+        container.setObjectName("ContentSection")
         layout = QVBoxLayout(container)
-        layout.setSpacing(12)
-        layout.addWidget(QLabel("토너먼트 진행"))
+        layout.setContentsMargins(32, 32, 32, 32)
+        layout.setSpacing(18)
+
+        title = QLabel("토너먼트 진행 중")
+        title.setObjectName("SectionTitle")
+        layout.addWidget(title)
 
         self.match_status_label = QLabel()
+        self.match_status_label.setObjectName("MatchStatusLabel")
         layout.addWidget(self.match_status_label)
 
         self.progress_bar = QProgressBar()
@@ -1965,6 +2192,7 @@ class MusicTournamentGUI(QMainWindow):
 
         cards_container = QWidget()
         cards_layout = QHBoxLayout(cards_container)
+        cards_layout.setSpacing(16)
         self.card_a = self.create_song_card(cards_container, "A 곡")
         self.card_b = self.create_song_card(cards_container, "B 곡")
         cards_layout.addWidget(self.card_a["box"])
@@ -1972,14 +2200,17 @@ class MusicTournamentGUI(QMainWindow):
         layout.addWidget(cards_container)
 
         self.helper_label = QLabel("마음에 드는 곡을 선택하세요.")
+        self.helper_label.setProperty("role", "helper")
         layout.addWidget(self.helper_label)
 
         button_row = QWidget()
         button_layout = QGridLayout(button_row)
-        button_layout.setSpacing(8)
+        button_layout.setSpacing(12)
 
         def add_button(text: str, row: int, col: int, choice: str):
             button = QPushButton(text)
+            if choice in {"A", "B"}:
+                button.setProperty("variant", "primary")
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(lambda _=False, c=choice: self.on_choice(c))
             button_layout.addWidget(button, row, col)
@@ -1996,17 +2227,23 @@ class MusicTournamentGUI(QMainWindow):
 
     def create_song_card(self, parent: QWidget, title: str):
         box = QGroupBox(title)
+        box.setObjectName("SongCard")
         layout = QVBoxLayout(box)
+        layout.setSpacing(10)
         name_label = QLabel()
+        name_label.setObjectName("SongTitle")
         layout.addWidget(name_label)
         meta_label = QLabel()
+        meta_label.setObjectName("MetaLabel")
         layout.addWidget(meta_label)
         tag_label = QLabel()
         tag_label.setWordWrap(True)
+        tag_label.setProperty("role", "helper")
         layout.addWidget(tag_label)
         link_label = QLabel()
         link_label.setTextFormat(Qt.TextFormat.RichText)
         link_label.setOpenExternalLinks(True)
+        link_label.setProperty("role", "helper")
         layout.addWidget(link_label)
         return {"box": box, "title": name_label, "meta": meta_label, "tag": tag_label, "link": link_label}
 
@@ -2092,18 +2329,32 @@ class MusicTournamentGUI(QMainWindow):
 
     def show_results_view(self):
         self.clear_content()
-        container = QWidget()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        container = QFrame()
+        container.setObjectName("ContentSection")
         layout = QVBoxLayout(container)
-        layout.setSpacing(12)
-        self.content_layout.addWidget(container)
+        layout.setContentsMargins(32, 32, 32, 32)
+        layout.setSpacing(18)
+
+        title = QLabel("토너먼트 결과")
+        title.setObjectName("SectionTitle")
+        layout.addWidget(title)
+
+        scroll.setWidget(container)
+        self.content_layout.addWidget(scroll)
 
         if not self.champion or not self.engine:
             message = QLabel("토너먼트 결과가 존재하지 않습니다.")
+            message.setObjectName("BodyLabel")
             layout.addWidget(message)
             back = QPushButton("처음으로")
             back.setCursor(Qt.CursorShape.PointingHandCursor)
             back.clicked.connect(self.show_start_view)
             layout.addWidget(back, alignment=Qt.AlignmentFlag.AlignLeft)
+            layout.addStretch(1)
             self.update_status("토너먼트 결과가 없습니다.")
             return
 
@@ -2113,31 +2364,42 @@ class MusicTournamentGUI(QMainWindow):
         self.recommendations = recommender.generate_recommendations(self.report["top_songs"])
 
         champion_label = QLabel(f"우승 곡: {self.champion}")
+        champion_label.setObjectName("ChampionTitle")
         layout.addWidget(champion_label)
         record_label = QLabel(
             f"레이팅 {self.champion.rating:.1f} · 전적 {self.champion.wins}승 {self.champion.losses}패"
         )
+        record_label.setObjectName("BodyLabel")
         layout.addWidget(record_label)
         summary_text = self.report.get("preference_summary") if self.report else None
         if summary_text:
             summary_label = QLabel(f"취향 요약: {summary_text}")
+            summary_label.setObjectName("BodyLabel")
             summary_label.setWordWrap(True)
             layout.addWidget(summary_label)
         if self.champion.youtube_url:
             link = QLabel(f'<a href="{self.champion.youtube_url}">YouTube에서 우승 곡 듣기 ↗</a>')
             link.setTextFormat(Qt.TextFormat.RichText)
             link.setOpenExternalLinks(True)
+            link.setProperty("role", "helper")
             layout.addWidget(link)
 
         if self.report["top_songs"]:
-            layout.addWidget(QLabel("상위 플레이리스트"))
+            playlist_label = QLabel("상위 플레이리스트")
+            playlist_label.setObjectName("SectionSubtitle")
+            layout.addWidget(playlist_label)
             for idx, song in enumerate(self.report["top_songs"], 1):
-                layout.addWidget(QLabel(f"{idx}. {song}"))
+                song_label = QLabel(f"{idx}. {song}")
+                song_label.setObjectName("BodyLabel")
+                layout.addWidget(song_label)
 
         stats = self.report["choice_distribution"]
-        layout.addWidget(QLabel(
+        stats_label = QLabel(
             f"총 매치 {self.report['total_matches']} · A {stats.get('A', 0)} · B {stats.get('B', 0)} · 둘 다 {stats.get('T', 0)} · 건너뛰기 {stats.get('S', 0)}"
-        ))
+        )
+        stats_label.setProperty("role", "helper")
+        stats_label.setWordWrap(True)
+        layout.addWidget(stats_label)
 
         self.render_recommendations(layout)
 
@@ -2145,30 +2407,43 @@ class MusicTournamentGUI(QMainWindow):
         back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         back_button.clicked.connect(self.show_start_view)
         layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        layout.addStretch(1)
+
         self.update_status("결과를 확인하고 추천곡을 감상해보세요.")
 
     def render_recommendations(self, layout: QVBoxLayout):
-        layout.addWidget(QLabel("맞춤 추천"))
+        section_title = QLabel("맞춤 추천")
+        section_title.setObjectName("SectionSubtitle")
+        layout.addWidget(section_title)
         core_recs = self.recommendations.get("core", []) if self.recommendations else []
         fresh_recs = self.recommendations.get("fresh", []) if self.recommendations else []
         if not core_recs and not fresh_recs:
-            layout.addWidget(QLabel("추천할 곡이 없습니다."))
+            empty_label = QLabel("추천할 곡이 없습니다.")
+            empty_label.setObjectName("BodyLabel")
+            layout.addWidget(empty_label)
             return
         for title, entries in (("🎯 취향 저격 트랙", core_recs), ("🌱 새롭게 시도해볼 곡", fresh_recs)):
             if not entries:
                 continue
-            layout.addWidget(QLabel(title))
+            group_label = QLabel(title)
+            group_label.setObjectName("BodyLabel")
+            layout.addWidget(group_label)
             for idx, entry in enumerate(entries, 1):
                 song = entry["song"]
                 reason = entry["reason"]
-                layout.addWidget(QLabel(f"{idx}. {song}"))
+                song_label = QLabel(f"{idx}. {song}")
+                song_label.setObjectName("BodyLabel")
+                layout.addWidget(song_label)
                 reason_label = QLabel(reason)
+                reason_label.setObjectName("BodyLabel")
+                reason_label.setProperty("role", "helper")
                 reason_label.setWordWrap(True)
                 layout.addWidget(reason_label)
                 if song.youtube_url:
                     link = QLabel(f'<a href="{song.youtube_url}">YouTube에서 듣기 ↗</a>')
                     link.setTextFormat(Qt.TextFormat.RichText)
                     link.setOpenExternalLinks(True)
+                    link.setProperty("role", "helper")
                     layout.addWidget(link)
 
     def run(self):
