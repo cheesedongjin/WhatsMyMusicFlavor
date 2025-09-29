@@ -2009,15 +2009,17 @@ QGroupBox#SongCard {
 }
 QLabel#FooterNotice {
     color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.35em;
 }
 QPushButton {
     background-color: rgba(148, 163, 184, 0.18);
     border: none;
     border-radius: 12px;
-    padding: 12px 18px;
+    padding: 8px 16px;
     color: #e2e8f0;
     font-weight: 600;
-    min-height: 42px;
+    min-height: 36px;
 }
 QPushButton:hover {
     background-color: rgba(148, 163, 184, 0.32);
