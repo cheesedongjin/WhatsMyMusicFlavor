@@ -6386,5 +6386,273 @@
       "duration_sec": 204,
       "loudness_lufs": -6.5
     }
+  },
+  {
+    "id": "song_171",
+    "artist": "IU",
+    "title": "Good Day",
+    "title_kor": "좋은 날",
+    "youtube_url": "https://www.youtube.com/watch?v=jeqdYqsrsA0",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [44, 50],
+      "mood": [9, 63, 64],
+      "energy": 0.75,
+      "valence": 0.85,
+      "tempo_bpm": 136,
+      "era_year": 2010,
+      "language": 4,
+      "instrumentation": [8, 13, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.97,
+      "yt_views": 600000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 217,
+      "loudness_lufs": -8.0
+    }
+  },
+  {
+    "id": "song_172",
+    "artist": "Jannabi",
+    "title": "For Lovers Who Hesitate",
+    "title_kor": "주저하는 연인들을 위해",
+    "youtube_url": "https://www.youtube.com/watch?v=GdoNGNe5CSg",
+    "genres": [1, 21],
+    "tags": {
+      "subgenres": [45, 53],
+      "mood": [37, 44, 51],
+      "energy": 0.6,
+      "valence": 0.7,
+      "tempo_bpm": 118,
+      "era_year": 2019,
+      "language": 4,
+      "instrumentation": [4, 1, 8, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 200000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 245,
+      "loudness_lufs": -8.8
+    }
+  },
+  {
+    "id": "song_173",
+    "artist": "Lee Mu-jin",
+    "title": "Traffic Light",
+    "title_kor": "신호등",
+    "youtube_url": "https://www.youtube.com/watch?v=SK6Sm2Ki9tI",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [35, 44],
+      "mood": [37, 53, 65],
+      "energy": 0.55,
+      "valence": 0.65,
+      "tempo_bpm": 84,
+      "era_year": 2021,
+      "language": 4,
+      "instrumentation": [8, 13, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 300000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 228,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_174",
+    "artist": "10cm",
+    "title": "Americano",
+    "title_kor": "아메리카노",
+    "youtube_url": "https://www.youtube.com/watch?v=30G_SMoAr24",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [19, 50],
+      "mood": [63, 9, 47],
+      "energy": 0.7,
+      "valence": 0.8,
+      "tempo_bpm": 110,
+      "era_year": 2010,
+      "language": 4,
+      "instrumentation": [1, 13, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 150000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 209,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_175",
+    "artist": "AKMU",
+    "title": "200%",
+    "youtube_url": "https://www.youtube.com/watch?v=0Oi8jDMvd_w",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [38, 45],
+      "mood": [64, 22, 23],
+      "energy": 0.8,
+      "valence": 0.75,
+      "tempo_bpm": 122,
+      "era_year": 2014,
+      "language": 4,
+      "instrumentation": [13, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.90,
+      "yt_views": 120000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 195,
+      "loudness_lufs": -7.2
+    }
+  },
+  {
+    "id": "song_176",
+    "artist": "Blackpink",
+    "title": "Kill This Love",
+    "youtube_url": "https://www.youtube.com/watch?v=2S24-y0Ij3Y",
+    "genres": [2, 20],
+    "tags": {
+      "subgenres": [38, 56],
+      "mood": [1, 27, 48],
+      "energy": 0.92,
+      "valence": 0.55,
+      "tempo_bpm": 132,
+      "era_year": 2019,
+      "language": 0,
+      "instrumentation": [13, 0, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 2500000000,
+      "regionality": [4, 6, 0]
+    },
+    "meta": {
+      "duration_sec": 211,
+      "loudness_lufs": -6.0
+    }
+  },
+  {
+    "id": "song_177",
+    "artist": "Toy",
+    "title": "Remember I Was Next to You",
+    "title_kor": "내가 너의 곁에 잠시 살았다는 걸",
+    "youtube_url": "https://www.youtube.com/watch?v=FsGYcohDXHQ",
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 45],
+      "mood": [37, 34, 51],
+      "energy": 0.5,
+      "valence": 0.6,
+      "tempo_bpm": 96,
+      "era_year": 1995,
+      "language": 4,
+      "instrumentation": [4, 8, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 50000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 264,
+      "loudness_lufs": -10.8
+    }
+  },
+  {
+    "id": "song_178",
+    "artist": "IU",
+    "title": "Blueming",
+    "title_kor": "블루밍",
+    "youtube_url": "https://www.youtube.com/watch?v=D1PvIWdJ8xo",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [19, 50],
+      "mood": [63, 26, 47],
+      "energy": 0.72,
+      "valence": 0.82,
+      "tempo_bpm": 126,
+      "era_year": 2019,
+      "language": 4,
+      "instrumentation": [13, 8, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 350000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 201,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_179",
+    "artist": "Jannabi",
+    "title": "A Thought on an Autumn Night",
+    "title_kor": "가을밤에 든 생각",
+    "youtube_url": "https://www.youtube.com/watch?v=9T_uq_HpfyQ",
+    "genres": [1, 21],
+    "tags": {
+      "subgenres": [32, 53],
+      "mood": [44, 46, 52],
+      "energy": 0.45,
+      "valence": 0.55,
+      "tempo_bpm": 104,
+      "era_year": 2020,
+      "language": 4,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.80,
+      "yt_views": 80000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 232,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_180",
+    "artist": "Lee Mu-jin",
+    "title": "Episode",
+    "title_kor": "에피소드",
+    "youtube_url": "https://www.youtube.com/watch?v=gH1rVdXUlpo",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [35, 44],
+      "mood": [53, 65, 31],
+      "energy": 0.65,
+      "valence": 0.7,
+      "tempo_bpm": 92,
+      "era_year": 2021,
+      "language": 4,
+      "instrumentation": [8, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 150000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 240,
+      "loudness_lufs": -8.8
+    }
   }
 ]
