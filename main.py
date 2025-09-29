@@ -1466,7 +1466,7 @@ class MusicTournamentGUI:
         hero = ttk.Frame(self.content_frame, style="Hero.TFrame", padding=48)
         hero.pack(expand=True, fill="both", pady=12)
 
-        ttk.Label(hero, text="당신의 음악 취향을 시각적으로 발견해보세요", style="HeroTitle.TLabel", wraplength=680).pack(anchor="w")
+        ttk.Label(hero, text="당신의 음악 취향을 발견해보세요", style="HeroTitle.TLabel", wraplength=680).pack(anchor="w")
         ttk.Label(
             hero,
             text="장르 선호부터 토너먼트 챔피언 선정, 추천곡까지 한 번에 경험할 수 있는 인터랙티브 테스트입니다.",
