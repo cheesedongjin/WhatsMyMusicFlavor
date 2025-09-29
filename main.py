@@ -1870,12 +1870,18 @@ class MusicTournamentGUI(QMainWindow):
         footer_layout = QHBoxLayout(self.footer_frame)
         footer_layout.setContentsMargins(0, 0, 0, 0)
         footer_layout.setSpacing(12)
-        footer_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+        footer_notice = QLabel(
+            "곡 정보에 오류를 발견하셨나요? 하단의 '문제 신고 · 개선 제안하기' 버튼으로 알려주시면, 서비스 개선에 큰 힘이 됩니다."
+        )
+        footer_notice.setObjectName("FooterNotice")
+        footer_notice.setWordWrap(True)
+        footer_layout.addWidget(footer_notice, 1)
 
         self.report_issue_button = QPushButton("문제 신고 · 개선 제안하기")
         self.report_issue_button.setProperty("variant", "primary")
         self.report_issue_button.clicked.connect(self.open_issue_link)
-        footer_layout.addWidget(self.report_issue_button)
+        footer_layout.addWidget(self.report_issue_button, 0, Qt.AlignmentFlag.AlignRight)
 
         main_layout.addWidget(self.footer_frame)
 
@@ -2000,6 +2006,9 @@ QGroupBox::title {
 }
 QGroupBox#SongCard {
     padding-top: 28px;
+}
+QLabel#FooterNotice {
+    color: #94a3b8;
 }
 QPushButton {
     background-color: rgba(148, 163, 184, 0.18);
