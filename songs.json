@@ -5261,5 +5261,305 @@
         "duration_sec": 210,
         "loudness_lufs": -9.0
     }
+  },
+  {
+    "id": "song_111",
+    "artist": "The Strokes",
+    "title": "Someday",
+    "youtube_url": "https://www.youtube.com/watch?v=knU9gRUWCno",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [32, 3],
+      "mood": [44, 29, 17],
+      "energy": 0.75,
+      "valence": 0.65,
+      "tempo_bpm": 136,
+      "era_year": 2001,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 92000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 186,
+      "loudness_lufs": -10.5
+    }
+  },
+  {
+    "id": "song_112",
+    "artist": "Cage the Elephant",
+    "title": "Cigarette Daydreams",
+    "youtube_url": "https://www.youtube.com/watch?v=opeETnB8m8w",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 32],
+      "mood": [44, 51, 12],
+      "energy": 0.55,
+      "valence": 0.5,
+      "tempo_bpm": 98,
+      "era_year": 2013,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.76,
+      "yt_views": 280000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 310,
+      "loudness_lufs": -11.2
+    }
+  },
+  {
+    "id": "song_113",
+    "artist": "Yeah Yeah Yeahs",
+    "title": "Maps",
+    "youtube_url": "https://www.youtube.com/watch?v=oIIxlgcuQRU",
+    "clip": {
+      "start_sec": 45,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 32],
+      "mood": [21, 37, 45],
+      "energy": 0.7,
+      "valence": 0.4,
+      "tempo_bpm": 148,
+      "era_year": 2003,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.73,
+      "yt_views": 65000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 221,
+      "loudness_lufs": -10.8
+    }
+  },
+  {
+    "id": "song_114",
+    "artist": "Vampire Weekend",
+    "title": "A-Punk",
+    "youtube_url": "https://www.youtube.com/watch?v=_XC2mqcMMGQ",
+    "clip": {
+      "start_sec": 20,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [32, 51],
+      "mood": [23, 63, 47],
+      "energy": 0.88,
+      "valence": 0.8,
+      "tempo_bpm": 180,
+      "era_year": 2008,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.68,
+      "yt_views": 48000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 138,
+      "loudness_lufs": -9.2
+    }
+  },
+  {
+    "id": "song_115",
+    "artist": "Lorde",
+    "title": "Royals",
+    "youtube_url": "https://www.youtube.com/watch?v=nlcIKh6sBtc",
+    "clip": {
+      "start_sec": 25,
+      "preview_sec": 30
+    },
+    "genres": [2, 27],
+    "tags": {
+      "subgenres": [0, 19],
+      "mood": [14, 39, 11],
+      "energy": 0.5,
+      "valence": 0.45,
+      "tempo_bpm": 85,
+      "era_year": 2013,
+      "language": 0,
+      "instrumentation": [13, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 1200000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 191,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_116",
+    "artist": "alt-J",
+    "title": "Breezeblocks",
+    "youtube_url": "https://www.youtube.com/watch?v=rVeMiVU77wo",
+    "clip": {
+      "start_sec": 50,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 20],
+      "mood": [32, 14, 10],
+      "energy": 0.75,
+      "valence": 0.5,
+      "tempo_bpm": 125,
+      "era_year": 2012,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15, 10]
+    },
+    "popularity": {
+      "awareness_idx": 0.74,
+      "yt_views": 320000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 207,
+      "loudness_lufs": -9.8
+    }
+  },
+  {
+    "id": "song_117",
+    "artist": "Florence + The Machine",
+    "title": "Dog Days Are Over",
+    "youtube_url": "https://www.youtube.com/watch?v=iWOyfLBYtuU",
+    "clip": {
+      "start_sec": 35,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 5],
+      "mood": [22, 64, 23],
+      "energy": 0.85,
+      "valence": 0.75,
+      "tempo_bpm": 148,
+      "era_year": 2008,
+      "language": 0,
+      "instrumentation": [4, 12, 2, 15, 7]
+    },
+    "popularity": {
+      "awareness_idx": 0.79,
+      "yt_views": 185000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 242,
+      "loudness_lufs": -9.5
+    }
+  },
+  {
+    "id": "song_118",
+    "artist": "The Killers",
+    "title": "Mr. Brightside",
+    "youtube_url": "https://www.youtube.com/watch?v=gGdGFtwCNBE",
+    "clip": {
+      "start_sec": 30,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [3, 45],
+      "mood": [23, 18, 21],
+      "energy": 0.9,
+      "valence": 0.6,
+      "tempo_bpm": 148,
+      "era_year": 2003,
+      "language": 0,
+      "instrumentation": [13, 4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 920000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 222,
+      "loudness_lufs": -8.8
+    }
+  },
+  {
+    "id": "song_119",
+    "artist": "Two Door Cinema Club",
+    "title": "What You Know",
+    "youtube_url": "https://www.youtube.com/watch?v=YXwYJyrKK5A",
+    "clip": {
+      "start_sec": 25,
+      "preview_sec": 30
+    },
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [32, 12],
+      "mood": [63, 23, 26],
+      "energy": 0.88,
+      "valence": 0.85,
+      "tempo_bpm": 160,
+      "era_year": 2010,
+      "language": 0,
+      "instrumentation": [4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.71,
+      "yt_views": 95000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 191,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_120",
+    "artist": "Grimes",
+    "title": "Oblivion",
+    "youtube_url": "https://www.youtube.com/watch?v=JtH68PJIQLE",
+    "clip": {
+      "start_sec": 40,
+      "preview_sec": 30
+    },
+    "genres": [2, 27],
+    "tags": {
+      "subgenres": [5, 17, 54],
+      "mood": [17, 25, 44],
+      "energy": 0.72,
+      "valence": 0.65,
+      "tempo_bpm": 118,
+      "era_year": 2012,
+      "language": 0,
+      "instrumentation": [13, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.69,
+      "yt_views": 72000000,
+      "regionality": [4]
+    },
+    "meta": {
+      "duration_sec": 228,
+      "loudness_lufs": -10.2
+    }
   }
 ]
