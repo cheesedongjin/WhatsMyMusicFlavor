@@ -32,14 +32,14 @@
     },
     "popularity": {
       "awareness_idx": 0.95,
-      "yt_views": 1800000000,
+      "yt_views": 2200000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 354,
-      "loudness_lufs": -11.5
+      "loudness_lufs": -10.7
     }
   },
   {
@@ -75,7 +75,7 @@
     },
     "popularity": {
       "awareness_idx": 0.92,
-      "yt_views": 1500000000,
+      "yt_views": 2050000000,
       "regionality": [
         4,
         6,
@@ -84,7 +84,7 @@
     },
     "meta": {
       "duration_sec": 199,
-      "loudness_lufs": -6.2
+      "loudness_lufs": -5.1
     }
   },
   {
@@ -120,14 +120,14 @@
     },
     "popularity": {
       "awareness_idx": 0.88,
-      "yt_views": 450000000,
+      "yt_views": 1200000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 238,
-      "loudness_lufs": -10.8
+      "loudness_lufs": -9.8
     }
   },
   {
@@ -163,14 +163,14 @@
     },
     "popularity": {
       "awareness_idx": 0.85,
-      "yt_views": 280000000,
+      "yt_views": 600000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 320,
-      "loudness_lufs": -8.5
+      "loudness_lufs": -7.8
     }
   },
   {
@@ -205,7 +205,7 @@
     },
     "popularity": {
       "awareness_idx": 0.8,
-      "yt_views": 950000000,
+      "yt_views": 1500000000,
       "regionality": [
         4,
         8
@@ -213,7 +213,7 @@
     },
     "meta": {
       "duration_sec": 177,
-      "loudness_lufs": -7.2
+      "loudness_lufs": -6.8
     }
   },
   {
@@ -237,7 +237,7 @@
       ],
       "energy": 0.4,
       "valence": 0.6,
-      "tempo_bpm": 138,
+      "tempo_bpm": 136,
       "era_year": 1959,
       "language": 3,
       "instrumentation": [
@@ -250,14 +250,14 @@
     },
     "popularity": {
       "awareness_idx": 0.65,
-      "yt_views": 45000000,
+      "yt_views": 105000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 562,
-      "loudness_lufs": -18.5
+      "loudness_lufs": -17.2
     }
   },
   {
@@ -293,7 +293,7 @@
     },
     "popularity": {
       "awareness_idx": 0.9,
-      "yt_views": 185000000,
+      "yt_views": 300000000,
       "regionality": [
         6,
         0
@@ -301,7 +301,7 @@
     },
     "meta": {
       "duration_sec": 217,
-      "loudness_lufs": -9.8
+      "loudness_lufs": -8.5
     }
   },
   {
@@ -337,14 +337,14 @@
     },
     "popularity": {
       "awareness_idx": 0.93,
-      "yt_views": 1400000000,
+      "yt_views": 2000000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 301,
-      "loudness_lufs": -9.2
+      "loudness_lufs": -8.4
     }
   },
   {
@@ -370,7 +370,7 @@
       ],
       "energy": 0.92,
       "valence": 0.65,
-      "tempo_bpm": 145,
+      "tempo_bpm": 140,
       "era_year": 2018,
       "language": 4,
       "instrumentation": [
@@ -381,7 +381,7 @@
     },
     "popularity": {
       "awareness_idx": 0.91,
-      "yt_views": 2000000000,
+      "yt_views": 2500000000,
       "regionality": [
         4,
         6,
@@ -390,7 +390,7 @@
     },
     "meta": {
       "duration_sec": 209,
-      "loudness_lufs": -5.8
+      "loudness_lufs": -5.2
     }
   },
   {
@@ -426,14 +426,14 @@
     },
     "popularity": {
       "awareness_idx": 0.96,
-      "yt_views": 1100000000,
+      "yt_views": 1800000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 200,
-      "loudness_lufs": -7.1
+      "loudness_lufs": -5.9
     }
   },
   {
@@ -457,7 +457,7 @@
       ],
       "energy": 0.7,
       "valence": 0.5,
-      "tempo_bpm": 132,
+      "tempo_bpm": 123,
       "era_year": 1999,
       "language": 0,
       "instrumentation": [
@@ -468,14 +468,14 @@
     },
     "popularity": {
       "awareness_idx": 0.45,
-      "yt_views": 28000000,
+      "yt_views": 50000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 368,
-      "loudness_lufs": -10.2
+      "loudness_lufs": -9.5
     }
   },
   {
@@ -510,14 +510,14 @@
     },
     "popularity": {
       "awareness_idx": 0.94,
-      "yt_views": 1300000000,
+      "yt_views": 1500000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 194,
-      "loudness_lufs": -11.3
+      "loudness_lufs": -10.7
     }
   },
   {
@@ -550,14 +550,14 @@
     },
     "popularity": {
       "awareness_idx": 0.75,
-      "yt_views": 95000000,
+      "yt_views": 200000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 276,
-      "loudness_lufs": -20.5
+      "loudness_lufs": -19.0
     }
   },
   {
@@ -593,14 +593,14 @@
     },
     "popularity": {
       "awareness_idx": 0.72,
-      "yt_views": 520000000,
+      "yt_views": 800000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 216,
-      "loudness_lufs": -9.5
+      "loudness_lufs": -8.2
     }
   },
   {
@@ -636,7 +636,7 @@
     },
     "popularity": {
       "awareness_idx": 0.68,
-      "yt_views": 52000000,
+      "yt_views": 100000000,
       "regionality": [
         6,
         0
@@ -644,7 +644,7 @@
     },
     "meta": {
       "duration_sec": 272,
-      "loudness_lufs": -8.2
+      "loudness_lufs": -7.5
     }
   },
   {
@@ -668,7 +668,7 @@
       ],
       "energy": 0.65,
       "valence": 0.5,
-      "tempo_bpm": 63,
+      "tempo_bpm": 127,
       "era_year": 1979,
       "language": 0,
       "instrumentation": [
@@ -681,14 +681,14 @@
     },
     "popularity": {
       "awareness_idx": 0.87,
-      "yt_views": 280000000,
+      "yt_views": 500000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 382,
-      "loudness_lufs": -13.8
+      "loudness_lufs": -12.5
     }
   },
   {
@@ -723,14 +723,14 @@
     },
     "popularity": {
       "awareness_idx": 0.55,
-      "yt_views": 95000000,
+      "yt_views": 200000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 219,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -6.9
     }
   },
   {
@@ -766,14 +766,14 @@
     },
     "popularity": {
       "awareness_idx": 0.94,
-      "yt_views": 1200000000,
+      "yt_views": 1800000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 242,
-      "loudness_lufs": -8.8
+      "loudness_lufs": -10.9
     }
   },
   {
@@ -797,7 +797,7 @@
       ],
       "energy": 0.4,
       "valence": 0.35,
-      "tempo_bpm": 80,
+      "tempo_bpm": 77,
       "era_year": 1998,
       "language": 0,
       "instrumentation": [
@@ -809,14 +809,14 @@
     },
     "popularity": {
       "awareness_idx": 0.68,
-      "yt_views": 125000000,
+      "yt_views": 300000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 329,
-      "loudness_lufs": -12.5
+      "loudness_lufs": -11.2
     }
   },
   {
@@ -840,7 +840,7 @@
       ],
       "energy": 0.85,
       "valence": 0.6,
-      "tempo_bpm": 162,
+      "tempo_bpm": 98,
       "era_year": 2018,
       "language": 1,
       "instrumentation": [
@@ -851,7 +851,7 @@
     },
     "popularity": {
       "awareness_idx": 0.62,
-      "yt_views": 180000000,
+      "yt_views": 250000000,
       "regionality": [
         1,
         7,
@@ -859,8 +859,8 @@
       ]
     },
     "meta": {
-      "duration_sec": 163,
-      "loudness_lufs": -7.5
+      "duration_sec": 153,
+      "loudness_lufs": -6.8
     }
   },
   {
@@ -896,7 +896,7 @@
     },
     "popularity": {
       "awareness_idx": 0.77,
-      "yt_views": 92000000,
+      "yt_views": 150000000,
       "regionality": [
         4,
         8
@@ -904,7 +904,7 @@
     },
     "meta": {
       "duration_sec": 307,
-      "loudness_lufs": -9.2
+      "loudness_lufs": -8.5
     }
   },
   {
@@ -940,7 +940,7 @@
     },
     "popularity": {
       "awareness_idx": 0.71,
-      "yt_views": 68000000,
+      "yt_views": 100000000,
       "regionality": [
         6,
         0
@@ -948,7 +948,7 @@
     },
     "meta": {
       "duration_sec": 255,
-      "loudness_lufs": -8.9
+      "loudness_lufs": -8.2
     }
   },
   {
@@ -984,14 +984,14 @@
     },
     "popularity": {
       "awareness_idx": 0.89,
-      "yt_views": 380000000,
+      "yt_views": 1000000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 257,
-      "loudness_lufs": -13.2
+      "loudness_lufs": -12.5
     }
   },
   {
@@ -1026,14 +1026,14 @@
     },
     "popularity": {
       "awareness_idx": 0.42,
-      "yt_views": 15000000,
+      "yt_views": 50000000,
       "regionality": [
         4
       ]
     },
     "meta": {
       "duration_sec": 141,
-      "loudness_lufs": -14.8
+      "loudness_lufs": -11.8
     }
   },
   {
@@ -5646,12 +5646,12 @@
     },
     "popularity": {
       "awareness_idx": 0.81,
-      "yt_views": 420000000,
+      "yt_views": 500000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 226,
-      "loudness_lufs": -8.2
+      "loudness_lufs": -7.5
     }
   },
   {
@@ -5672,12 +5672,12 @@
     },
     "popularity": {
       "awareness_idx": 0.68,
-      "yt_views": 95000000,
+      "yt_views": 150000000,
       "regionality": [4, 8]
     },
     "meta": {
       "duration_sec": 247,
-      "loudness_lufs": -7.5
+      "loudness_lufs": -6.8
     }
   },
   {
@@ -5698,12 +5698,12 @@
     },
     "popularity": {
       "awareness_idx": 0.79,
-      "yt_views": 680000000,
+      "yt_views": 800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 224,
-      "loudness_lufs": -7.2
+      "loudness_lufs": -6.5
     }
   },
   {
@@ -5724,12 +5724,12 @@
     },
     "popularity": {
       "awareness_idx": 0.76,
-      "yt_views": 280000000,
+      "yt_views": 400000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 208,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -7.2
     }
   },
   {
@@ -5750,12 +5750,12 @@
     },
     "popularity": {
       "awareness_idx": 0.88,
-      "yt_views": 520000000,
+      "yt_views": 600000000,
       "regionality": [6, 0, 4]
     },
     "meta": {
       "duration_sec": 210,
-      "loudness_lufs": -8.5
+      "loudness_lufs": -7.8
     }
   },
   {
@@ -5777,12 +5777,12 @@
     },
     "popularity": {
       "awareness_idx": 0.85,
-      "yt_views": 650000000,
+      "yt_views": 800000000,
       "regionality": [6, 0, 4]
     },
     "meta": {
       "duration_sec": 192,
-      "loudness_lufs": -6.8
+      "loudness_lufs": -6.2
     }
   },
   {
@@ -5803,12 +5803,12 @@
     },
     "popularity": {
       "awareness_idx": 0.74,
-      "yt_views": 180000000,
+      "yt_views": 250000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 199,
-      "loudness_lufs": -7.5
+      "loudness_lufs": -6.9
     }
   },
   {
@@ -5830,12 +5830,12 @@
     },
     "popularity": {
       "awareness_idx": 0.82,
-      "yt_views": 320000000,
+      "yt_views": 400000000,
       "regionality": [6, 0, 4]
     },
     "meta": {
       "duration_sec": 206,
-      "loudness_lufs": -6.5
+      "loudness_lufs": -5.8
     }
   },
   {
@@ -5856,12 +5856,12 @@
     },
     "popularity": {
       "awareness_idx": 0.83,
-      "yt_views": 920000000,
+      "yt_views": 1200000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 266,
-      "loudness_lufs": -8.2
+      "loudness_lufs": -7.5
     }
   },
   {
@@ -5883,12 +5883,12 @@
     },
     "popularity": {
       "awareness_idx": 0.89,
-      "yt_views": 380000000,
+      "yt_views": 500000000,
       "regionality": [6, 0, 4]
     },
     "meta": {
       "duration_sec": 179,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -7.2
     }
   },
   {
@@ -5910,12 +5910,12 @@
     },
     "popularity": {
       "awareness_idx": 0.87,
-      "yt_views": 290000000,
+      "yt_views": 400000000,
       "regionality": [6, 0, 4]
     },
     "meta": {
       "duration_sec": 215,
-      "loudness_lufs": -7.5
+      "loudness_lufs": -6.8
     }
   },
   {
@@ -5936,12 +5936,12 @@
     },
     "popularity": {
       "awareness_idx": 0.86,
-      "yt_views": 2400000000,
+      "yt_views": 2800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 275,
-      "loudness_lufs": -7.2
+      "loudness_lufs": -6.5
     }
   },
   {
@@ -5962,12 +5962,12 @@
     },
     "popularity": {
       "awareness_idx": 0.89,
-      "yt_views": 1800000000,
+      "yt_views": 2500000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 214,
-      "loudness_lufs": -7.5
+      "loudness_lufs": -6.9
     }
   },
   {
@@ -5988,12 +5988,12 @@
     },
     "popularity": {
       "awareness_idx": 0.68,
-      "yt_views": 180000000,
+      "yt_views": 300000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 279,
-      "loudness_lufs": -15.8
+      "loudness_lufs": -14.5
     }
   },
   {
@@ -6014,12 +6014,12 @@
     },
     "popularity": {
       "awareness_idx": 0.91,
-      "yt_views": 850000000,
+      "yt_views": 1200000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 247,
-      "loudness_lufs": -11.2
+      "loudness_lufs": -10.5
     }
   },
   {
@@ -6040,12 +6040,12 @@
     },
     "popularity": {
       "awareness_idx": 0.88,
-      "yt_views": 1400000000,
+      "yt_views": 1800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 231,
-      "loudness_lufs": -8.2
+      "loudness_lufs": -7.5
     }
   },
   {
@@ -6066,12 +6066,12 @@
     },
     "popularity": {
       "awareness_idx": 0.86,
-      "yt_views": 1200000000,
+      "yt_views": 1500000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 231,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -7.2
     }
   },
   {
@@ -6093,12 +6093,12 @@
     },
     "popularity": {
       "awareness_idx": 0.83,
-      "yt_views": 95000000,
+      "yt_views": 150000000,
       "regionality": [6, 0]
     },
     "meta": {
       "duration_sec": 238,
-      "loudness_lufs": -9.5
+      "loudness_lufs": -8.8
     }
   },
   {
@@ -6119,12 +6119,12 @@
     },
     "popularity": {
       "awareness_idx": 0.78,
-      "yt_views": 68000000,
+      "yt_views": 100000000,
       "regionality": [6, 0]
     },
     "meta": {
       "duration_sec": 205,
-      "loudness_lufs": -8.2
+      "loudness_lufs": -7.5
     }
   },
   {
@@ -6145,12 +6145,12 @@
     },
     "popularity": {
       "awareness_idx": 0.93,
-      "yt_views": 680000000,
+      "yt_views": 1000000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 174,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -7.2
     }
   },
   {
@@ -6171,12 +6171,12 @@
     },
     "popularity": {
       "awareness_idx": 0.89,
-      "yt_views": 520000000,
+      "yt_views": 800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 340,
-      "loudness_lufs": -10.2
+      "loudness_lufs": -9.5
     }
   },
   {
@@ -6197,12 +6197,12 @@
     },
     "popularity": {
       "awareness_idx": 0.94,
-      "yt_views": 3500000000,
+      "yt_views": 4000000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 201,
-      "loudness_lufs": -7.2
+      "loudness_lufs": -6.5
     }
   },
   {
@@ -6223,12 +6223,12 @@
     },
     "popularity": {
       "awareness_idx": 0.92,
-      "yt_views": 850000000,
+      "yt_views": 1200000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 309,
-      "loudness_lufs": -12.5
+      "loudness_lufs": -11.8
     }
   },
   {
@@ -6249,12 +6249,12 @@
     },
     "popularity": {
       "awareness_idx": 0.86,
-      "yt_views": 580000000,
+      "yt_views": 800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 203,
-      "loudness_lufs": -7.5
+      "loudness_lufs": -6.8
     }
   },
   {
@@ -6268,19 +6268,19 @@
       "mood": [34, 14, 41],
       "energy": 0.55,
       "valence": 0.4,
-      "tempo_bpm": 64,
+      "tempo_bpm": 75,
       "era_year": 1997,
       "language": 0,
       "instrumentation": [8, 4, 1, 2, 15]
     },
     "popularity": {
       "awareness_idx": 0.84,
-      "yt_views": 280000000,
+      "yt_views": 500000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 263,
-      "loudness_lufs": -11.8
+      "loudness_lufs": -11.2
     }
   },
   {
@@ -6301,12 +6301,12 @@
     },
     "popularity": {
       "awareness_idx": 0.92,
-      "yt_views": 3600000000,
+      "yt_views": 2800000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 202,
-      "loudness_lufs": -8.5
+      "loudness_lufs": -7.8
     }
   },
   {
@@ -6320,19 +6320,19 @@
       "mood": [23, 47, 67],
       "energy": 0.85,
       "valence": 0.75,
-      "tempo_bpm": 130,
+      "tempo_bpm": 120,
       "era_year": 2008,
       "language": 0,
       "instrumentation": [4, 1, 2, 15, 5]
     },
     "popularity": {
       "awareness_idx": 0.71,
-      "yt_views": 52000000,
+      "yt_views": 100000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 199,
-      "loudness_lufs": -9.5
+      "loudness_lufs": -8.8
     }
   },
   {
@@ -6353,12 +6353,12 @@
     },
     "popularity": {
       "awareness_idx": 0.95,
-      "yt_views": 1200000000,
+      "yt_views": 1500000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 187,
-      "loudness_lufs": -7.8
+      "loudness_lufs": -7.2
     }
   },
   {
@@ -6379,12 +6379,12 @@
     },
     "popularity": {
       "awareness_idx": 0.94,
-      "yt_views": 2800000000,
+      "yt_views": 3000000000,
       "regionality": [4]
     },
     "meta": {
       "duration_sec": 204,
-      "loudness_lufs": -7.2
+      "loudness_lufs": -6.5
     }
   }
 ]
