@@ -11,7 +11,7 @@ import webbrowser
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Set, Any
 from dataclasses import dataclass, field, asdict
-from collections import defaultdict
+from collections import defaultdict, Counter
 import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
@@ -903,6 +903,363 @@ class TournamentEngine:
         champion = current_winners[0] if current_winners else None
         return champion
 
+class PreferenceSummarizer:
+    """토너먼트 결과를 바탕으로 취향을 한 문장으로 묘사한다."""
+
+    GENRE_LABELS = {
+        "Rock": "록",
+        "Pop": "팝",
+        "Electronic": "일렉트로닉",
+        "Hip Hop": "힙합",
+        "Jazz": "재즈",
+        "Classical": "클래식",
+        "Progressive Rock": "프로그레시브 록",
+        "Art Rock": "아트 록",
+        "Grunge": "그런지",
+        "Psychedelic Rock": "사이키델릭 록",
+        "Alternative Rock": "얼터너티브 록",
+        "Indie Folk": "인디 포크",
+        "Classic Rock": "클래식 록",
+        "Dance Pop": "댄스 팝",
+        "K-Indie Pop": "케이 인디 팝",
+        "R&B Pop": "알앤비 팝",
+        "Synth Pop": "신스 팝",
+        "Electropop": "일렉트로팝",
+    }
+
+    SUBGENRE_TONES = {
+        "alt_pop": "대담한 얼터 팝",
+        "alternative_r&b": "대체 R&B",
+        "alternative_rock": "험칙한 얼터 록",
+        "ambient": "미세한 앰비언트 텍스처",
+        "art_pop": "예술적 팝 감각",
+        "chillhop": "느긋한 칠합",
+        "dance_pop": "반짝이는 댄스 팝",
+        "edm_pop": "EDM 팝",
+        "electronic": "전자음 레이어",
+        "electropop": "전자 팝",
+        "future_bass": "반짝이는 퓨처 베이스",
+        "grunge": "거친 그런지",
+        "indie_folk": "포근한 인디 포크",
+        "indie_rock": "인디 록",
+        "jazz_hop": "재지한 재즈합",
+        "k_indie": "케이 인디",
+        "k_r&b": "케이 알앤비",
+        "kpop": "케이팝",
+        "lo_fi": "로파이 질감",
+        "neo_soul": "네오 소울",
+        "progressive_rock": "기교적인 프로그 록",
+        "psychedelic_pop": "사이키델릭 팝",
+        "psychedelic_rock": "몽환 록",
+        "synth_pop": "신스 팝",
+        "synthwave": "신스웨이브",
+        "trip_hop": "몽환적인 트립합",
+    }
+
+    LANGUAGE_LABELS = {
+        "en": "영어",
+        "es": "스페인어",
+        "fr": "프랑스어",
+        "instrumental": "가사 없이",
+        "ko": "한국어",
+    }
+
+    INSTRUMENT_TONES = {
+        "synth": "신시사이저",
+        "guitar": "기타 리프",
+        "piano": "피아노 선율",
+        "strings": "스트링 편곡",
+        "bass": "베이스 그루브",
+        "808": "808 베이스",
+        "drums": "라이브 드럼",
+        "electronic_beats": "전자 비트",
+        "percussion": "퍼커션 결",
+        "vocals": "보컬 하모니",
+        "keyboards": "키보드 사운드",
+    }
+
+    def summarize(self, champion: Optional[Song], top_songs: List[Song]) -> str:
+        songs: List[Song] = []
+        if champion:
+            songs.append(champion)
+        songs.extend(song for song in top_songs if song and song is not champion)
+        songs = [s for s in songs if s]
+
+        if not songs:
+            return "취향 데이터를 확인할 수 없어 요약을 생성하지 못했습니다."
+
+        features = self._analyze_features(songs, champion)
+
+        clauses = [self._intro_clause(champion)]
+        for builder in (
+            self._describe_genre,
+            self._describe_energy_mood,
+            self._describe_era,
+            self._describe_language,
+            self._describe_instrumentation,
+        ):
+            clause = builder(features)
+            if clause:
+                clauses.append(clause)
+
+        tail = self._tail_clause(features)
+        if tail:
+            clauses.append(tail)
+
+        sentence = ", ".join(part.strip(" ,") for part in clauses if part)
+        if not sentence.endswith("."):
+            sentence += "."
+        return sentence
+
+    def _analyze_features(self, songs: List[Song], champion: Optional[Song]) -> Dict[str, Any]:
+        genre_counter: Counter = Counter()
+        subgenre_counter: Counter = Counter()
+        language_counter: Counter = Counter()
+        instrument_counter: Counter = Counter()
+        mood_counter: Counter = Counter()
+
+        energy_values: List[float] = []
+        valence_values: List[float] = []
+        era_values: List[int] = []
+
+        for song in songs:
+            genres = song.genres or []
+            if genres:
+                weight = 1.0 / len(genres)
+                for genre in genres:
+                    genre_counter[genre] += weight
+
+            subgenres = song.tags.get("subgenres") or []
+            if isinstance(subgenres, list) and subgenres:
+                weight = 1.0 / len(subgenres)
+                for subgenre in subgenres:
+                    if isinstance(subgenre, str):
+                        subgenre_counter[subgenre] += weight
+
+            language = song.tags.get("language")
+            if isinstance(language, str):
+                language_counter[language] += 1
+
+            instrumentation = song.tags.get("instrumentation") or []
+            if isinstance(instrumentation, list) and instrumentation:
+                weight = 1.0 / len(instrumentation)
+                for inst in instrumentation:
+                    if isinstance(inst, str):
+                        instrument_counter[inst] += weight
+
+            moods = song.tags.get("mood") or []
+            if isinstance(moods, list) and moods:
+                weight = 1.0 / len(moods)
+                for mood in moods:
+                    if isinstance(mood, str):
+                        mood_counter[mood] += weight
+
+            energy = song.tags.get("energy")
+            if isinstance(energy, (int, float)):
+                energy_values.append(float(energy))
+
+            valence = song.tags.get("valence")
+            if isinstance(valence, (int, float)):
+                valence_values.append(float(valence))
+
+            era = song.tags.get("era_year")
+            if isinstance(era, int):
+                era_values.append(era)
+
+        def ratio(counter: Counter) -> List[Tuple[str, float]]:
+            total = sum(counter.values())
+            if not total:
+                return []
+            return [(key, counter[key] / total) for key in counter]
+
+        genre_ratios = sorted(ratio(genre_counter), key=lambda x: x[1], reverse=True)
+        subgenre_ratios = sorted(ratio(subgenre_counter), key=lambda x: x[1], reverse=True)
+        instrument_ratios = sorted(ratio(instrument_counter), key=lambda x: x[1], reverse=True)
+        language_ratios = sorted(ratio(language_counter), key=lambda x: x[1], reverse=True)
+
+        features: Dict[str, Any] = {
+            "champion": champion,
+            "genre_ratios": genre_ratios,
+            "subgenre_ratios": subgenre_ratios,
+            "instrument_ratios": instrument_ratios,
+            "language_ratios": language_ratios,
+            "mood_counter": mood_counter,
+            "energy_avg": sum(energy_values) / len(energy_values) if energy_values else None,
+            "valence_avg": sum(valence_values) / len(valence_values) if valence_values else None,
+            "era_values": era_values,
+        }
+        return features
+
+    def _intro_clause(self, champion: Optional[Song]) -> str:
+        if champion:
+            return f"결승에서 {champion.artist}의 \"{champion.get_display_title()}\"에 마음을 준 걸 보면"
+        return "토너먼트 상위 곡들의 공통분모를 살펴보면"
+
+    def _describe_genre(self, features: Dict[str, Any]) -> Optional[str]:
+        genre_ratios: List[Tuple[str, float]] = features["genre_ratios"]
+        subgenre_ratios: List[Tuple[str, float]] = features["subgenre_ratios"]
+        if not genre_ratios:
+            return None
+
+        primary_genre, primary_ratio = genre_ratios[0]
+        secondary_clause = None
+        if len(genre_ratios) > 1:
+            secondary_genre, secondary_ratio = genre_ratios[1]
+            if abs(primary_ratio - secondary_ratio) <= 0.12:
+                secondary_clause = f"{self._genre_label(primary_genre)}와 {self._genre_label(secondary_genre)} 사이를 번갈아 넘나들고"
+        if not secondary_clause:
+            if primary_ratio >= 0.65:
+                secondary_clause = f"{self._genre_label(primary_genre)} 결에 확실히 마음이 쏠리고"
+            elif primary_ratio >= 0.5:
+                secondary_clause = f"{self._genre_label(primary_genre)}를 굵직한 축으로 삼고"
+            else:
+                secondary_clause = f"{self._genre_label(primary_genre)}를 바탕으로 폭넓게 확장하고"
+
+        accent = None
+        if subgenre_ratios:
+            subgenre, sub_ratio = subgenre_ratios[0]
+            if sub_ratio >= 0.25:
+                accent = f"특히 {self._subgenre_label(subgenre)} 무드를 놓치지 않는 편이며"
+
+        if accent:
+            return f"{secondary_clause} {accent}".strip()
+        return secondary_clause
+
+    def _describe_energy_mood(self, features: Dict[str, Any]) -> Optional[str]:
+        energy = features.get("energy_avg")
+        valence = features.get("valence_avg")
+        if energy is None and valence is None:
+            return None
+
+        energy_clause = None
+        if energy is not None:
+            if energy >= 0.75:
+                energy_clause = "에너지는 불붙듯이 터뜨리고"
+            elif energy >= 0.6:
+                energy_clause = "에너지는 탄탄한 비트에 몸을 맡기고"
+            elif energy >= 0.48:
+                energy_clause = "에너지는 차분한 그루브를 유지하고"
+            else:
+                energy_clause = "에너지는 잔잔하게 눌러두고"
+
+        valence_clause = None
+        if valence is not None:
+            if valence >= 0.68:
+                valence_clause = "감정선은 밝고 경쾌한 쪽을 찾는 편"
+            elif valence >= 0.54:
+                valence_clause = "감정선은 명암을 고르게 섞는 편"
+            elif valence >= 0.42:
+                valence_clause = "감정선은 살짝 어두운 기운을 남겨두고"
+            else:
+                valence_clause = "감정선은 짙고 서늘한 편"
+
+        clauses = [c for c in (energy_clause, valence_clause) if c]
+        return " ".join(clauses) if clauses else None
+
+    def _describe_era(self, features: Dict[str, Any]) -> Optional[str]:
+        era_values: List[int] = features.get("era_values") or []
+        if not era_values:
+            return None
+
+        min_year = min(era_values)
+        max_year = max(era_values)
+        avg_year = sum(era_values) / len(era_values)
+        spread = max_year - min_year
+
+        anchor = self._era_anchor(avg_year)
+        if spread <= 6:
+            return f"감성은 {anchor} 즈음을 깊게 파고들고"
+        if spread <= 15:
+            return f"감성은 {anchor}을 중심으로 맴돌고"
+        return f"감성은 {min_year}년부터 {max_year}년대까지 폭넓게 끌어안고"
+
+    def _describe_language(self, features: Dict[str, Any]) -> Optional[str]:
+        language_ratios: List[Tuple[str, float]] = features["language_ratios"]
+        if not language_ratios:
+            return None
+        primary_language, primary_ratio = language_ratios[0]
+        label = self.LANGUAGE_LABELS.get(primary_language, primary_language)
+        diversity = sum(1 for _ in language_ratios)
+
+        if primary_language == "instrumental":
+            if primary_ratio >= 0.6:
+                return "언어는 가사 없는 트랙에서 편안함을 느끼고"
+            return "언어는 가사 없는 트랙을 슬쩍 끼워 넣고"
+
+        if primary_ratio >= 0.7:
+            return f"언어는 {label} 보컬을 들어야 마음이 편하고"
+        if primary_ratio >= 0.5:
+            return f"언어는 {label} 중심이되 다른 언어도 기꺼이 받아들이고"
+        if diversity >= 3:
+            return "언어 장벽은 거의 느끼지 않고"
+        return f"언어는 {label}를 포함해 자유롭게 넘나들고"
+
+    def _describe_instrumentation(self, features: Dict[str, Any]) -> Optional[str]:
+        instrument_ratios: List[Tuple[str, float]] = features["instrument_ratios"]
+        if not instrument_ratios:
+            return None
+        primary_inst, primary_ratio = instrument_ratios[0]
+        tone = self.INSTRUMENT_TONES.get(primary_inst)
+        if not tone:
+            tone = primary_inst.replace("_", " ")
+
+        if primary_ratio >= 0.55:
+            return f"사운드는 {tone}가 중심을 잡고"
+        if primary_ratio >= 0.38:
+            return f"사운드는 {tone}에 은근히 무게를 두고"
+        return None
+
+    def _tail_clause(self, features: Dict[str, Any]) -> str:
+        energy = features.get("energy_avg")
+        valence = features.get("valence_avg")
+        if energy is None and valence is None:
+            return "라는 취향이 선명하게 드러납니다"
+
+        if energy is not None and valence is not None and energy >= 0.72 and valence >= 0.6:
+            return "라는 취향으로 활기차고 긍정적인 재생목록을 채워 갑니다"
+        if energy is not None and valence is not None and energy >= 0.7 and valence < 0.5:
+            return "라는 취향으로 강렬하면서도 농밀한 무드를 탐험합니다"
+        if energy is not None and valence is not None and energy <= 0.45 and valence >= 0.55:
+            return "라는 취향으로 부드럽고 따스한 멜로디에 오래 머뭅니다"
+        if energy is not None and valence is not None and energy <= 0.45 and valence < 0.5:
+            return "라는 취향으로 고요한 어둠의 결을 음미합니다"
+        if energy is not None and valence is None:
+            if energy >= 0.7:
+                return "라는 취향으로 리듬감이 살아 있는 곡을 찾아 헤맵니다"
+            if energy <= 0.45:
+                return "라는 취향으로 포근한 잔향을 천천히 즐깁니다"
+            return "라는 취향으로 균형 잡힌 비트를 편안하게 즐깁니다"
+        if valence is not None and energy is None:
+            if valence >= 0.6:
+                return "라는 취향으로 낙관적인 정서를 기꺼이 끌어안습니다"
+            if valence < 0.45:
+                return "라는 취향으로 서늘한 정서를 곁에 둡니다"
+            return "라는 취향으로 감정 온도를 균형 있게 유지합니다"
+        return "라는 취향이 뚜렷하게 드러납니다"
+
+    def _genre_label(self, genre: str) -> str:
+        return self.GENRE_LABELS.get(genre, genre)
+
+    def _subgenre_label(self, subgenre: str) -> str:
+        return self.SUBGENRE_TONES.get(subgenre, subgenre.replace("_", " "))
+
+    def _era_anchor(self, year: float) -> str:
+        if year >= 2018:
+            return "2010년대 후반 이후"
+        if year >= 2012:
+            return "2010년대 중반"
+        if year >= 2006:
+            return "2000년대 후반"
+        if year >= 1998:
+            return "90년대 말~2000년대 초"
+        if year >= 1990:
+            return "90년대 초중반"
+        if year >= 1980:
+            return "80년대"
+        if year >= 1970:
+            return "70년대"
+        return "60년대 이전"
+
 # ============================================================================
 # 결과 분석
 # ============================================================================
@@ -911,7 +1268,7 @@ class ResultAnalyzer:
     def __init__(self, match_history: List[Match], all_songs: List[Song]):
         self.match_history = match_history
         self.all_songs = all_songs
-    
+
     def generate_report(self, champion: Song) -> Dict:
         """결과 리포트 생성"""
         print("\n" + "="*60)
@@ -943,12 +1300,18 @@ class ResultAnalyzer:
         print(f"   B 선택: {choice_counts['B']}")
         print(f"   둘 다: {choice_counts['T']}")
         print(f"   건너뛰기: {choice_counts['S']}")
-        
+
+        summarizer = PreferenceSummarizer()
+        preference_summary = summarizer.summarize(champion, participated[:5])
+
+        print(f"\n🧭 취향 한 줄 요약: {preference_summary}")
+
         return {
             'champion': champion,
             'top_songs': participated[:5],
             'total_matches': total_matches,
-            'choice_distribution': dict(choice_counts)
+            'choice_distribution': dict(choice_counts),
+            'preference_summary': preference_summary
         }
 
 # ============================================================================
@@ -1755,6 +2118,11 @@ class MusicTournamentGUI(QMainWindow):
             f"레이팅 {self.champion.rating:.1f} · 전적 {self.champion.wins}승 {self.champion.losses}패"
         )
         layout.addWidget(record_label)
+        summary_text = self.report.get("preference_summary") if self.report else None
+        if summary_text:
+            summary_label = QLabel(f"취향 요약: {summary_text}")
+            summary_label.setWordWrap(True)
+            layout.addWidget(summary_label)
         if self.champion.youtube_url:
             link = QLabel(f'<a href="{self.champion.youtube_url}">YouTube에서 우승 곡 듣기 ↗</a>')
             link.setTextFormat(Qt.TextFormat.RichText)
