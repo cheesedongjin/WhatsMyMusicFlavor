@@ -4,10 +4,6 @@
     "artist": "Queen",
     "title": "Bohemian Rhapsody",
     "youtube_url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
-    "clip": {
-      "start_sec": 120,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       11
@@ -51,10 +47,6 @@
     "artist": "BTS",
     "title": "Dynamite",
     "youtube_url": "https://www.youtube.com/watch?v=gdZLi9oWNZg",
-    "clip": {
-      "start_sec": 48,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -100,10 +92,6 @@
     "artist": "Radiohead",
     "title": "Creep",
     "youtube_url": "https://www.youtube.com/watch?v=XFkzRNyygfk",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       11
@@ -147,10 +135,6 @@
     "artist": "Daft Punk",
     "title": "One More Time",
     "youtube_url": "https://www.youtube.com/watch?v=FGBhQbmPwH8",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       30
@@ -194,10 +178,6 @@
     "artist": "Kendrick Lamar",
     "title": "HUMBLE.",
     "youtube_url": "https://www.youtube.com/watch?v=tvTRZJ-4EyI",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       40
@@ -241,10 +221,6 @@
     "artist": "Miles Davis",
     "title": "So What",
     "youtube_url": "https://www.youtube.com/watch?v=zqNTltOGh5c",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       5,
       50
@@ -290,10 +266,6 @@
     "title": "Palette",
     "title_kor": "팔레트",
     "youtube_url": "https://www.youtube.com/watch?v=d9IxdwEFk1c",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -337,10 +309,6 @@
     "artist": "Nirvana",
     "title": "Smells Like Teen Spirit",
     "youtube_url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
-    "clip": {
-      "start_sec": 24,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       12
@@ -385,10 +353,6 @@
     "title": "DDU-DU DDU-DU",
     "title_kor": "뚜두뚜두",
     "youtube_url": "https://www.youtube.com/watch?v=IHNzOHi8sJs",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -434,10 +398,6 @@
     "artist": "The Weeknd",
     "title": "Blinding Lights",
     "youtube_url": "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       23
@@ -481,10 +441,6 @@
     "artist": "Aphex Twin",
     "title": "Windowlicker",
     "youtube_url": "https://www.youtube.com/watch?v=UBS4Gi1y_nc",
-    "clip": {
-      "start_sec": 180,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       32
@@ -527,10 +483,6 @@
     "artist": "Billie Eilish",
     "title": "bad guy",
     "youtube_url": "https://www.youtube.com/watch?v=DyDfgMOUjCI",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       24
@@ -573,10 +525,6 @@
     "artist": "Chopin",
     "title": "Nocturne Op.9 No.2",
     "youtube_url": "https://www.youtube.com/watch?v=9E6b3swbnWg",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       6,
       60
@@ -617,10 +565,6 @@
     "artist": "Tame Impala",
     "title": "The Less I Know The Better",
     "youtube_url": "https://www.youtube.com/watch?v=sBzrzS1Ag_g",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       13
@@ -664,10 +608,6 @@
     "artist": "Epik High",
     "title": "Born Hater",
     "youtube_url": "https://www.youtube.com/watch?v=3s1jaFDrp5M",
-    "clip": {
-      "start_sec": 70,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       41
@@ -712,10 +652,6 @@
     "artist": "Pink Floyd",
     "title": "Comfortably Numb",
     "youtube_url": "https://www.youtube.com/watch?v=_FrOQC-zEog",
-    "clip": {
-      "start_sec": 200,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       11
@@ -760,10 +696,6 @@
     "artist": "Porter Robinson",
     "title": "Shelter",
     "youtube_url": "https://www.youtube.com/watch?v=fzQ6gRAEoy0",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       33
@@ -806,10 +738,6 @@
     "artist": "Ariana Grande",
     "title": "7 rings",
     "youtube_url": "https://www.youtube.com/watch?v=QYh6mYIJG2Y",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       22
@@ -853,10 +781,6 @@
     "artist": "Massive Attack",
     "title": "Teardrop",
     "youtube_url": "https://www.youtube.com/watch?v=u7K72X4eo_s",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       34
@@ -900,10 +824,6 @@
     "artist": "Rosalía",
     "title": "Malamente",
     "youtube_url": "https://www.youtube.com/watch?v=Rht7rBHuXW8",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       28
@@ -948,10 +868,6 @@
     "artist": "Frank Ocean",
     "title": "Nights",
     "youtube_url": "https://www.youtube.com/watch?v=r4l9bFqgMaQ",
-    "clip": {
-      "start_sec": 180,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -996,10 +912,6 @@
     "artist": "DEAN",
     "title": "Instagram",
     "youtube_url": "https://www.youtube.com/watch?v=wKyMIrBClYw",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -1044,10 +956,6 @@
     "artist": "Fleetwood Mac",
     "title": "Dreams",
     "youtube_url": "https://www.youtube.com/watch?v=mrZRURcb1cM",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       19
@@ -1091,10 +999,6 @@
     "artist": "Boards of Canada",
     "title": "Roygbiv",
     "youtube_url": "https://www.youtube.com/watch?v=yT0gRc2c2wQ",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       35
@@ -1137,10 +1041,6 @@
     "artist": "Red Velvet",
     "title": "Psycho",
     "youtube_url": "https://www.youtube.com/watch?v=uR8Mrt1IpXg",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -1185,10 +1085,6 @@
     "artist": "Led Zeppelin",
     "title": "Stairway to Heaven",
     "youtube_url": "https://www.youtube.com/watch?v=QkF3oxziUI4",
-    "clip": {
-      "start_sec": 240,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       10
@@ -1233,10 +1129,6 @@
     "artist": "SZA",
     "title": "Good Days",
     "youtube_url": "https://www.youtube.com/watch?v=0BdlKkvjEgA",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -1281,10 +1173,6 @@
     "artist": "The Beatles",
     "title": "Come Together",
     "youtube_url": "https://www.youtube.com/watch?v=45cYwDMibGo",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       19
@@ -1328,10 +1216,6 @@
     "artist": "BadBadNotGood",
     "title": "Time Moves Slow",
     "youtube_url": "https://www.youtube.com/watch?v=UWIIPX_5rbM",
-    "clip": {
-      "start_sec": 70,
-      "preview_sec": 30
-    },
     "genres": [
       5,
       51
@@ -1376,10 +1260,6 @@
     "artist": "TWICE",
     "title": "Feel Special",
     "youtube_url": "https://www.youtube.com/watch?v=3ymwOvzhwHs",
-    "clip": {
-      "start_sec": 65,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -1425,10 +1305,6 @@
     "artist": "J Dilla",
     "title": "Don't Cry",
     "youtube_url": "https://www.youtube.com/watch?v=x-23FpWsTKk",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       45
@@ -1472,10 +1348,6 @@
     "artist": "Björk",
     "title": "Hyperballad",
     "youtube_url": "https://www.youtube.com/watch?v=6CSiU0j_lFA",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       27
@@ -1520,10 +1392,6 @@
     "artist": "Anderson .Paak",
     "title": "Come Down",
     "youtube_url": "https://www.youtube.com/watch?v=ferZnZ0_rSM",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       46
@@ -1569,10 +1437,6 @@
     "artist": "Nujabes",
     "title": "Feather",
     "youtube_url": "https://www.youtube.com/watch?v=jfFTT3iz740",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       45
@@ -1617,10 +1481,6 @@
     "artist": "MGMT",
     "title": "Electric Feel",
     "youtube_url": "https://www.youtube.com/watch?v=MmZexg8sxyk",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       13
@@ -1664,10 +1524,6 @@
     "artist": "NewJeans",
     "title": "Ditto",
     "youtube_url": "https://www.youtube.com/watch?v=Rrf8uQFvICE",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -1713,10 +1569,6 @@
     "artist": "Gorillaz",
     "title": "Feel Good Inc.",
     "youtube_url": "https://www.youtube.com/watch?v=HyHNuVaZJ-k",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -1761,10 +1613,6 @@
     "artist": "Bon Iver",
     "title": "Holocene",
     "youtube_url": "https://www.youtube.com/watch?v=TWcyIpul8OE",
-    "clip": {
-      "start_sec": 80,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -1808,10 +1656,6 @@
     "artist": "Stromae",
     "title": "Alors on danse",
     "youtube_url": "https://www.youtube.com/watch?v=VHoT4N43jK8",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       36
@@ -1856,10 +1700,6 @@
     "artist": "Caribou",
     "title": "Can't Do Without You",
     "youtube_url": "https://www.youtube.com/watch?v=BI2Et19vDCM",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       35
@@ -1903,10 +1743,6 @@
     "artist": "Amy Winehouse",
     "title": "Back to Black",
     "youtube_url": "https://www.youtube.com/watch?v=TJAfLE39ZZ8",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -1950,10 +1786,6 @@
     "artist": "Metallica",
     "title": "Enter Sandman",
     "youtube_url": "https://www.youtube.com/watch?v=CD-E-LDc384",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       10
@@ -1997,10 +1829,6 @@
     "artist": "Dua Lipa",
     "title": "Levitating",
     "youtube_url": "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -2044,10 +1872,6 @@
     "artist": "Coldplay",
     "title": "Viva La Vida",
     "youtube_url": "https://www.youtube.com/watch?v=dvgZkm1xWPE",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2091,10 +1915,6 @@
     "artist": "Zedd",
     "title": "Clarity",
     "youtube_url": "https://www.youtube.com/watch?v=IxxstCcJlsc",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       33
@@ -2138,10 +1958,6 @@
     "artist": "Simon & Garfunkel",
     "title": "The Sound of Silence",
     "youtube_url": "https://www.youtube.com/watch?v=6ukmjBSQY-c",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -2183,10 +1999,6 @@
     "artist": "Shakira",
     "title": "Hips Don't Lie",
     "youtube_url": "https://www.youtube.com/watch?v=DUT5rEU6pqM",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       28
@@ -2232,10 +2044,6 @@
     "artist": "Tyler, The Creator",
     "title": "See You Again",
     "youtube_url": "https://www.youtube.com/watch?v=NmvVhovjJI0",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       45
@@ -2280,10 +2088,6 @@
     "artist": "Cigarettes After Sex",
     "title": "Apocalypse",
     "youtube_url": "https://www.youtube.com/watch?v=sElE_BfQ67s",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2327,10 +2131,6 @@
     "artist": "Talking Heads",
     "title": "Once in a Lifetime",
     "youtube_url": "https://www.youtube.com/watch?v=5IsSpAOD6K8",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2375,10 +2175,6 @@
     "artist": "Arctic Monkeys",
     "title": "Do I Wanna Know?",
     "youtube_url": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2422,10 +2218,6 @@
     "artist": "Avicii",
     "title": "Wake Me Up",
     "youtube_url": "https://www.youtube.com/watch?v=IcrbM1l_BoI",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       36
@@ -2469,10 +2261,6 @@
     "artist": "Lana Del Rey",
     "title": "Video Games",
     "youtube_url": "https://www.youtube.com/watch?v=cE6wxDqdOV0",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       27
@@ -2515,10 +2303,6 @@
     "artist": "AC/DC",
     "title": "Back in Black",
     "youtube_url": "https://www.youtube.com/watch?v=pAgnJDJN4VA",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       10
@@ -2562,10 +2346,6 @@
     "artist": "Oasis",
     "title": "Wonderwall",
     "youtube_url": "https://www.youtube.com/watch?v=bx1Bh8ZvH84",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2609,10 +2389,6 @@
     "artist": "OutKast",
     "title": "Hey Ya!",
     "youtube_url": "https://www.youtube.com/watch?v=PWgvGjAhvIw",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       46
@@ -2656,10 +2432,6 @@
     "artist": "Joji",
     "title": "Slow Dancing in the Dark",
     "youtube_url": "https://www.youtube.com/watch?v=K3Qzzggn--s",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -2704,10 +2476,6 @@
     "artist": "Doja Cat",
     "title": "Say So",
     "youtube_url": "https://www.youtube.com/watch?v=pok8H_KF1FA",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -2751,10 +2519,6 @@
     "artist": "Eurythmics",
     "title": "Sweet Dreams (Are Made of This)",
     "youtube_url": "https://www.youtube.com/watch?v=qeMFqkcPYcg",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       23
@@ -2797,10 +2561,6 @@
     "artist": "Marvin Gaye",
     "title": "What's Going On",
     "youtube_url": "https://www.youtube.com/watch?v=H-kA3UtBj4M",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -2845,10 +2605,6 @@
     "artist": "Calvin Harris",
     "title": "Summer",
     "youtube_url": "https://www.youtube.com/watch?v=ebXbLfLACGM",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       36
@@ -2891,10 +2647,6 @@
     "artist": "Måneskin",
     "title": "Beggin'",
     "youtube_url": "https://www.youtube.com/watch?v=Xg72z08aTXY",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -2939,10 +2691,6 @@
     "artist": "Bruno Mars",
     "title": "24K Magic",
     "youtube_url": "https://www.youtube.com/watch?v=UqyT8IEBkvY",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       22
@@ -2986,10 +2734,6 @@
     "artist": "Eminem",
     "title": "Lose Yourself",
     "youtube_url": "https://www.youtube.com/watch?v=_Yhyp-_hX2s",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       40
@@ -3034,10 +2778,6 @@
     "artist": "Louis Armstrong",
     "title": "What a Wonderful World",
     "youtube_url": "https://www.youtube.com/watch?v=VqhCQZaH4Vs",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       5,
       50
@@ -3080,10 +2820,6 @@
     "artist": "Travis Scott",
     "title": "SICKO MODE",
     "youtube_url": "https://www.youtube.com/watch?v=6ONRf7h3Mdk",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       40
@@ -3127,10 +2863,6 @@
     "artist": "Hozier",
     "title": "Take Me to Church",
     "youtube_url": "https://www.youtube.com/watch?v=PVjiKRfKpPI",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -3174,10 +2906,6 @@
     "artist": "The Smiths",
     "title": "There Is a Light That Never Goes Out",
     "youtube_url": "https://www.youtube.com/watch?v=siO6dkqidc4",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -3221,10 +2949,6 @@
     "artist": "Jay-Z",
     "title": "Empire State of Mind",
     "youtube_url": "https://www.youtube.com/watch?v=vk6014HuxcE",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       40
@@ -3269,10 +2993,6 @@
     "artist": "Childish Gambino",
     "title": "Redbone",
     "youtube_url": "https://www.youtube.com/watch?v=nRJnZsB52Es",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -3318,10 +3038,6 @@
     "title": "Gangnam Style",
     "title_kor": "강남스타일",
     "youtube_url": "https://www.youtube.com/watch?v=9bZkp7q19f0",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3368,10 +3084,6 @@
     "title": "Any Song",
     "title_kor": "아무노래",
     "youtube_url": "https://www.youtube.com/watch?v=UuV2BmJ1p_I",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       41
@@ -3416,10 +3128,6 @@
     "title": "Fantastic Baby",
     "title_kor": "판타스틱 베이비",
     "youtube_url": "https://www.youtube.com/watch?v=AAbokV76tkU",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3466,10 +3174,6 @@
     "title": "Growl",
     "title_kor": "으르렁",
     "youtube_url": "https://www.youtube.com/watch?v=I3dezFzsNss",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3516,10 +3220,6 @@
     "title": "Gashina",
     "title_kor": "가시나",
     "youtube_url": "https://www.youtube.com/watch?v=ur0hCdne2-s",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3564,10 +3264,6 @@
     "title": "Don't Wanna Cry",
     "title_kor": "울고 싶지 않아",
     "youtube_url": "https://www.youtube.com/watch?v=zEkg4GBQumc",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3613,10 +3309,6 @@
     "title": "How Can I Love the Heartbreak, You're the One I Love",
     "title_kor": "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지",
     "youtube_url": "https://www.youtube.com/watch?v=m3DZsBw5bnE",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -3660,10 +3352,6 @@
     "artist": "Crush",
     "title": "Beautiful",
     "youtube_url": "https://www.youtube.com/watch?v=W0cs6ciCt_k",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -3709,10 +3397,6 @@
     "title": "Don't Know You",
     "title_kor": "널 너무 모르고",
     "youtube_url": "https://www.youtube.com/watch?v=vvkWaI91mLM",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       26
@@ -3757,10 +3441,6 @@
     "title": "Wi Ing Wi Ing",
     "title_kor": "위잉위잉",
     "youtube_url": "https://www.youtube.com/watch?v=IUoTjkS242c",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -3806,10 +3486,6 @@
     "title": "Gee",
     "title_kor": "지",
     "youtube_url": "https://www.youtube.com/watch?v=U7mPqycQ0tQ",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3855,10 +3531,6 @@
     "title": "Love Scenario",
     "title_kor": "사랑을 했다",
     "youtube_url": "https://www.youtube.com/watch?v=vecSVX1QYbQ",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -3904,10 +3576,6 @@
     "artist": "Jay Park",
     "title": "All I Wanna Do",
     "youtube_url": "https://www.youtube.com/watch?v=JPTunZy4Fl8",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       41
@@ -3952,10 +3620,6 @@
     "title": "Four Seasons",
     "title_kor": "사계",
     "youtube_url": "https://www.youtube.com/watch?v=4HG_CJzyX6A",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4001,10 +3665,6 @@
     "title": "Just Right",
     "title_kor": "딱 좋아",
     "youtube_url": "https://www.youtube.com/watch?v=vrdk3IGcau8",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -4049,10 +3709,6 @@
     "title": "Decalcomanie",
     "title_kor": "데칼코마니",
     "youtube_url": "https://www.youtube.com/watch?v=o0I8YjeWfQU",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -4098,10 +3754,6 @@
     "title": "God's Menu",
     "title_kor": "神메뉴",
     "youtube_url": "https://www.youtube.com/watch?v=TQTlCHxyuu8",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -4148,10 +3800,6 @@
     "title": "Every Day, Every Moment",
     "title_kor": "모든 날, 모든 순간",
     "youtube_url": "https://www.youtube.com/watch?v=64uidOIH2vY",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4197,10 +3845,6 @@
     "title": "Galaxy",
     "title_kor": "우주를 줄게",
     "youtube_url": "https://www.youtube.com/watch?v=9U8uA702xrE",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4244,10 +3888,6 @@
     "artist": "Aespa",
     "title": "Next Level",
     "youtube_url": "https://www.youtube.com/watch?v=4TWR90KJl84",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -4294,10 +3934,6 @@
     "title": "Come Back Home",
     "title_kor": "컴백홈",
     "youtube_url": "https://www.youtube.com/watch?v=q3xy4p2JTfU",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       41
@@ -4343,10 +3979,6 @@
     "title": "Time Spent Walking Through Memories",
     "title_kor": "기억을 걷는 시간",
     "youtube_url": "https://www.youtube.com/watch?v=8vL_nWjFTPk",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -4393,10 +4025,6 @@
     "title": "Around Thirty",
     "title_kor": "서른 즈음에",
     "youtube_url": "https://www.youtube.com/watch?v=L7lED8RtdAI",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -4440,10 +4068,6 @@
     "title": "Mal Dallija",
     "title_kor": "말 달리자",
     "youtube_url": "https://www.youtube.com/watch?v=7QhJm8-UlKw",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -4489,10 +4113,6 @@
     "title": "Like Being Hit By a Bullet",
     "title_kor": "총 맞은 것처럼",
     "youtube_url": "https://www.youtube.com/watch?v=uSdlduWm4HM",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4538,10 +4158,6 @@
     "title": "Like It",
     "title_kor": "좋니",
     "youtube_url": "https://www.youtube.com/watch?v=b1kQvZhQ6_M",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4586,10 +4202,6 @@
     "title": "Coward",
     "title_kor": "겁쟁이",
     "youtube_url": "https://www.youtube.com/watch?v=GSXvwmamkoU",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -4635,10 +4247,6 @@
     "title": "Stalker",
     "title_kor": "스토커",
     "youtube_url": "https://www.youtube.com/watch?v=E4bMmWKBo8I",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -4683,10 +4291,6 @@
     "title": "Hey Hey Hey",
     "title_kor": "헤이헤이헤이",
     "youtube_url": "https://www.youtube.com/watch?v=wit5HNfViIA",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -4732,10 +4336,6 @@
     "title": "When Love Passes By",
     "title_kor": "사랑이 지나가면",
     "youtube_url": "https://www.youtube.com/watch?v=cOq-vCErjIU",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4780,10 +4380,6 @@
     "artist": "The Black Skirts",
     "title": "Everything",
     "youtube_url": "https://www.youtube.com/watch?v=Aq_gsctWHtQ",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -4829,10 +4425,6 @@
     "title": "Timeless",
     "title_kor": "타임리스",
     "youtube_url": "https://www.youtube.com/watch?v=0pLa8NyS4Es",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -4877,10 +4469,6 @@
     "title": "Solo",
     "title_kor": "솔로",
     "youtube_url": "https://www.youtube.com/watch?v=9IHWH6E8oZs",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       4,
       41
@@ -4927,10 +4515,6 @@
     "title_kor": "거울",
 
     "youtube_url": "https://www.youtube.com/watch?v=nj2b9teoQSY",
-    "clip": {
-      "start_sec": 55,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       11
@@ -4976,10 +4560,6 @@
     "title": "Wild Flower",
     "title_kor": "야생화",
     "youtube_url": "https://www.youtube.com/watch?v=OxgiiyLp5pk",
-    "clip": {
-      "start_sec": 60,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       21
@@ -5025,10 +4605,6 @@
     "title": "Bounce",
     "title_kor": "바운스",
     "youtube_url": "https://www.youtube.com/watch?v=SaVUdhEZVKg",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [
       2,
       20
@@ -5074,10 +4650,6 @@
     "title": "Event Horizon",
     "title_kor": "사건의 지평선",
     "youtube_url": "https://www.youtube.com/watch?v=BBdC1rl5sKY",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       14
@@ -5122,10 +4694,6 @@
     "artist": "Clazziquai Project",
     "title": "She Is",
     "youtube_url": "https://www.youtube.com/watch?v=zjVt73gD1fc",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [
       3,
       35
@@ -5171,10 +4739,6 @@
     "title": "Old Song",
     "title_kor": "오래된 노래",
     "youtube_url": "https://www.youtube.com/watch?v=JVIKowQZEdk",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [
       1,
       17
@@ -5219,10 +4783,6 @@
     "title": "You’ve Fallen for Me",
     "title_kor": "넌 내게 반했어",
     "youtube_url": "https://www.youtube.com/watch?v=s4ouUGsagaE",
-    "clip": {
-        "start_sec": 35,
-        "preview_sec": 30
-    },
     "genres": [
         1,
         14
@@ -5267,10 +4827,6 @@
     "artist": "The Strokes",
     "title": "Someday",
     "youtube_url": "https://www.youtube.com/watch?v=knU9gRUWCno",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 3],
@@ -5297,10 +4853,6 @@
     "artist": "Cage the Elephant",
     "title": "Cigarette Daydreams",
     "youtube_url": "https://www.youtube.com/watch?v=opeETnB8m8w",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 32],
@@ -5327,10 +4879,6 @@
     "artist": "Yeah Yeah Yeahs",
     "title": "Maps",
     "youtube_url": "https://www.youtube.com/watch?v=oIIxlgcuQRU",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 32],
@@ -5357,10 +4905,6 @@
     "artist": "Vampire Weekend",
     "title": "A-Punk",
     "youtube_url": "https://www.youtube.com/watch?v=_XC2mqcMMGQ",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 51],
@@ -5387,10 +4931,6 @@
     "artist": "Lorde",
     "title": "Royals",
     "youtube_url": "https://www.youtube.com/watch?v=nlcIKh6sBtc",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [2, 27],
     "tags": {
       "subgenres": [0, 19],
@@ -5417,10 +4957,6 @@
     "artist": "alt-J",
     "title": "Breezeblocks",
     "youtube_url": "https://www.youtube.com/watch?v=rVeMiVU77wo",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 20],
@@ -5447,10 +4983,6 @@
     "artist": "Florence + The Machine",
     "title": "Dog Days Are Over",
     "youtube_url": "https://www.youtube.com/watch?v=iWOyfLBYtuU",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 5],
@@ -5477,10 +5009,6 @@
     "artist": "The Killers",
     "title": "Mr. Brightside",
     "youtube_url": "https://www.youtube.com/watch?v=gGdGFtwCNBE",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 45],
@@ -5507,10 +5035,6 @@
     "artist": "Two Door Cinema Club",
     "title": "What You Know",
     "youtube_url": "https://www.youtube.com/watch?v=YXwYJyrKK5A",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 12],
@@ -5537,10 +5061,6 @@
     "artist": "Grimes",
     "title": "Oblivion",
     "youtube_url": "https://www.youtube.com/watch?v=JtH68PJIQLE",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [2, 27],
     "tags": {
       "subgenres": [5, 17, 54],
@@ -5567,10 +5087,6 @@
     "artist": "Maroon 5",
     "title": "Sunday Morning",
     "youtube_url": "https://www.youtube.com/watch?v=S2Cti12XBw4",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [2, 22],
     "tags": {
       "subgenres": [45, 25],
@@ -5597,10 +5113,6 @@
     "artist": "The 1975",
     "title": "Somebody Else",
     "youtube_url": "https://www.youtube.com/watch?v=Bimd2nZirT4",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [2, 23],
     "tags": {
       "subgenres": [54, 19],
@@ -5627,10 +5139,6 @@
     "artist": "Foster the People",
     "title": "Pumped Up Kicks",
     "youtube_url": "https://www.youtube.com/watch?v=SDTZ7iX4vTQ",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 19],
@@ -5657,10 +5165,6 @@
     "artist": "Phoenix",
     "title": "1901",
     "youtube_url": "https://www.youtube.com/watch?v=HL548cHH3OY",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 12],
@@ -5687,10 +5191,6 @@
     "artist": "Blink-182",
     "title": "All the Small Things",
     "youtube_url": "https://www.youtube.com/watch?v=9Ht5RZpzPqw",
-    "clip": {
-      "start_sec": 20,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [51, 45],
@@ -5717,10 +5217,6 @@
     "artist": "Paramore",
     "title": "Misery Business",
     "youtube_url": "https://www.youtube.com/watch?v=aCyGvGEtOwc",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [51, 3],
@@ -5747,10 +5243,6 @@
     "artist": "Blur",
     "title": "Song 2",
     "youtube_url": "https://www.youtube.com/watch?v=SSbBvKaM6sk",
-    "clip": {
-      "start_sec": 15,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 27],
@@ -5777,10 +5269,6 @@
     "artist": "Neon Trees",
     "title": "Animal",
     "youtube_url": "https://www.youtube.com/watch?v=gM7Hlg75Mlo",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 12],
@@ -5807,10 +5295,6 @@
     "artist": "Kings of Leon",
     "title": "Use Somebody",
     "youtube_url": "https://www.youtube.com/watch?v=gnhXHvRoUd0",
-    "clip": {
-      "start_sec": 50,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 53],
@@ -5837,10 +5321,6 @@
     "artist": "The Black Keys",
     "title": "Lonely Boy",
     "youtube_url": "https://www.youtube.com/watch?v=a_426RiwST8",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [6, 3],
@@ -5867,10 +5347,6 @@
     "artist": "WALK THE MOON",
     "title": "Shut Up and Dance",
     "youtube_url": "https://www.youtube.com/watch?v=6JCLY0Rlx6Q",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [2, 20],
     "tags": {
       "subgenres": [12, 45],
@@ -5897,10 +5373,6 @@
     "artist": "Catfish and the Bottlemen",
     "title": "Cocoon",
     "youtube_url": "https://www.youtube.com/watch?v=Va75GaPv5jY",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 3],
@@ -5927,10 +5399,6 @@
     "artist": "Panic! At The Disco",
     "title": "I Write Sins Not Tragedies",
     "youtube_url": "https://www.youtube.com/watch?v=vc6vs-l5dkc",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [51, 45],
@@ -5957,10 +5425,6 @@
     "artist": "Passion Pit",
     "title": "Take a Walk",
     "youtube_url": "https://www.youtube.com/watch?v=dZX6Q-Bj_xg",
-    "clip": {
-      "start_sec": 40,
-      "preview_sec": 30
-    },
     "genres": [2, 24],
     "tags": {
       "subgenres": [19, 32],
@@ -5987,10 +5451,6 @@
     "artist": "CHVRCHES",
     "title": "The Mother We Share",
     "youtube_url": "https://www.youtube.com/watch?v=_mTRvJ9fugM",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [2, 23],
     "tags": {
       "subgenres": [54, 17],
@@ -6017,10 +5477,6 @@
     "artist": "Young the Giant",
     "title": "My Body",
     "youtube_url": "https://www.youtube.com/watch?v=qQYpF2pCkLI",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 3],
@@ -6047,10 +5503,6 @@
     "artist": "Weezer",
     "title": "Island in the Sun",
     "youtube_url": "https://www.youtube.com/watch?v=0C3zgYW_FAM",
-    "clip": {
-      "start_sec": 25,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 53],
@@ -6077,10 +5529,6 @@
     "artist": "Kodaline",
     "title": "All I Want",
     "youtube_url": "https://www.youtube.com/watch?v=mtf7hC17IBM",
-    "clip": {
-      "start_sec": 45,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [3, 31],
@@ -6107,10 +5555,6 @@
     "artist": "The Wombats",
     "title": "Let's Dance to Joy Division",
     "youtube_url": "https://www.youtube.com/watch?v=ayuooyWPEUc",
-    "clip": {
-      "start_sec": 30,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 12],
@@ -6137,10 +5581,6 @@
     "artist": "Glass Animals",
     "title": "Heat Waves",
     "youtube_url": "https://www.youtube.com/watch?v=mRD0-GxqHVo",
-    "clip": {
-      "start_sec": 35,
-      "preview_sec": 30
-    },
     "genres": [1, 14],
     "tags": {
       "subgenres": [32, 17],
