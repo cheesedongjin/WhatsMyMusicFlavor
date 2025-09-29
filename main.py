@@ -47,10 +47,6 @@ from PyQt6.QtWidgets import (
 #   "artist": str,              # 아티스트 이름
 #   "title": str,               # 곡 제목
 #   "youtube_url": str,         # 미리듣기 링크 (선택)
-#   "clip": {                   # 미리듣기 구간 정보 (선택)
-#       "start_sec": float,     # 시작 위치(초)
-#       "preview_sec": float    # 미리듣기 길이(초)
-#   },
 #   "genres": List[int],        # 기본 장르 코드 (0-base)
 #   "tags": {
 #       "subgenres": List[int],      # 세부 장르 코드 (0-base)
@@ -388,7 +384,6 @@ class Song:
     tags: Dict = field(default_factory=dict)
     popularity: Dict = field(default_factory=dict)
     meta: Dict = field(default_factory=dict)
-    clip: Dict = field(default_factory=dict)
     
     # 학습 데이터
     rating: float = 0.0
@@ -466,8 +461,7 @@ class DataLoader:
                     genres=genre_names,
                     tags=tags,
                     popularity=popularity,
-                    meta=item.get('meta', {}),
-                    clip=item.get('clip', {})
+                    meta=item.get('meta', {})
                 )
                 songs.append(song)
             
