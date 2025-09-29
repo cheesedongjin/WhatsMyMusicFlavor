@@ -990,7 +990,7 @@ class PreferenceSummarizer:
 
         features = self._analyze_features(songs, champion)
 
-        clauses = [self._intro_clause(champion)]
+        body_clauses = [self._intro_clause(champion)]
         for builder in (
             self._describe_genre,
             self._describe_energy_mood,
@@ -1000,13 +1000,16 @@ class PreferenceSummarizer:
         ):
             clause = builder(features)
             if clause:
-                clauses.append(clause)
+                body_clauses.append(clause)
 
         tail = self._tail_clause(features)
-        if tail:
-            clauses.append(tail)
 
-        sentence = ", ".join(part.strip(" ,") for part in clauses if part)
+        sentence_body = ", ".join(part.strip(" ,") for part in body_clauses if part)
+        if tail and sentence_body:
+            sentence = f"{sentence_body}, {tail}"
+        else:
+            sentence = tail or sentence_body
+
         if not sentence.endswith("."):
             sentence += "."
         return sentence
@@ -1134,9 +1137,9 @@ class PreferenceSummarizer:
         energy_clause = None
         if energy is not None:
             if energy >= 0.75:
-                energy_clause = "에너지는 불붙듯이 터뜨리고"
+                energy_clause = "에너지는 한껏 끌어올리고"
             elif energy >= 0.6:
-                energy_clause = "에너지는 탄탄한 비트에 몸을 맡기고"
+                energy_clause = "에너지는 탄탄한 비트에 기대고"
             elif energy >= 0.48:
                 energy_clause = "에너지는 차분한 그루브를 유지하고"
             else:
@@ -1187,9 +1190,9 @@ class PreferenceSummarizer:
             return "언어는 가사 없는 트랙을 슬쩍 끼워 넣고"
 
         if primary_ratio >= 0.7:
-            return f"언어는 {label} 보컬을 들어야 마음이 편하고"
+            return f"언어는 {label} 보컬일 때 마음이 가장 편안한 편"
         if primary_ratio >= 0.5:
-            return f"언어는 {label} 중심이되 다른 언어도 기꺼이 받아들이고"
+            return f"언어는 {label}를 중심에 두되 다른 언어도 기꺼이 받아들이고"
         if diversity >= 3:
             return "언어 장벽은 거의 느끼지 않고"
         return f"언어는 {label}를 포함해 자유롭게 넘나들고"
@@ -1213,29 +1216,29 @@ class PreferenceSummarizer:
         energy = features.get("energy_avg")
         valence = features.get("valence_avg")
         if energy is None and valence is None:
-            return "라는 취향이 선명하게 드러납니다"
+            return "이런 취향이 선명하게 드러납니다"
 
         if energy is not None and valence is not None and energy >= 0.72 and valence >= 0.6:
-            return "라는 취향으로 활기차고 긍정적인 재생목록을 채워 갑니다"
+            return "이런 취향은 밝고 활기찬 곡들로 재생목록을 채웁니다"
         if energy is not None and valence is not None and energy >= 0.7 and valence < 0.5:
-            return "라는 취향으로 강렬하면서도 농밀한 무드를 탐험합니다"
+            return "이런 취향은 강렬하면서도 농밀한 무드를 즐기게 합니다"
         if energy is not None and valence is not None and energy <= 0.45 and valence >= 0.55:
-            return "라는 취향으로 부드럽고 따스한 멜로디에 오래 머뭅니다"
+            return "이런 취향은 부드럽고 따뜻한 멜로디에 자연스레 머뭅니다"
         if energy is not None and valence is not None and energy <= 0.45 and valence < 0.5:
-            return "라는 취향으로 고요한 어둠의 결을 음미합니다"
+            return "이런 취향은 고요한 어둠의 결을 천천히 음미하게 합니다"
         if energy is not None and valence is None:
             if energy >= 0.7:
-                return "라는 취향으로 리듬감이 살아 있는 곡을 찾아 헤맵니다"
+                return "이런 취향은 리듬감이 살아 있는 곡을 찾게 합니다"
             if energy <= 0.45:
-                return "라는 취향으로 포근한 잔향을 천천히 즐깁니다"
-            return "라는 취향으로 균형 잡힌 비트를 편안하게 즐깁니다"
+                return "이런 취향은 포근한 잔향을 오래 즐기게 합니다"
+            return "이런 취향은 균형 잡힌 비트를 편안하게 만끽합니다"
         if valence is not None and energy is None:
             if valence >= 0.6:
-                return "라는 취향으로 낙관적인 정서를 기꺼이 끌어안습니다"
+                return "이런 취향은 낙관적인 정서를 기꺼이 받아들입니다"
             if valence < 0.45:
-                return "라는 취향으로 서늘한 정서를 곁에 둡니다"
-            return "라는 취향으로 감정 온도를 균형 있게 유지합니다"
-        return "라는 취향이 뚜렷하게 드러납니다"
+                return "이런 취향은 서늘한 정서를 곁에 두게 합니다"
+            return "이런 취향은 감정 온도를 균형 있게 맞춥니다"
+        return "이런 취향이 뚜렷하게 드러납니다"
 
     def _genre_label(self, genre: str) -> str:
         return self.GENRE_LABELS.get(genre, genre)
