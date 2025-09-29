@@ -1865,6 +1865,20 @@ class MusicTournamentGUI(QMainWindow):
         self.content_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         main_layout.addWidget(self.content_frame, 1)
 
+        self.footer_frame = QFrame()
+        self.footer_frame.setObjectName("FooterFrame")
+        footer_layout = QHBoxLayout(self.footer_frame)
+        footer_layout.setContentsMargins(0, 0, 0, 0)
+        footer_layout.setSpacing(12)
+        footer_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+        self.report_issue_button = QPushButton("문제 신고 · 개선 제안하기")
+        self.report_issue_button.setProperty("variant", "primary")
+        self.report_issue_button.clicked.connect(self.open_issue_link)
+        footer_layout.addWidget(self.report_issue_button)
+
+        main_layout.addWidget(self.footer_frame)
+
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
@@ -1883,6 +1897,9 @@ class MusicTournamentGUI(QMainWindow):
 
     def update_status(self, message: str):
         self.status_bar.showMessage(message)
+
+    def open_issue_link(self):
+        webbrowser.open("https://github.com/cheesedongjin/WhatsMyMusicFlavor/issues")
 
     def apply_modern_theme(self):
         self.setStyleSheet(
@@ -1908,6 +1925,9 @@ QFrame#ContentFrame {
     background-color: rgba(15, 23, 42, 0.65);
     border-radius: 24px;
     padding: 12px;
+}
+QFrame#FooterFrame {
+    background-color: transparent;
 }
 QFrame#ContentSection {
     background-color: rgba(15, 23, 42, 0.9);
