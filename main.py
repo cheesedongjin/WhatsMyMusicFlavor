@@ -1095,8 +1095,8 @@ class PreferenceSummarizer:
 
     def _intro_clause(self, champion: Optional[Song]) -> str:
         if champion:
-            return f"결승에서 {champion.artist}의 \"{champion.get_display_title()}\"에 마음을 준 걸 보면"
-        return "토너먼트 상위 곡들의 공통분모를 살펴보면"
+            return f"결승에서 {champion.artist}의 \"{champion.get_display_title()}\"을(를) 선택한 걸 보면"
+        return "상위 곡들의 공통점을 살펴보면"
 
     def _describe_genre(self, features: Dict[str, Any]) -> Optional[str]:
         genre_ratios: List[Tuple[str, float]] = features["genre_ratios"]
@@ -1109,14 +1109,14 @@ class PreferenceSummarizer:
         if len(genre_ratios) > 1:
             secondary_genre, secondary_ratio = genre_ratios[1]
             if abs(primary_ratio - secondary_ratio) <= 0.12:
-                secondary_clause = f"{self._genre_label(primary_genre)}와 {self._genre_label(secondary_genre)} 사이를 번갈아 넘나들고"
+                secondary_clause = f"{self._genre_label(primary_genre)}와(과) {self._genre_label(secondary_genre)}을(를) 두루 즐기고"
         if not secondary_clause:
             if primary_ratio >= 0.65:
-                secondary_clause = f"{self._genre_label(primary_genre)} 결에 확실히 마음이 쏠리고"
+                secondary_clause = f"{self._genre_label(primary_genre)} 중심의 취향이고"
             elif primary_ratio >= 0.5:
-                secondary_clause = f"{self._genre_label(primary_genre)}를 굵직한 축으로 삼고"
+                secondary_clause = f"{self._genre_label(primary_genre)}을(를) 주축으로 삼고"
             else:
-                secondary_clause = f"{self._genre_label(primary_genre)}를 바탕으로 폭넓게 확장하고"
+                secondary_clause = f"{self._genre_label(primary_genre)}을(를) 기반으로 다양하게 즐기고"
 
         accent = None
         if subgenre_ratios:
@@ -1135,15 +1135,14 @@ class PreferenceSummarizer:
             return None
 
         energy_clause = None
-        if energy is not None:
-            if energy >= 0.75:
-                energy_clause = "에너지는 한껏 끌어올리고"
-            elif energy >= 0.6:
-                energy_clause = "에너지는 탄탄한 비트에 기대고"
-            elif energy >= 0.48:
-                energy_clause = "에너지는 차분한 그루브를 유지하고"
-            else:
-                energy_clause = "에너지는 잔잔하게 눌러두고"
+        if energy >= 0.75:
+            energy_clause = "에너지는 강하게 끌어올리고"
+        elif energy >= 0.6:
+            energy_clause = "에너지는 단단한 비트에 기대고"
+        elif energy >= 0.48:
+            energy_clause = "에너지는 차분하게 유지하고"
+        else:
+            energy_clause = "에너지는 잔잔하게 두고"
 
         valence_clause = None
         if valence is not None:
@@ -1171,10 +1170,10 @@ class PreferenceSummarizer:
 
         anchor = self._era_anchor(avg_year)
         if spread <= 6:
-            return f"감성은 {anchor} 즈음을 깊게 파고들고"
+            return f"감성은 {anchor} 즈음에 주로 머물고"
         if spread <= 15:
-            return f"감성은 {anchor}을 중심으로 맴돌고"
-        return f"감성은 {min_year}년부터 {max_year}년대까지 폭넓게 끌어안고"
+            return f"감성은 {anchor}을 중심으로 약간 넓게 펼쳐지고"
+        return f"감성은 {min_year}년부터 {max_year}년대까지 폭넓게 이어지고"
 
     def _describe_language(self, features: Dict[str, Any]) -> Optional[str]:
         language_ratios: List[Tuple[str, float]] = features["language_ratios"]
@@ -1190,7 +1189,7 @@ class PreferenceSummarizer:
             return "언어는 가사 없는 트랙을 슬쩍 끼워 넣고"
 
         if primary_ratio >= 0.7:
-            return f"언어는 {label} 보컬일 때 마음이 가장 편안한 편"
+            return f"언어는 {label} 보컬일 때 가장 좋은 편"
         if primary_ratio >= 0.5:
             return f"언어는 {label}를 중심에 두되 다른 언어도 기꺼이 받아들이고"
         if diversity >= 3:
@@ -1219,26 +1218,26 @@ class PreferenceSummarizer:
             return "이런 취향이 선명하게 드러납니다"
 
         if energy is not None and valence is not None and energy >= 0.72 and valence >= 0.6:
-            return "이런 취향은 밝고 활기찬 곡들로 재생목록을 채웁니다"
+            return "밝고 활기찬 곡을 주로 선호합니다"
         if energy is not None and valence is not None and energy >= 0.7 and valence < 0.5:
-            return "이런 취향은 강렬하면서도 농밀한 무드를 즐기게 합니다"
+            return "강한 리듬과 어두운 분위기의 곡을 즐깁니다"
         if energy is not None and valence is not None and energy <= 0.45 and valence >= 0.55:
-            return "이런 취향은 부드럽고 따뜻한 멜로디에 자연스레 머뭅니다"
+            return "부드럽고 따뜻한 멜로디에 끌립니다"
         if energy is not None and valence is not None and energy <= 0.45 and valence < 0.5:
-            return "이런 취향은 고요한 어둠의 결을 천천히 음미하게 합니다"
+            return "차분하고 어두운 곡을 선호합니다"
         if energy is not None and valence is None:
             if energy >= 0.7:
-                return "이런 취향은 리듬감이 살아 있는 곡을 찾게 합니다"
+                return "리듬감 있는 곡을 좋아합니다"
             if energy <= 0.45:
-                return "이런 취향은 포근한 잔향을 오래 즐기게 합니다"
-            return "이런 취향은 균형 잡힌 비트를 편안하게 만끽합니다"
+                return "잔잔한 곡을 오래 듣는 편입니다"
+            return "균형 잡힌 비트를 편안하게 즐깁니다"
         if valence is not None and energy is None:
             if valence >= 0.6:
-                return "이런 취향은 낙관적인 정서를 기꺼이 받아들입니다"
+                return "밝고 낙관적인 정서를 선호합니다"
             if valence < 0.45:
-                return "이런 취향은 서늘한 정서를 곁에 두게 합니다"
-            return "이런 취향은 감정 온도를 균형 있게 맞춥니다"
-        return "이런 취향이 뚜렷하게 드러납니다"
+                return "차갑고 서늘한 정서를 선호합니다"
+            return "감정의 균형을 유지하는 곡을 좋아합니다"
+        return "이런 취향이 잘 드러납니다"
 
     def _genre_label(self, genre: str) -> str:
         return self.GENRE_LABELS.get(genre, genre)
@@ -1619,7 +1618,7 @@ class MusicTournamentApp:
     def run(self):
         """전체 프로세스 실행"""
         print("\n" + "="*60)
-        print("🎵 음악 토너먼트 취향 테스트")
+        print("🎵 음악 취향 테스트")
         print("="*60)
         
         # 1. 데이터 로드
@@ -1732,7 +1731,7 @@ class MusicTournamentGUI(QMainWindow):
     def __init__(self, songs_file: str):
         super().__init__()
         self.songs_file = songs_file
-        self.setWindowTitle("Whats My Music Flavor · 토너먼트 취향 테스트")
+        self.setWindowTitle("Whats My Music Flavor · 음악 취향 테스트")
         self.resize(1000, 760)
 
         central = QWidget()
@@ -1756,7 +1755,7 @@ class MusicTournamentGUI(QMainWindow):
         title_label.setObjectName("HeroTitle")
         header_layout.addWidget(title_label)
 
-        subtitle_label = QLabel("설문부터 추천까지, AI가 당신의 음악 취향을 찾아드립니다.")
+        subtitle_label = QLabel("설문부터 추천까지, 당신의 음악 취향을 찾아드립니다.")
         subtitle_label.setObjectName("HeroSubtitle")
         subtitle_label.setWordWrap(True)
         header_layout.addWidget(subtitle_label)
