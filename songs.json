@@ -6654,5 +6654,274 @@
       "duration_sec": 240,
       "loudness_lufs": -8.8
     }
+  },
+  {
+    "id": "song_181",
+    "artist": "Kim Hyun Sik",
+    "title": "My Love By My Side",
+    "title_kor": "내 사랑 내 곁에",
+    "youtube_url": "https://www.youtube.com/watch?v=iJ6ThgYyhSs",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [44, 45],
+      "mood": [53, 65, 21],
+      "energy": 0.6,
+      "valence": 0.7,
+      "tempo_bpm": 78,
+      "era_year": 1990,
+      "language": 4,
+      "instrumentation": [8, 12, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.89,
+      "yt_views": 40000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 268,
+      "loudness_lufs": -14.0
+    }
+  },
+  {
+    "id": "song_182",
+    "artist": "Shin Seung Hun",
+    "title": "I Believe",
+    "youtube_url": "https://www.youtube.com/watch?v=-UZnpcufkbc",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [44, 49],
+      "mood": [53, 31, 65],
+      "energy": 0.55,
+      "valence": 0.75,
+      "tempo_bpm": 130,
+      "era_year": 1992,
+      "language": 4,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.91,
+      "yt_views": 60000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 284,
+      "loudness_lufs": -13.0
+    }
+  },
+  {
+    "id": "song_183",
+    "artist": "Shin Hae Chul",
+    "title": "To You",
+    "title_kor": "그대에게",
+    "youtube_url": "https://www.youtube.com/watch?v=5dHcVjj_Kq0",
+    "genres": [1, 14],
+    "tags": {
+      "subgenres": [51, 45],
+      "mood": [44, 37, 51],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 86,
+      "era_year": 1991,
+      "language": 4,
+      "instrumentation": [13, 4, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 30000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 289,
+      "loudness_lufs": -12.0
+    }
+  },
+  {
+    "id": "song_184",
+    "artist": "DJ DOC",
+    "title": "Run to You",
+    "title_kor": "Run to You",
+    "youtube_url": "https://www.youtube.com/watch?v=pR5sDqm8Wys",
+    "genres": [4, 41],
+    "tags": {
+      "subgenres": [37, 11],
+      "mood": [63, 23, 47],
+      "energy": 0.88,
+      "valence": 0.85,
+      "tempo_bpm": 136,
+      "era_year": 1997,
+      "language": 4,
+      "instrumentation": [13, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.86,
+      "yt_views": 25000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 228,
+      "loudness_lufs": -10.0
+    }
+  },
+  {
+    "id": "song_185",
+    "artist": "Turbo",
+    "title": "Black Cat",
+    "title_kor": "검은 고양이",
+    "youtube_url": "https://www.youtube.com/watch?v=QeKwUtj1Ihs",
+    "genres": [3, 36],
+    "tags": {
+      "subgenres": [11, 29],
+      "mood": [13, 23, 47],
+      "energy": 0.92,
+      "valence": 0.75,
+      "tempo_bpm": 131,
+      "era_year": 1995,
+      "language": 4,
+      "instrumentation": [13, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.88,
+      "yt_views": 20000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 213,
+      "loudness_lufs": -10.0
+    }
+  },
+  {
+    "id": "song_186",
+    "artist": "Im Jae Bum",
+    "title": "For You",
+    "title_kor": "너를 위해",
+    "youtube_url": "https://www.youtube.com/watch?v=CkfT8UZPJ3Y",
+    "genres": [2, 21],
+    "tags": {
+      "subgenres": [44, 49],
+      "mood": [53, 37, 21],
+      "energy": 0.5,
+      "valence": 0.4,
+      "tempo_bpm": 68,
+      "era_year": 2000,
+      "language": 4,
+      "instrumentation": [8, 12, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 35000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 276,
+      "loudness_lufs": -15.0
+    }
+  },
+  {
+    "id": "song_187",
+    "artist": "Psy",
+    "title": "Sae",
+    "title_kor": "새",
+    "youtube_url": "https://www.youtube.com/watch?v=FEMvCfkUqiA",
+    "genres": [4, 41],
+    "tags": {
+      "subgenres": [37, 1],
+      "mood": [50, 34, 49],
+      "energy": 0.75,
+      "valence": 0.5,
+      "tempo_bpm": 92,
+      "era_year": 2002,
+      "language": 4,
+      "instrumentation": [8, 13, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.78,
+      "yt_views": 20000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 264,
+      "loudness_lufs": -11.0
+    }
+  },
+  {
+    "id": "song_188",
+    "artist": "Roo'ra",
+    "title": "3!4!",
+    "title_kor": "3!4!",
+    "youtube_url": "https://www.youtube.com/watch?v=NkeFE3Gw9VY",
+    "genres": [3, 36],
+    "tags": {
+      "subgenres": [11, 12],
+      "mood": [63, 13, 26],
+      "energy": 0.9,
+      "valence": 0.9,
+      "tempo_bpm": 124,
+      "era_year": 1994,
+      "language": 4,
+      "instrumentation": [13, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.87,
+      "yt_views": 15000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 197,
+      "loudness_lufs": -10.0
+    }
+  },
+  {
+    "id": "song_189",
+    "artist": "Park Jin Young",
+    "title": "Don't Leave Me",
+    "title_kor": "날 떠나지마",
+    "youtube_url": "https://www.youtube.com/watch?v=SJtO83eoxwg",
+    "genres": [2, 22],
+    "tags": {
+      "subgenres": [49, 44],
+      "mood": [37, 21, 59],
+      "energy": 0.65,
+      "valence": 0.35,
+      "tempo_bpm": 82,
+      "era_year": 1994,
+      "language": 4,
+      "instrumentation": [13, 1, 2, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.84,
+      "yt_views": 28000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 241,
+      "loudness_lufs": -12.0
+    }
+  },
+  {
+    "id": "song_190",
+    "artist": "Lee Seung Hwan",
+    "title": "Confession is Not Flashy",
+    "title_kor": "화려하지 않은 고백",
+    "youtube_url": "https://www.youtube.com/watch?v=YM7OZ-9w_lw",
+    "genres": [1, 17],
+    "tags": {
+      "subgenres": [31, 51],
+      "mood": [44, 51, 12],
+      "energy": 0.5,
+      "valence": 0.55,
+      "tempo_bpm": 102,
+      "era_year": 1993,
+      "language": 4,
+      "instrumentation": [4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.82,
+      "yt_views": 20000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 231,
+      "loudness_lufs": -15.0
+    }
   }
 ]
