@@ -504,12 +504,12 @@ class SurveyEngine:
         print("="*60)
         
         # 1. 장르 선호도 (쌍대 비교)
-        print("\n[1단계] 두 장르 중 더 선호하는 쪽을 선택하세요")
+        print("\n[1단계] 두 장르 중 지금 더 끌리는 쪽을 골라보세요")
         genre_pairs = [
             ("Rock", "Pop"),
             ("Hip-Hop", "Electronic"),
             ("Jazz", "Classical"),
-            ("K-Pop", "Indie")
+            ("K-Pop", "Indie"),
         ]
         
         genre_scores = defaultdict(int)
@@ -522,8 +522,8 @@ class SurveyEngine:
                 genre_scores[g2] += 1
         
         # 2. 시대 선호도
-        print("\n[2단계] 선호하는 음악 시대는?")
-        print("1. 1970s-1980s  2. 1990s-2000s  3. 2010s 이후  4. 상관없음")
+        print("\n[2단계] 플레이리스트의 분위기를 결정할 시대감은?")
+        print("1. 레트로 감성 (70-80s)  2. 추억의 90-00s  3. 최신 10s 이후  4. 시대 구애받지 않음")
         era = input("선택: ").strip()
         era_map = {'1': 1980, '2': 2000, '3': 2015, '4': None}
         preferred_era = era_map.get(era)
@@ -535,36 +535,53 @@ class SurveyEngine:
         energy_map = {'1': 0.2, '2': 0.5, '3': 0.7, '4': 0.9}
         preferred_energy = energy_map.get(energy, 0.5)
         
-        # 4. 인지도 성향
-        print("\n[4단계] 어떤 곡을 선호하시나요?")
-        print("1. 유명한 히트곡  2. 적당히 알려진 곡  3. 숨은 명곡")
+        # 4. 음악 발견 스타일
+        print("\n[4단계] 어떤 방식의 음악 발견을 더 즐기나요?")
+        print("1. 모두가 아는 히트곡  2. 입소문이 난 곡  3. 숨겨진 보석 찾기")
         popularity = input("선택: ").strip()
         pop_map = {'1': 0.8, '2': 0.5, '3': 0.2}
         preferred_popularity = pop_map.get(popularity, 0.5)
-        
+
         # 5. 언어 선호
-        print("\n[5단계] 선호하는 가사 언어는?")
-        print("1. 한국어  2. 영어  3. 기타  4. 상관없음")
-        lang = input("선택: ").strip()
-        lang_map = {'1': 'ko', '2': 'en', '3': 'other', '4': None}
-        preferred_language = lang_map.get(lang)
-
-        # 6. 언어 집중도
-        print("\n[6단계] 특정 언어 위주로 음악을 듣는 편인가요?")
-        print("1. 거의 한국어만  2. 한국어/영어 위주  3. 영어/글로벌 위주  4. 다양하게 듣는다")
-        language_focus_choice = input("선택: ").strip()
-        global_languages = {'en', 'es', 'fr', 'instrumental'}
-        language_focus_map = {
-            '1': {'languages': {'ko'}, 'strict': True},
-            '2': {'languages': {'ko', 'en'}, 'strict': True},
-            '3': {'languages': global_languages, 'strict': True},
-            '4': {'languages': set(), 'strict': False},
+        print("\n[5단계] 가사 언어에 대해 어떤 취향에 가깝나요?")
+        print("1. 한국어 위주  2. 영어/글로벌  3. 언어는 크게 상관없음  4. 가사보다 사운드 중심")
+        lang_choice = input("선택: ").strip()
+        language_pref_map = {
+            '1': {'preferred': 'ko', 'languages': {'ko'}, 'strict': False},
+            '2': {'preferred': 'en', 'languages': {'en', 'es', 'fr'}, 'strict': False},
+            '3': {'preferred': None, 'languages': set(), 'strict': False},
+            '4': {'preferred': 'instrumental', 'languages': {'instrumental'}, 'strict': True},
         }
-        language_focus = language_focus_map.get(language_focus_choice, {'languages': set(), 'strict': False})
+        language_pref = language_pref_map.get(lang_choice, {'preferred': None, 'languages': set(), 'strict': False})
+        preferred_language = language_pref['preferred']
 
-        # 7. 지역/씬 집중도
-        print("\n[7단계] 특정 지역 음악에 더 끌리나요?")
-        print("1. 한국 음악만 찾는다  2. 한국/아시아 음악 위주  3. 글로벌 다양성 선호  4. 잘 모르겠다")
+        # 6. 무드 선호
+        print("\n[6단계] 이번 플레이리스트에서 느끼고 싶은 무드는?")
+        print("1. 에너지 넘치는/업비트  2. 포근하고 감성적인  3. 그루비하고 리드미컬한  4. 잔잔하고 야간 감성")
+        mood_choice = input("선택: ").strip()
+        mood_map = {
+            '1': {'moods': {'energetic', 'empowering', 'upbeat'}, 'weight': 0.9},
+            '2': {'moods': {'romantic', 'dreamy', 'mellow'}, 'weight': 0.7},
+            '3': {'moods': {'groovy', 'funky', 'soulful'}, 'weight': 0.8},
+            '4': {'moods': {'introspective', 'nocturnal', 'melancholic'}, 'weight': 0.85},
+        }
+        mood_pref = mood_map.get(mood_choice, {'moods': set(), 'weight': 0.0})
+
+        # 7. 사운드 질감
+        print("\n[7단계] 어떤 사운드 질감에 더 마음이 가나요?")
+        print("1. 밴드/어쿠스틱  2. 신스/전자음  3. 피아노/보컬 중심  4. 재즈/브라스 그루브")
+        sound_choice = input("선택: ").strip()
+        sound_map = {
+            '1': {'instrumentations': {'guitar', 'drums', 'bass', 'vocals'}},
+            '2': {'instrumentations': {'synth', 'electronic_beats', 'samples'}},
+            '3': {'instrumentations': {'piano', 'strings', 'vocals'}},
+            '4': {'instrumentations': {'saxophone', 'trumpet', 'bass'}},
+        }
+        sound_pref = sound_map.get(sound_choice, {'instrumentations': set()})
+
+        # 8. 지역/씬 집중도
+        print("\n[8단계] 특정 지역의 음악에 마음이 가나요?")
+        print("1. 한국 음악 위주  2. 한국/아시아 중심  3. 글로벌 다양성  4. 잘 모르겠다")
         regional_choice = input("선택: ").strip()
         regional_focus_map = {
             '1': 'k_only',
@@ -580,8 +597,11 @@ class SurveyEngine:
             'preferred_energy': preferred_energy,
             'preferred_popularity': preferred_popularity,
             'preferred_language': preferred_language,
-            'preferred_languages': sorted(language_focus['languages']),
-            'language_strict': language_focus['strict'],
+            'preferred_languages': sorted(language_pref['languages']),
+            'language_strict': language_pref['strict'],
+            'preferred_moods': sorted(mood_pref['moods']),
+            'mood_weight': mood_pref['weight'],
+            'preferred_instrumentations': sorted(sound_pref['instrumentations']),
             'regional_focus': regional_focus
         }
         
@@ -616,6 +636,8 @@ class CandidateSelector:
         if preferred_language:
             if language == preferred_language:
                 score += 0.5
+            elif preferred_language == 'instrumental' and language != 'instrumental':
+                score -= 0.2
             else:
                 score -= 0.1
 
@@ -628,6 +650,17 @@ class CandidateSelector:
                 score += 0.2
         else:
             score += 0.3
+
+        preferred_moods = set(self.profile.get('preferred_moods') or [])
+        mood_weight = float(self.profile.get('mood_weight') or 0.0)
+        if preferred_moods:
+            song_moods = set(song.tags.get('mood') or [])
+            if song_moods:
+                overlap = preferred_moods & song_moods
+                if overlap:
+                    score += 0.3 + mood_weight * 0.4 + 0.05 * max(0, len(overlap) - 1)
+                else:
+                    score -= 0.1 * max(1.0, mood_weight)
 
         if self.profile.get('preferred_era'):
             song_year = song.tags.get('era_year', 2000)
@@ -644,6 +677,16 @@ class CandidateSelector:
         pop_diff = abs(awareness - self.profile['preferred_popularity'])
         pop_score = 1 - pop_diff
         score += pop_score * 0.5
+
+        preferred_instrumentations = set(self.profile.get('preferred_instrumentations') or [])
+        if preferred_instrumentations:
+            song_instrumentations = set(song.tags.get('instrumentation') or [])
+            if song_instrumentations:
+                overlap = preferred_instrumentations & song_instrumentations
+                if overlap:
+                    score += 0.25 + 0.1 * len(overlap)
+                else:
+                    score -= 0.05
 
         regional_focus = self.profile.get('regional_focus', 'neutral')
         regionality = set(song.popularity.get('regionality', []))
@@ -1345,6 +1388,9 @@ class RecommendationEngine:
         self.language_strict: bool = bool(self.profile.get('language_strict') and self.language_whitelist)
         self.preferred_language: Optional[str] = self.profile.get('preferred_language')
         self.regional_focus: str = self.profile.get('regional_focus', 'neutral')
+        self.preferred_moods: Set[str] = set(self.profile.get('preferred_moods') or [])
+        self.mood_weight: float = float(self.profile.get('mood_weight') or 0.0)
+        self.preferred_instrumentations: Set[str] = set(self.profile.get('preferred_instrumentations') or [])
         self.selector = CandidateSelector(all_songs, self.profile)
 
     def generate_recommendations(
@@ -1375,6 +1421,8 @@ class RecommendationEngine:
             language_note = self._describe_language_fit(song)
             region_note = self._describe_region_fit(song)
             freshness_score, freshness_note = self._freshness_profile(song)
+            mood_note = self._describe_mood_fit(song)
+            instrumentation_note = self._describe_instrumentation_fit(song)
 
             scored_entries.append({
                 'song': song,
@@ -1385,6 +1433,8 @@ class RecommendationEngine:
                 'language_note': language_note,
                 'region_note': region_note,
                 'freshness_note': freshness_note,
+                'mood_note': mood_note,
+                'instrumentation_note': instrumentation_note,
             })
 
         if not scored_entries:
@@ -1536,6 +1586,42 @@ class RecommendationEngine:
 
         return None
 
+    def _describe_mood_fit(self, song: Song) -> Optional[str]:
+        if not self.preferred_moods:
+            return None
+
+        song_moods = set(song.tags.get('mood') or [])
+        if not song_moods:
+            return None
+
+        overlap = sorted(self.preferred_moods & song_moods)
+        if not overlap:
+            return None
+
+        friendly = [self._format_tag_name(tag) for tag in overlap[:2]]
+        if len(friendly) == 1:
+            return f"선호 무드 {friendly[0]} 감성 반영"
+        return f"원하는 무드 {', '.join(friendly)}를 살린 트랙"
+
+    def _describe_instrumentation_fit(self, song: Song) -> Optional[str]:
+        if not self.preferred_instrumentations:
+            return None
+
+        song_instrumentations = set(song.tags.get('instrumentation') or [])
+        if not song_instrumentations:
+            return None
+
+        overlap = sorted(self.preferred_instrumentations & song_instrumentations)
+        if not overlap:
+            return None
+
+        friendly = [self._format_tag_name(tag) for tag in overlap[:2]]
+        return f"선호 사운드 ({', '.join(friendly)})와 잘 맞아요"
+
+    @staticmethod
+    def _format_tag_name(tag: str) -> str:
+        return tag.replace('_', ' ').title()
+
     def _freshness_profile(self, song: Song) -> Tuple[float, Optional[str]]:
         era_year = song.tags.get('era_year')
         awareness = song.popularity.get('awareness_idx')
@@ -1582,6 +1668,14 @@ class RecommendationEngine:
         region_note = entry.get('region_note')
         if region_note:
             parts.append(region_note)
+
+        mood_note = entry.get('mood_note')
+        if mood_note:
+            parts.append(mood_note)
+
+        instrumentation_note = entry.get('instrumentation_note')
+        if instrumentation_note:
+            parts.append(instrumentation_note)
 
         freshness_note = entry.get('freshness_note')
         if freshness_note and (category == 'fresh' or entry.get('freshness', 0) >= 0.5):
@@ -1682,10 +1776,10 @@ class MusicTournamentGUI(QMainWindow):
     ]
 
     ERA_OPTIONS = [
-        ("1970s-1980s", "1"),
-        ("1990s-2000s", "2"),
-        ("2010s 이후", "3"),
-        ("상관없음", "4"),
+        ("레트로 감성 (70-80s)", "1"),
+        ("추억의 90-00s", "2"),
+        ("최신 10s 이후", "3"),
+        ("시대 구애받지 않음", "4"),
     ]
 
     ENERGY_OPTIONS = [
@@ -1696,23 +1790,30 @@ class MusicTournamentGUI(QMainWindow):
     ]
 
     POPULARITY_OPTIONS = [
-        ("유명한 히트곡", "1"),
-        ("적당히 알려진 곡", "2"),
-        ("숨은 명곡", "3"),
+        ("모두가 아는 히트곡", "1"),
+        ("입소문이 난 곡", "2"),
+        ("숨겨진 보석 찾기", "3"),
     ]
 
     LANGUAGE_OPTIONS = [
-        ("한국어", "1"),
-        ("영어", "2"),
-        ("기타 언어", "3"),
-        ("상관없음", "4"),
+        ("한국어 위주", "1"),
+        ("영어/글로벌", "2"),
+        ("언어 상관없음", "3"),
+        ("가사보다 사운드", "4"),
     ]
 
-    LANGUAGE_FOCUS_OPTIONS = [
-        ("거의 한국어만 들어요", "1"),
-        ("한국어/영어 위주", "2"),
-        ("영어/글로벌 위주", "3"),
-        ("다양한 언어 환영", "4"),
+    MOOD_OPTIONS = [
+        ("에너지 넘치는/업비트", "1"),
+        ("포근하고 감성적인", "2"),
+        ("그루비하고 리드미컬한", "3"),
+        ("잔잔하고 야간 감성", "4"),
+    ]
+
+    SOUND_OPTIONS = [
+        ("밴드/어쿠스틱", "1"),
+        ("신스/전자음", "2"),
+        ("피아노/보컬 중심", "3"),
+        ("재즈/브라스 그루브", "4"),
     ]
 
     REGIONAL_FOCUS_OPTIONS = [
@@ -2057,9 +2158,10 @@ QRadioButton::indicator {
 
         self.era_group = self.build_radio_section(form_layout, "시대 선호", self.ERA_OPTIONS, default="2")
         self.energy_group = self.build_radio_section(form_layout, "에너지 레벨", self.ENERGY_OPTIONS, default="3")
-        self.popularity_group = self.build_radio_section(form_layout, "인기도 선호", self.POPULARITY_OPTIONS, default="2")
-        self.language_group = self.build_radio_section(form_layout, "가사 언어", self.LANGUAGE_OPTIONS, default="4")
-        self.language_focus_group = self.build_radio_section(form_layout, "언어 집중도", self.LANGUAGE_FOCUS_OPTIONS, default="4")
+        self.popularity_group = self.build_radio_section(form_layout, "음악 발견 스타일", self.POPULARITY_OPTIONS, default="2")
+        self.language_group = self.build_radio_section(form_layout, "가사 언어", self.LANGUAGE_OPTIONS, default="3")
+        self.mood_group = self.build_radio_section(form_layout, "무드", self.MOOD_OPTIONS, default="2")
+        self.sound_group = self.build_radio_section(form_layout, "사운드 질감", self.SOUND_OPTIONS, default="1")
         self.regional_focus_group = self.build_radio_section(form_layout, "국가/지역 취향", self.REGIONAL_FOCUS_OPTIONS, default="4")
 
         start_button = QPushButton("토너먼트 시작")
@@ -2105,13 +2207,23 @@ QRadioButton::indicator {
         era_map = {"1": 1980, "2": 2000, "3": 2015, "4": None}
         energy_map = {"1": 0.2, "2": 0.5, "3": 0.7, "4": 0.9}
         pop_map = {"1": 0.8, "2": 0.5, "3": 0.2}
-        lang_map = {"1": "ko", "2": "en", "3": "other", "4": None}
-        global_languages = {"en", "es", "fr", "instrumental"}
-        language_focus_map = {
-            "1": {"languages": {"ko"}, "strict": True},
-            "2": {"languages": {"ko", "en"}, "strict": True},
-            "3": {"languages": global_languages, "strict": True},
-            "4": {"languages": set(), "strict": False},
+        language_pref_map = {
+            "1": {"preferred": "ko", "languages": {"ko"}, "strict": False},
+            "2": {"preferred": "en", "languages": {"en", "es", "fr"}, "strict": False},
+            "3": {"preferred": None, "languages": set(), "strict": False},
+            "4": {"preferred": "instrumental", "languages": {"instrumental"}, "strict": True},
+        }
+        mood_map = {
+            "1": {"moods": {"energetic", "empowering", "upbeat"}, "weight": 0.9},
+            "2": {"moods": {"romantic", "dreamy", "mellow"}, "weight": 0.7},
+            "3": {"moods": {"groovy", "funky", "soulful"}, "weight": 0.8},
+            "4": {"moods": {"introspective", "nocturnal", "melancholic"}, "weight": 0.85},
+        }
+        sound_map = {
+            "1": {"instrumentations": {"guitar", "drums", "bass", "vocals"}},
+            "2": {"instrumentations": {"synth", "electronic_beats", "samples"}},
+            "3": {"instrumentations": {"piano", "strings", "vocals"}},
+            "4": {"instrumentations": {"saxophone", "trumpet", "bass"}},
         }
         regional_focus_map = {"1": "k_only", "2": "k_prefer", "3": "global", "4": "neutral"}
 
@@ -2119,8 +2231,9 @@ QRadioButton::indicator {
             button = group.checkedButton()
             return button.property("value") if button else default
 
-        lang_focus_value = group_value(self.language_focus_group, "4")
-        language_focus = language_focus_map.get(lang_focus_value, {"languages": set(), "strict": False})
+        language_pref = language_pref_map.get(group_value(self.language_group, "3"), {"preferred": None, "languages": set(), "strict": False})
+        mood_pref = mood_map.get(group_value(self.mood_group, "2"), {"moods": set(), "weight": 0.0})
+        sound_pref = sound_map.get(group_value(self.sound_group, "1"), {"instrumentations": set()})
         regional_focus = regional_focus_map.get(group_value(self.regional_focus_group, "4"), "neutral")
 
         self.survey_profile = {
@@ -2128,9 +2241,12 @@ QRadioButton::indicator {
             "preferred_era": era_map.get(group_value(self.era_group, "2")),
             "preferred_energy": energy_map.get(group_value(self.energy_group, "3"), 0.5),
             "preferred_popularity": pop_map.get(group_value(self.popularity_group, "2"), 0.5),
-            "preferred_language": lang_map.get(group_value(self.language_group, "4")),
-            "preferred_languages": sorted(language_focus["languages"]),
-            "language_strict": language_focus["strict"],
+            "preferred_language": language_pref["preferred"],
+            "preferred_languages": sorted(language_pref["languages"]),
+            "language_strict": language_pref["strict"],
+            "preferred_moods": sorted(mood_pref["moods"]),
+            "mood_weight": mood_pref["weight"],
+            "preferred_instrumentations": sorted(sound_pref["instrumentations"]),
             "regional_focus": regional_focus,
         }
 
