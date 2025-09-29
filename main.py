@@ -1872,7 +1872,7 @@ class MusicTournamentGUI(QMainWindow):
         footer_layout.setSpacing(12)
 
         footer_notice = QLabel(
-            "곡 정보에 오류를 발견하셨나요? 하단의 '문제 신고 · 개선 제안하기' 버튼으로 알려주시면, 서비스 개선에 큰 힘이 됩니다."
+            "곡 정보에 오류를 발견하셨나요? '문제 신고 · 개선 제안하기' 버튼으로 알려주시면, 서비스 개선에 큰 힘이 됩니다."
         )
         footer_notice.setObjectName("FooterNotice")
         footer_notice.setWordWrap(True)
