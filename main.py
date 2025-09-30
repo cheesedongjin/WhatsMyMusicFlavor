@@ -46,6 +46,7 @@ from PyQt6.QtWidgets import (
     QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
+    QSizePolicy,
 )
 
 # ============================================================================
@@ -1901,13 +1902,16 @@ class MusicTournamentGUI(QMainWindow):
         footer_layout = QHBoxLayout(self.footer_frame)
         footer_layout.setContentsMargins(0, 0, 0, 0)
         footer_layout.setSpacing(12)
+        footer_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
         footer_notice = QLabel(
             "곡 정보에 오류를 발견하셨나요? '문제 신고 · 개선 제안하기' 버튼으로 알려주시면, 서비스 개선에 큰 힘이 됩니다."
         )
         footer_notice.setObjectName("FooterNotice")
         footer_notice.setWordWrap(True)
+        footer_notice.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         footer_layout.addWidget(footer_notice, 1)
+        self.footer_notice = footer_notice
 
         self.report_issue_button = QPushButton("문제 신고 · 개선 제안하기")
         self.report_issue_button.setObjectName("ReportIssueButton")
@@ -1921,6 +1925,7 @@ class MusicTournamentGUI(QMainWindow):
         self.setStatusBar(self.status_bar)
 
         self.apply_modern_theme()
+        self.sync_footer_height()
 
         loader = DataLoader()
         self.songs = loader.load_songs(self.songs_file)
@@ -1938,6 +1943,20 @@ class MusicTournamentGUI(QMainWindow):
 
     def open_issue_link(self):
         webbrowser.open("https://github.com/cheesedongjin/WhatsMyMusicFlavor/issues")
+
+    def sync_footer_height(self):
+        if not hasattr(self, "report_issue_button") or not hasattr(self, "footer_frame"):
+            return
+
+        button_height = self.report_issue_button.sizeHint().height()
+        if button_height <= 0:
+            return
+
+        self.footer_frame.setFixedHeight(button_height)
+        self.footer_frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+
+        if hasattr(self, "footer_notice"):
+            self.footer_notice.setFixedHeight(button_height)
 
     def apply_modern_theme(self):
         self.setStyleSheet(
@@ -1965,7 +1984,9 @@ QFrame#ContentFrame {
     padding: 12px;
 }
 QFrame#FooterFrame {
-    background-color: transparent;
+    background-color: rgba(15, 23, 42, 0.82);
+    border-radius: 16px;
+    padding: 0 16px;
 }
 QFrame#ContentSection {
     background-color: rgba(15, 23, 42, 0.9);
