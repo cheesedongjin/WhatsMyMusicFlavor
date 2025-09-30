@@ -3075,6 +3075,7 @@ QHeaderView::section {
             margin: 0;
             padding: 36px 48px;
             background: #ffffff;
+            font-size: 14px;
         }}
         header {{
             border-bottom: 2px solid #e5e9f0;
@@ -3082,26 +3083,26 @@ QHeaderView::section {
             padding-bottom: 12px;
         }}
         h1 {{
-            font-size: 28px;
+            font-size: 30px;
             margin: 0;
         }}
         h2 {{
-            font-size: 20px;
+            font-size: 22px;
             margin-top: 28px;
             margin-bottom: 12px;
         }}
         h3 {{
-            font-size: 16px;
+            font-size: 18px;
             margin-bottom: 8px;
         }}
         p {{
             line-height: 1.6;
-            font-size: 13px;
+            font-size: 14px;
             margin: 0;
         }}
         .meta {{
             color: #64748b;
-            font-size: 12px;
+            font-size: 13px;
             margin-top: 4px;
         }}
         .champion-card {{
@@ -3111,19 +3112,19 @@ QHeaderView::section {
             background: linear-gradient(135deg, #f8fafc, #ffffff);
         }}
         .champion-title {{
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
             margin-bottom: 6px;
         }}
         .champion-artist {{
             color: #475569;
-            font-size: 15px;
+            font-size: 16px;
         }}
         .champion-meta {{
             margin-top: 10px;
             display: flex;
             gap: 12px;
-            font-size: 13px;
+            font-size: 14px;
             color: #0f172a;
         }}
         ol {{
@@ -3132,7 +3133,7 @@ QHeaderView::section {
         }}
         ol li {{
             margin-bottom: 6px;
-            font-size: 13px;
+            font-size: 14px;
         }}
         .song-title {{
             font-weight: 600;
@@ -3150,7 +3151,7 @@ QHeaderView::section {
             justify-content: space-between;
             border-bottom: 1px dashed #e2e8f0;
             padding: 6px 0;
-            font-size: 13px;
+            font-size: 14px;
         }}
         .stat-label {{
             color: #475569;
@@ -3162,7 +3163,7 @@ QHeaderView::section {
             background: #f8fafc;
             border-radius: 10px;
             padding: 16px;
-            font-size: 13px;
+            font-size: 14px;
         }}
         .recommendation-group {{
             border: 1px solid #e2e8f0;
@@ -3176,21 +3177,21 @@ QHeaderView::section {
         }}
         .recommendation-title {{
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
         }}
         .recommendation-artist {{
             color: #475569;
-            font-size: 12px;
+            font-size: 13px;
         }}
         .recommendation-reason {{
             color: #334155;
-            font-size: 12px;
+            font-size: 13px;
             margin-top: 4px;
             line-height: 1.5;
         }}
         footer {{
             margin-top: 32px;
-            font-size: 11px;
+            font-size: 12px;
             color: #94a3b8;
             text-align: right;
         }}
