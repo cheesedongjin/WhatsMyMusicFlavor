@@ -15,8 +15,16 @@ from collections import defaultdict, Counter
 import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeySequence, QShortcut
+from html import escape
+
+from PyQt6.QtCore import Qt, QMarginsF
+from PyQt6.QtGui import (
+    QKeySequence,
+    QShortcut,
+    QPdfWriter,
+    QPageSize,
+    QTextDocument,
+)
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
@@ -2883,114 +2891,343 @@ QHeaderView::section {
             return
 
         try:
-            payload = self._build_export_payload()
-            json_text = json.dumps(payload, ensure_ascii=False, indent=2)
+            context = self._gather_export_context()
+            html = self._build_export_html(context)
         except Exception as exc:
-            self.update_status("결과 직렬화에 실패했습니다.")
-            QMessageBox.warning(self, "내보내기 실패", f"결과 직렬화 중 오류가 발생했습니다.\n{exc}")
+            self.update_status("결과 내보내기 구성에 실패했습니다.")
+            QMessageBox.warning(self, "내보내기 실패", f"PDF 생성 준비 중 오류가 발생했습니다.\n{exc}")
             return
 
-        chooser = QMessageBox(self)
-        chooser.setWindowTitle("결과 내보내기")
-        chooser.setText("결과를 어떻게 내보낼까요?")
-        chooser.setIcon(QMessageBox.Icon.Question)
-        save_button = chooser.addButton("파일로 저장", QMessageBox.ButtonRole.AcceptRole)
-        copy_button = chooser.addButton("클립보드로 복사", QMessageBox.ButtonRole.ActionRole)
-        chooser.addButton(QMessageBox.StandardButton.Cancel)
-        chooser.exec()
-
-        clicked = chooser.clickedButton()
-        if clicked == save_button:
-            default_path = Path.home() / "music_tournament_result.json"
-            file_path, _ = QFileDialog.getSaveFileName(
-                self,
-                "결과 저장",
-                str(default_path),
-                "JSON 파일 (*.json);;모든 파일 (*)",
-            )
-            if not file_path:
-                self.update_status("결과 내보내기가 취소되었습니다.")
-                return
-            try:
-                with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(json_text)
-                filename = Path(file_path).name
-                self.update_status(f"결과를 '{filename}' 파일로 저장했습니다.")
-            except Exception as exc:
-                self.update_status("결과 저장에 실패했습니다.")
-                QMessageBox.warning(self, "저장 실패", f"파일 저장 중 오류가 발생했습니다.\n{exc}")
-        elif clicked == copy_button:
-            try:
-                QApplication.clipboard().setText(json_text)
-                self.update_status("결과 JSON이 클립보드에 복사되었습니다.")
-            except Exception as exc:
-                self.update_status("클립보드 복사에 실패했습니다.")
-                QMessageBox.warning(self, "복사 실패", f"클립보드 복사 중 오류가 발생했습니다.\n{exc}")
-        else:
+        default_path = Path.home() / "music_tournament_result.pdf"
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "PDF로 저장",
+            str(default_path),
+            "PDF 파일 (*.pdf);;모든 파일 (*)",
+        )
+        if not file_path:
             self.update_status("결과 내보내기가 취소되었습니다.")
+            return
 
-    def _build_export_payload(self) -> Dict[str, Any]:
-        report: Dict[str, Any] = dict(getattr(self, "report", {}) or {})
+        file_path = Path(file_path)
+        if file_path.suffix.lower() != ".pdf":
+            file_path = file_path.with_suffix(".pdf")
+
+        try:
+            self._write_pdf(file_path, html)
+            self.update_status(f"결과를 '{file_path.name}' PDF로 저장했습니다.")
+            QMessageBox.information(self, "저장 완료", "결과가 PDF로 저장되었습니다.")
+        except Exception as exc:
+            self.update_status("PDF 저장에 실패했습니다.")
+            QMessageBox.warning(self, "저장 실패", f"PDF 저장 중 오류가 발생했습니다.\n{exc}")
+
+    def _gather_export_context(self) -> Dict[str, Any]:
+        report: Dict[str, Any] = getattr(self, "report", {}) or {}
         recommendations: Dict[str, Any] = getattr(self, "recommendations", {}) or {}
 
-        champion = report.get("champion")
-        top_songs = report.get("top_songs") or []
+        champion: Optional[Song] = report.get("champion") or getattr(self, "champion", None)
+        top_songs: List[Song] = report.get("top_songs") or []
 
-        serializable_report = {
-            key: value
-            for key, value in report.items()
-            if key not in {"champion", "top_songs"}
-        }
-        serializable_report["champion"] = self._serialize_song_for_export(champion)
-        serializable_report["top_songs"] = [
-            self._serialize_song_for_export(song)
-            for song in top_songs
-            if song is not None
-        ]
+        top_song_entries: List[Dict[str, Any]] = []
+        for idx, song in enumerate(top_songs, 1):
+            if not song:
+                continue
+            top_song_entries.append(
+                {
+                    "index": idx,
+                    "title": song.title,
+                    "artist": song.artist,
+                    "rating": song.rating,
+                }
+            )
 
-        serializable_recommendations: Dict[str, List[Dict[str, Any]]] = {}
-        for category, entries in recommendations.items():
-            serialized_entries: List[Dict[str, Any]] = []
+        recommendation_groups: List[Dict[str, Any]] = []
+        recommendation_mapping = (
+            ("🎯 취향 저격 트랙", recommendations.get("core", [])),
+            ("🌱 새롭게 시도해볼 곡", recommendations.get("fresh", [])),
+        )
+        for label, entries in recommendation_mapping:
+            items: List[Dict[str, Any]] = []
             for entry in entries:
                 song = entry.get("song") if isinstance(entry, dict) else None
-                song_payload = self._serialize_song_for_export(song)
-                if song_payload is None:
+                if not song:
                     continue
-                serialized_entries.append(
+                items.append(
                     {
-                        "song": song_payload,
+                        "title": song.title,
+                        "artist": song.artist,
                         "reason": entry.get("reason") if isinstance(entry, dict) else None,
-                        "category": entry.get("category") if isinstance(entry, dict) else category,
                     }
                 )
-            serializable_recommendations[category] = serialized_entries
+            if items:
+                recommendation_groups.append({"label": label, "items": items})
 
         return {
-            "generated_at": datetime.now().isoformat(),
-            "report": serializable_report,
-            "recommendations": serializable_recommendations,
+            "generated_at": datetime.now(),
+            "champion": {
+                "title": champion.title if champion else "-",
+                "artist": champion.artist if champion else "-",
+                "rating": champion.rating if champion else None,
+                "record": f"{champion.wins}승 {champion.losses}패" if champion else None,
+            },
+            "summary": report.get("preference_summary"),
+            "total_matches": report.get("total_matches"),
+            "choice_distribution": report.get("choice_distribution", {}),
+            "top_songs": top_song_entries,
+            "recommendations": recommendation_groups,
         }
 
-    @staticmethod
-    def _serialize_song_for_export(song: Optional[Song]) -> Optional[Dict[str, Any]]:
-        if not song:
-            return None
-        return {
-            "id": song.id,
-            "artist": song.artist,
-            "title": song.title,
-            "display_title": song.get_display_title(),
-            "youtube_url": song.youtube_url,
-            "rating": song.rating,
-            "wins": song.wins,
-            "losses": song.losses,
-            "matches": song.matches,
-            "genres": list(song.genres or []),
-            "genre_codes": list(song.genre_codes or []),
-            "tags": song.tags,
-            "popularity": song.popularity,
-            "meta": song.meta,
-        }
+    def _build_export_html(self, context: Dict[str, Any]) -> str:
+        def safe(text: Optional[Any]) -> str:
+            if text is None:
+                return ""
+            return escape(str(text))
+
+        generated_at = context.get("generated_at")
+        generated_text = generated_at.strftime("%Y.%m.%d %H:%M") if generated_at else ""
+
+        champion = context.get("champion", {})
+        top_songs = context.get("top_songs", [])
+        recommendations = context.get("recommendations", [])
+        stats = context.get("choice_distribution", {}) or {}
+        total_matches = context.get("total_matches")
+        summary = context.get("summary")
+
+        champion_rating_value = champion.get("rating")
+        if isinstance(champion_rating_value, (int, float)):
+            champion_rating_display = f"{champion_rating_value:.1f}"
+        else:
+            champion_rating_display = "-"
+        champion_record = champion.get("record") or "-"
+
+        top_song_html = ""
+        if top_songs:
+            items = []
+            for entry in top_songs:
+                rating = entry.get("rating")
+                rating_text = f" · 레이팅 {rating:.1f}" if isinstance(rating, (int, float)) else ""
+                items.append(
+                    f"<li><span class='song-title'>{safe(entry.get('title'))}</span>"
+                    f"<span class='song-artist'> — {safe(entry.get('artist'))}</span>"
+                    f"<span class='song-meta'>{safe(rating_text)}</span></li>"
+                )
+            top_song_html = "<h2>상위 플레이리스트</h2><ol>" + "".join(items) + "</ol>"
+
+        recommendation_html = ""
+        if recommendations:
+            sections = []
+            for group in recommendations:
+                rows = []
+                for idx, item in enumerate(group.get("items", []), 1):
+                    reason = safe(item.get("reason"))
+                    if reason:
+                        reason = reason.replace("\n", "<br>")
+                    rows.append(
+                        "<div class='recommendation-item'>"
+                        f"<div class='recommendation-title'>{idx}. {safe(item.get('title'))}</div>"
+                        f"<div class='recommendation-artist'>{safe(item.get('artist'))}</div>"
+                        + (f"<div class='recommendation-reason'>{reason}</div>" if reason else "")
+                        + "</div>"
+                    )
+                sections.append(
+                    f"<div class='recommendation-group'><h3>{safe(group.get('label'))}</h3>"
+                    + "".join(rows)
+                    + "</div>"
+                )
+            recommendation_html = "<section><h2>맞춤 추천</h2>" + "".join(sections) + "</section>"
+
+        stats_html = ""
+        if total_matches is not None or stats:
+            stats_rows = []
+            if total_matches is not None:
+                stats_rows.append(
+                    f"<div class='stat-row'><span class='stat-label'>총 매치</span><span class='stat-value'>{safe(total_matches)}</span></div>"
+                )
+            label_map = {
+                "A": "A 선택",
+                "B": "B 선택",
+                "T": "둘 다",
+                "S": "건너뛰기",
+            }
+            for key, label in label_map.items():
+                if key in stats:
+                    stats_rows.append(
+                        f"<div class='stat-row'><span class='stat-label'>{label}</span><span class='stat-value'>{safe(stats.get(key))}</span></div>"
+                    )
+            stats_html = "<section><h2>선택 통계</h2>" + "".join(stats_rows) + "</section>"
+
+        summary_html = ""
+        if summary:
+            summary_html = (
+                "<section><h2>취향 요약</h2>"
+                f"<p class='summary-text'>{safe(summary)}</p></section>"
+            )
+
+        html = f"""
+<!DOCTYPE html>
+<html lang=\"ko\">
+<head>
+    <meta charset=\"utf-8\">
+    <style>
+        body {{
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Pretendard', sans-serif;
+            color: #1f2933;
+            margin: 0;
+            padding: 36px 48px;
+            background: #ffffff;
+        }}
+        header {{
+            border-bottom: 2px solid #e5e9f0;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+        }}
+        h1 {{
+            font-size: 28px;
+            margin: 0;
+        }}
+        h2 {{
+            font-size: 20px;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }}
+        h3 {{
+            font-size: 16px;
+            margin-bottom: 8px;
+        }}
+        p {{
+            line-height: 1.6;
+            font-size: 13px;
+            margin: 0;
+        }}
+        .meta {{
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 4px;
+        }}
+        .champion-card {{
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+        }}
+        .champion-title {{
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }}
+        .champion-artist {{
+            color: #475569;
+            font-size: 15px;
+        }}
+        .champion-meta {{
+            margin-top: 10px;
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #0f172a;
+        }}
+        ol {{
+            margin: 0;
+            padding-left: 20px;
+        }}
+        ol li {{
+            margin-bottom: 6px;
+            font-size: 13px;
+        }}
+        .song-title {{
+            font-weight: 600;
+        }}
+        .song-artist {{
+            color: #475569;
+            margin-left: 6px;
+        }}
+        .song-meta {{
+            color: #64748b;
+            margin-left: 4px;
+        }}
+        .stat-row {{
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e2e8f0;
+            padding: 6px 0;
+            font-size: 13px;
+        }}
+        .stat-label {{
+            color: #475569;
+        }}
+        .stat-value {{
+            font-weight: 600;
+        }}
+        .summary-text {{
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 13px;
+        }}
+        .recommendation-group {{
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: #fcfdff;
+        }}
+        .recommendation-item {{
+            margin-bottom: 12px;
+        }}
+        .recommendation-title {{
+            font-weight: 600;
+            font-size: 14px;
+        }}
+        .recommendation-artist {{
+            color: #475569;
+            font-size: 12px;
+        }}
+        .recommendation-reason {{
+            color: #334155;
+            font-size: 12px;
+            margin-top: 4px;
+            line-height: 1.5;
+        }}
+        footer {{
+            margin-top: 32px;
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: right;
+        }}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WhatsMyMusicFlavor · 결과 리포트</h1>
+        <div class='meta'>생성일시 {safe(generated_text)}</div>
+    </header>
+    <section class='champion-card'>
+        <div class='champion-title'>{safe(champion.get('title'))}</div>
+        <div class='champion-artist'>{safe(champion.get('artist'))}</div>
+        <div class='champion-meta'>
+            <span>레이팅 {safe(champion_rating_display)}</span>
+            <span>{safe(champion_record)}</span>
+        </div>
+    </section>
+    {summary_html}
+    {stats_html}
+    {top_song_html}
+    {recommendation_html}
+    <footer>이 리포트는 WhatsMyMusicFlavor에서 생성되었습니다.</footer>
+</body>
+</html>
+"""
+        return html
+
+    def _write_pdf(self, file_path: Path, html: str) -> None:
+        document = QTextDocument()
+        document.setHtml(html)
+
+        writer = QPdfWriter(str(file_path))
+        writer.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
+        writer.setPageMargins(QMarginsF(12, 12, 12, 12))
+
+        document.print_(writer)
 
     def render_recommendations(self, layout: QVBoxLayout):
         section_title = QLabel("맞춤 추천")
