@@ -20,6 +20,7 @@ from PyQt6.QtGui import QKeySequence, QShortcut
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
+    QFileDialog,
     QFrame,
     QGridLayout,
     QGroupBox,
@@ -2565,10 +2566,136 @@ QRadioButton::indicator {
         back_button = QPushButton("처음으로 돌아가기")
         back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         back_button.clicked.connect(self.show_start_view)
-        layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
+
+        export_button = QPushButton("결과 내보내기")
+        export_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        export_button.clicked.connect(self.export_results)
+
+        button_row = QHBoxLayout()
+        button_row.setSpacing(12)
+        button_row.addWidget(back_button)
+        button_row.addWidget(export_button)
+        button_row.addStretch(1)
+        layout.addLayout(button_row)
         layout.addStretch(1)
 
         self.update_status("결과를 확인하고 추천곡을 감상해보세요.")
+
+    def export_results(self):
+        if not getattr(self, "report", None):
+            self.update_status("내보낼 결과가 없습니다.")
+            QMessageBox.warning(self, "내보내기 실패", "저장할 토너먼트 결과가 없습니다.")
+            return
+
+        try:
+            payload = self._build_export_payload()
+            json_text = json.dumps(payload, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            self.update_status("결과 직렬화에 실패했습니다.")
+            QMessageBox.warning(self, "내보내기 실패", f"결과 직렬화 중 오류가 발생했습니다.\n{exc}")
+            return
+
+        chooser = QMessageBox(self)
+        chooser.setWindowTitle("결과 내보내기")
+        chooser.setText("결과를 어떻게 내보낼까요?")
+        chooser.setIcon(QMessageBox.Icon.Question)
+        save_button = chooser.addButton("파일로 저장", QMessageBox.ButtonRole.AcceptRole)
+        copy_button = chooser.addButton("클립보드로 복사", QMessageBox.ButtonRole.ActionRole)
+        chooser.addButton(QMessageBox.StandardButton.Cancel)
+        chooser.exec()
+
+        clicked = chooser.clickedButton()
+        if clicked == save_button:
+            default_path = Path.home() / "music_tournament_result.json"
+            file_path, _ = QFileDialog.getSaveFileName(
+                self,
+                "결과 저장",
+                str(default_path),
+                "JSON 파일 (*.json);;모든 파일 (*)",
+            )
+            if not file_path:
+                self.update_status("결과 내보내기가 취소되었습니다.")
+                return
+            try:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(json_text)
+                filename = Path(file_path).name
+                self.update_status(f"결과를 '{filename}' 파일로 저장했습니다.")
+            except Exception as exc:
+                self.update_status("결과 저장에 실패했습니다.")
+                QMessageBox.warning(self, "저장 실패", f"파일 저장 중 오류가 발생했습니다.\n{exc}")
+        elif clicked == copy_button:
+            try:
+                QApplication.clipboard().setText(json_text)
+                self.update_status("결과 JSON이 클립보드에 복사되었습니다.")
+            except Exception as exc:
+                self.update_status("클립보드 복사에 실패했습니다.")
+                QMessageBox.warning(self, "복사 실패", f"클립보드 복사 중 오류가 발생했습니다.\n{exc}")
+        else:
+            self.update_status("결과 내보내기가 취소되었습니다.")
+
+    def _build_export_payload(self) -> Dict[str, Any]:
+        report: Dict[str, Any] = dict(getattr(self, "report", {}) or {})
+        recommendations: Dict[str, Any] = getattr(self, "recommendations", {}) or {}
+
+        champion = report.get("champion")
+        top_songs = report.get("top_songs") or []
+
+        serializable_report = {
+            key: value
+            for key, value in report.items()
+            if key not in {"champion", "top_songs"}
+        }
+        serializable_report["champion"] = self._serialize_song_for_export(champion)
+        serializable_report["top_songs"] = [
+            self._serialize_song_for_export(song)
+            for song in top_songs
+            if song is not None
+        ]
+
+        serializable_recommendations: Dict[str, List[Dict[str, Any]]] = {}
+        for category, entries in recommendations.items():
+            serialized_entries: List[Dict[str, Any]] = []
+            for entry in entries:
+                song = entry.get("song") if isinstance(entry, dict) else None
+                song_payload = self._serialize_song_for_export(song)
+                if song_payload is None:
+                    continue
+                serialized_entries.append(
+                    {
+                        "song": song_payload,
+                        "reason": entry.get("reason") if isinstance(entry, dict) else None,
+                        "category": entry.get("category") if isinstance(entry, dict) else category,
+                    }
+                )
+            serializable_recommendations[category] = serialized_entries
+
+        return {
+            "generated_at": datetime.now().isoformat(),
+            "report": serializable_report,
+            "recommendations": serializable_recommendations,
+        }
+
+    @staticmethod
+    def _serialize_song_for_export(song: Optional[Song]) -> Optional[Dict[str, Any]]:
+        if not song:
+            return None
+        return {
+            "id": song.id,
+            "artist": song.artist,
+            "title": song.title,
+            "display_title": song.get_display_title(),
+            "youtube_url": song.youtube_url,
+            "rating": song.rating,
+            "wins": song.wins,
+            "losses": song.losses,
+            "matches": song.matches,
+            "genres": list(song.genres or []),
+            "genre_codes": list(song.genre_codes or []),
+            "tags": song.tags,
+            "popularity": song.popularity,
+            "meta": song.meta,
+        }
 
     def render_recommendations(self, layout: QVBoxLayout):
         section_title = QLabel("맞춤 추천")
