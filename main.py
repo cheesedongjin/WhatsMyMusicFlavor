@@ -17,7 +17,7 @@ from sklearn.cluster import KMeans
 from datetime import datetime
 from html import escape
 
-from PyQt6.QtCore import Qt, QMarginsF, QSizeF
+from PyQt6.QtCore import Qt, QMarginsF, QSizeF, QEvent, QTimer
 from PyQt6.QtGui import (
     QKeySequence,
     QShortcut,
@@ -1910,6 +1910,7 @@ class MusicTournamentGUI(QMainWindow):
         footer_notice.setObjectName("FooterNotice")
         footer_notice.setWordWrap(True)
         footer_notice.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        footer_notice.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         footer_layout.addWidget(footer_notice, 1)
         self.footer_notice = footer_notice
 
@@ -1920,6 +1921,9 @@ class MusicTournamentGUI(QMainWindow):
         footer_layout.addWidget(self.report_issue_button, 0, Qt.AlignmentFlag.AlignRight)
 
         main_layout.addWidget(self.footer_frame)
+
+        self.report_issue_button.installEventFilter(self)
+        self.footer_notice.installEventFilter(self)
 
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
@@ -1948,7 +1952,10 @@ class MusicTournamentGUI(QMainWindow):
         if not hasattr(self, "report_issue_button") or not hasattr(self, "footer_frame"):
             return
 
-        button_height = self.report_issue_button.sizeHint().height()
+        button_height = max(
+            self.report_issue_button.height(),
+            self.report_issue_button.sizeHint().height(),
+        )
         if button_height <= 0:
             return
 
@@ -1956,7 +1963,20 @@ class MusicTournamentGUI(QMainWindow):
         self.footer_frame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         if hasattr(self, "footer_notice"):
-            self.footer_notice.setFixedHeight(button_height)
+            self.footer_notice.setMinimumHeight(button_height)
+            self.footer_notice.setMaximumHeight(button_height)
+            self.footer_notice.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+
+    def eventFilter(self, obj, event):
+        if obj in (getattr(self, "report_issue_button", None), getattr(self, "footer_notice", None)):
+            if event.type() in {
+                QEvent.Type.Show,
+                QEvent.Type.Resize,
+                QEvent.Type.StyleChange,
+                QEvent.Type.PolishRequest,
+            }:
+                QTimer.singleShot(0, self.sync_footer_height)
+        return super().eventFilter(obj, event)
 
     def apply_modern_theme(self):
         self.setStyleSheet(
@@ -1984,7 +2004,7 @@ QFrame#ContentFrame {
     padding: 12px;
 }
 QFrame#FooterFrame {
-    background-color: rgba(15, 23, 42, 0.82);
+    background-color: rgba(15, 23, 42, 0.92);
     border-radius: 16px;
     padding: 0 16px;
 }
