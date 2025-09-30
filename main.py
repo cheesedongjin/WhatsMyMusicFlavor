@@ -1910,6 +1910,7 @@ class MusicTournamentGUI(QMainWindow):
         footer_layout.addWidget(footer_notice, 1)
 
         self.report_issue_button = QPushButton("문제 신고 · 개선 제안하기")
+        self.report_issue_button.setObjectName("ReportIssueButton")
         self.report_issue_button.setProperty("variant", "primary")
         self.report_issue_button.clicked.connect(self.open_issue_link)
         footer_layout.addWidget(self.report_issue_button, 0, Qt.AlignmentFlag.AlignRight)
@@ -2122,8 +2123,8 @@ QLabel#RecommendationGroupLabel {
 }
 QLabel#FooterNotice {
     color: #94a3b8;
-    font-size: 13px;
-    line-height: 1.35em;
+    font-size: 11px;
+    line-height: 1.2em;
 }
 QPushButton {
     background-color: rgba(148, 163, 184, 0.18);
@@ -2133,6 +2134,11 @@ QPushButton {
     color: #e2e8f0;
     font-weight: 600;
     min-height: 36px;
+}
+QPushButton#ReportIssueButton {
+    padding: 4px 12px;
+    min-height: 28px;
+    font-size: 12px;
 }
 QPushButton:hover {
     background-color: rgba(148, 163, 184, 0.32);
