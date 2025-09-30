@@ -3227,7 +3227,7 @@ QHeaderView::section {
         writer.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
         writer.setPageMargins(QMarginsF(12, 12, 12, 12))
 
-        document.print_(writer)
+        document.print(writer)
 
     def render_recommendations(self, layout: QVBoxLayout):
         section_title = QLabel("맞춤 추천")
