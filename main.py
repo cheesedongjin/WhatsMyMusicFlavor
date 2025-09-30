@@ -1837,6 +1837,17 @@ class MusicTournamentGUI(QMainWindow):
         self.shortcuts: List[QShortcut] = []
         self.history_show_all = False
         self.history_max_rows = 10
+        self.stage_order: List[str] = ["start", "survey", "tournament", "results"]
+        self.stage_descriptions: Dict[str, str] = {
+            "start": "서비스 소개와 준비 단계",
+            "survey": "선호도를 입력하고 토너먼트를 준비해요",
+            "tournament": "두 곡씩 비교하며 최애를 골라보세요",
+            "results": "챔피언과 추천 플레이리스트를 확인하세요",
+        }
+        self.stage_buttons: Dict[str, QPushButton] = {}
+        self.stage_summary_label: Optional[QLabel] = None
+        self.unlocked_stages: Set[str] = {"start", "survey"}
+        self.active_stage = "start"
 
         central = QWidget()
         central.setObjectName("CentralWidget")
@@ -1865,6 +1876,9 @@ class MusicTournamentGUI(QMainWindow):
         header_layout.addWidget(subtitle_label)
 
         main_layout.addWidget(header)
+
+        stage_navigator = self.build_stage_navigator()
+        main_layout.addWidget(stage_navigator)
 
         self.content_frame = QFrame()
         self.content_frame.setObjectName("ContentFrame")
@@ -1946,7 +1960,50 @@ QFrame#FooterFrame {
 }
 QFrame#ContentSection {
     background-color: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.12);
     border-radius: 20px;
+    padding: 4px;
+}
+QFrame#StageNavigator {
+    background-color: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(56, 189, 248, 0.18);
+    border-radius: 18px;
+}
+QLabel#StageSummaryLabel {
+    color: #94a3b8;
+    font-size: 13px;
+}
+QPushButton#StagePill {
+    background-color: rgba(148, 163, 184, 0.16);
+    border: none;
+    border-radius: 16px;
+    padding: 8px 18px;
+    font-weight: 600;
+    color: #cbd5f5;
+}
+QPushButton#StagePill:enabled:hover {
+    background-color: rgba(148, 163, 184, 0.28);
+}
+QPushButton#StagePill:checked,
+QPushButton#StagePill[active="true"] {
+    background-color: #38bdf8;
+    color: #0f172a;
+}
+QPushButton#StagePill:disabled {
+    color: rgba(148, 163, 184, 0.5);
+    background-color: rgba(148, 163, 184, 0.08);
+}
+QWidget#ChipContainer {
+    background-color: rgba(148, 163, 184, 0.08);
+    border-radius: 16px;
+    padding: 12px;
+}
+QLabel#HighlightChip {
+    background-color: rgba(56, 189, 248, 0.15);
+    border-radius: 14px;
+    padding: 10px 12px;
+    color: #e0f2fe;
+    font-weight: 600;
 }
 QLabel#OverlineLabel {
     color: #38bdf8;
@@ -1989,6 +2046,14 @@ QLabel#MatchStatusLabel {
     font-weight: 600;
     color: #f1f5f9;
 }
+QLabel#RoundBadge {
+    background-color: rgba(56, 189, 248, 0.16);
+    color: #38bdf8;
+    font-weight: 600;
+    border-radius: 14px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
 QLabel#SongTitle {
     font-size: 17px;
     font-weight: 600;
@@ -1999,6 +2064,10 @@ QLabel#MetaLabel {
 }
 QLabel[role="helper"] {
     color: #94a3b8;
+}
+QLabel#ProgressCaption {
+    color: #94a3b8;
+    font-size: 13px;
 }
 QGroupBox {
     background-color: rgba(15, 23, 42, 0.75);
@@ -2014,7 +2083,34 @@ QGroupBox::title {
     padding: 0 6px;
 }
 QGroupBox#SongCard {
-    padding-top: 28px;
+    padding: 28px 24px 24px 24px;
+    border-radius: 20px;
+}
+QGroupBox#SongCard[side="A"] {
+    border: 1px solid rgba(56, 189, 248, 0.45);
+}
+QGroupBox#SongCard[side="B"] {
+    border: 1px solid rgba(129, 140, 248, 0.45);
+}
+QGroupBox#SongCard:hover {
+    background-color: rgba(56, 189, 248, 0.12);
+}
+QFrame#InsightCard {
+    background-color: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+}
+QGroupBox#InsightGroup {
+    background-color: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 20px;
+    padding: 20px;
+}
+QLabel#RecommendationGroupLabel {
+    color: #38bdf8;
+    font-weight: 600;
+    margin-top: 6px;
 }
 QLabel#FooterNotice {
     color: #94a3b8;
@@ -2046,6 +2142,17 @@ QPushButton[variant="primary"]:hover {
 QPushButton[variant="primary"]:pressed {
     background-color: #0284c7;
 }
+QPushButton[variant="ghost"] {
+    background-color: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    color: #cbd5f5;
+}
+QPushButton[variant="ghost"]:hover {
+    background-color: rgba(148, 163, 184, 0.2);
+}
+QPushButton[variant="ghost"]:pressed {
+    background-color: rgba(148, 163, 184, 0.3);
+}
 QStatusBar {
     background-color: #0b1120;
     color: #94a3b8;
@@ -2054,13 +2161,15 @@ QStatusBar {
 }
 QProgressBar {
     background-color: rgba(148, 163, 184, 0.16);
-    border: none;
+    border: 1px solid rgba(56, 189, 248, 0.28);
     border-radius: 10px;
     height: 20px;
+    padding: 2px;
 }
 QProgressBar::chunk {
     border-radius: 10px;
     background-color: #38bdf8;
+    margin: 1px;
 }
 QScrollArea {
     border: none;
@@ -2090,9 +2199,111 @@ QRadioButton::indicator {
     width: 18px;
     height: 18px;
 }
+QRadioButton::indicator {
+    border-radius: 9px;
+    border: 2px solid rgba(148, 163, 184, 0.6);
+    background: transparent;
+}
+QRadioButton::indicator:checked {
+    background-color: #38bdf8;
+    border: 2px solid #38bdf8;
+}
+QRadioButton::indicator:hover {
+    border: 2px solid #0ea5e9;
+}
+QTreeWidget#MatchHistoryTree {
+    background-color: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    color: #e2e8f0;
+    alternate-background-color: rgba(15, 23, 42, 0.7);
+}
+QTreeWidget#MatchHistoryTree::item {
+    height: 28px;
+}
+QTreeWidget#MatchHistoryTree::item:hover {
+    background-color: rgba(56, 189, 248, 0.18);
+}
+QTreeWidget#MatchHistoryTree::item:selected {
+    background-color: rgba(56, 189, 248, 0.35);
+    color: #0f172a;
+}
+QHeaderView::section {
+    background-color: rgba(148, 163, 184, 0.18);
+    border: none;
+    color: #cbd5f5;
+    padding: 6px;
+    font-weight: 600;
+}
             """
         )
 
+
+    def build_stage_navigator(self) -> QFrame:
+        container = QFrame()
+        container.setObjectName("StageNavigator")
+        layout = QHBoxLayout(container)
+        layout.setContentsMargins(24, 14, 24, 14)
+        layout.setSpacing(12)
+        for stage in self.stage_order:
+            label = {
+                "start": "1. 시작",
+                "survey": "2. 설문",
+                "tournament": "3. 토너먼트",
+                "results": "4. 결과",
+            }[stage]
+            button = QPushButton(label)
+            button.setObjectName("StagePill")
+            button.setCheckable(True)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.setToolTip(self.stage_descriptions.get(stage, ""))
+            button.clicked.connect(lambda _=False, s=stage: self.navigate_to_stage(s))
+            layout.addWidget(button)
+            self.stage_buttons[stage] = button
+        layout.addStretch(1)
+        summary = QLabel(self.stage_descriptions.get(self.active_stage, ""))
+        summary.setObjectName("StageSummaryLabel")
+        summary.setWordWrap(True)
+        layout.addWidget(summary, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.stage_summary_label = summary
+        self.update_stage_indicator()
+        return container
+
+    def update_stage_indicator(self):
+        for stage, button in self.stage_buttons.items():
+            is_active = stage == self.active_stage
+            is_unlocked = stage in self.unlocked_stages or is_active
+            button.setEnabled(is_unlocked)
+            button.setChecked(is_active)
+            button.setProperty("active", "true" if is_active else "false")
+            button.style().unpolish(button)
+            button.style().polish(button)
+        if self.stage_summary_label:
+            self.stage_summary_label.setText(self.stage_descriptions.get(self.active_stage, ""))
+
+    def set_active_stage(self, stage: str):
+        if stage not in self.stage_order:
+            return
+        if stage not in self.unlocked_stages:
+            self.unlocked_stages.add(stage)
+        self.active_stage = stage
+        self.update_stage_indicator()
+
+    def navigate_to_stage(self, stage: str):
+        if stage not in self.unlocked_stages and stage != self.active_stage:
+            return
+        if stage == self.active_stage:
+            return
+        if stage == "start":
+            self.show_start_view()
+        elif stage == "survey":
+            self.show_survey_view()
+        elif stage == "tournament":
+            if self.engine and (self.current_round_matches or self.current_round_winners):
+                self.show_match_view()
+        elif stage == "results":
+            if self.engine and self.champion:
+                self.show_results_view()
 
     def reset_state(self):
         self.survey_profile: Dict[str, Any] = {}
@@ -2110,6 +2321,9 @@ QRadioButton::indicator {
         self.recommendations: Dict[str, List[Dict[str, Any]]] = {"core": [], "fresh": []}
         self.seed_scores: Dict[str, float] = {}
         self.history_show_all = False
+        self.unlocked_stages = {"start", "survey"}
+        self.active_stage = "start"
+        self.update_stage_indicator()
 
 
     def clear_content(self):
@@ -2127,6 +2341,7 @@ QRadioButton::indicator {
     def show_start_view(self):
         self.reset_state()
         self.clear_content()
+        self.set_active_stage("start")
 
         widget = QFrame()
         widget.setObjectName("ContentSection")
@@ -2143,11 +2358,29 @@ QRadioButton::indicator {
         intro.setWordWrap(True)
         layout.addWidget(intro)
 
-        highlights = [
+        chip_container = QWidget()
+        chip_container.setObjectName("ChipContainer")
+        chip_layout = QHBoxLayout(chip_container)
+        chip_layout.setContentsMargins(0, 0, 0, 0)
+        chip_layout.setSpacing(12)
+        chip_messages = [
+            "🧭 단계별 네비게이션으로 진행 상황 확인",
+            "📊 라운드별 진행도를 실시간으로 체크",
+            "💡 결과 카드에서 추천과 통계를 한눈에",
+        ]
+        for message in chip_messages:
+            chip = QLabel(message)
+            chip.setObjectName("HighlightChip")
+            chip.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            chip.setWordWrap(True)
+            chip_layout.addWidget(chip, 1)
+        layout.addWidget(chip_container)
+
+        bullet_points = [
             ("🎧", "선호 장르와 무드를 분석해 한 눈에 정리된 취향 리포트를 제공합니다."),
             ("🚀", "토너먼트 결과를 바탕으로 새로운 추천곡까지 이어지는 경험을 만나보세요."),
         ]
-        for icon, text in highlights:
+        for icon, text in bullet_points:
             bullet = QLabel(f"{icon} {text}")
             bullet.setObjectName("BodyLabel")
             bullet.setProperty("role", "helper")
@@ -2167,6 +2400,7 @@ QRadioButton::indicator {
 
     def show_survey_view(self):
         self.clear_content()
+        self.set_active_stage("survey")
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -2185,6 +2419,10 @@ QRadioButton::indicator {
         description.setObjectName("BodyLabel")
         description.setWordWrap(True)
         form_layout.addWidget(description)
+        tip = QLabel("각 항목의 선택은 즉시 저장되며, 상단 단계 표시줄로 언제든 이전 단계로 돌아갈 수 있어요.")
+        tip.setProperty("role", "helper")
+        tip.setWordWrap(True)
+        form_layout.addWidget(tip)
         form_layout.addSpacing(4)
 
         self.genre_groups: List[Tuple[QButtonGroup, Tuple[str, str]]] = []
@@ -2329,6 +2567,7 @@ QRadioButton::indicator {
 
     def show_match_view(self):
         self.clear_content()
+        self.set_active_stage("tournament")
 
         container = QFrame()
         container.setObjectName("ContentSection")
@@ -2340,29 +2579,44 @@ QRadioButton::indicator {
         title.setObjectName("SectionTitle")
         layout.addWidget(title)
 
+        self.round_badge = QLabel()
+        self.round_badge.setObjectName("RoundBadge")
+        layout.addWidget(self.round_badge, 0, Qt.AlignmentFlag.AlignLeft)
+
         self.match_status_label = QLabel()
         self.match_status_label.setObjectName("MatchStatusLabel")
         layout.addWidget(self.match_status_label)
 
         self.progress_bar = QProgressBar()
         self.progress_bar.setRange(0, 100)
+        self.progress_bar.setTextVisible(True)
+        self.progress_bar.setFormat("%p% 완료")
         layout.addWidget(self.progress_bar)
 
+        self.progress_summary_label = QLabel()
+        self.progress_summary_label.setObjectName("ProgressCaption")
+        self.progress_summary_label.setWordWrap(True)
+        layout.addWidget(self.progress_summary_label)
+
         cards_container = QWidget()
+        cards_container.setObjectName("MatchCardsContainer")
         cards_layout = QHBoxLayout(cards_container)
+        cards_layout.setContentsMargins(0, 0, 0, 0)
         cards_layout.setSpacing(16)
-        self.card_a = self.create_song_card(cards_container, "A 곡")
-        self.card_b = self.create_song_card(cards_container, "B 곡")
-        cards_layout.addWidget(self.card_a["box"])
-        cards_layout.addWidget(self.card_b["box"])
+        self.card_a = self.create_song_card(cards_container, "A 곡", "A")
+        self.card_b = self.create_song_card(cards_container, "B 곡", "B")
+        cards_layout.addWidget(self.card_a["box"], 1)
+        cards_layout.addWidget(self.card_b["box"], 1)
         layout.addWidget(cards_container)
 
         self.helper_label = QLabel("키보드 A/B/T/S로도 선택할 수 있어요.")
         self.helper_label.setProperty("role", "helper")
+        self.helper_label.setWordWrap(True)
         layout.addWidget(self.helper_label)
 
         button_row = QWidget()
         button_layout = QGridLayout(button_row)
+        button_layout.setContentsMargins(0, 0, 0, 0)
         button_layout.setSpacing(12)
 
         def add_button(text: str, row: int, col: int, choice: str):
@@ -2389,9 +2643,10 @@ QRadioButton::indicator {
         self.update_status("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
         self.display_current_match()
 
-    def create_song_card(self, parent: QWidget, title: str):
+    def create_song_card(self, parent: QWidget, title: str, side: str):
         box = QGroupBox(title)
         box.setObjectName("SongCard")
+        box.setProperty("side", side)
         layout = QVBoxLayout(box)
         layout.setSpacing(10)
         name_label = QLabel()
@@ -2425,6 +2680,11 @@ QRadioButton::indicator {
             details.append("장르 " + ", ".join(song.genres[:2]))
         elif song.genre_codes:
             details.append("장르 코드 " + ", ".join(map(str, song.genre_codes[:3])))
+        moods = song.tags.get("mood") if isinstance(song.tags, dict) else None
+        if moods:
+            details.append("무드 " + ", ".join(moods[:2]))
+        if getattr(self, "seed_scores", None) and song.id in self.seed_scores:
+            details.append(f"시드 {self.seed_scores[song.id]:.0f}")
         card["tag"].setText(" · ".join(details))
         if song.youtube_url:
             card["link"].setOpenExternalLinks(True)
@@ -2444,16 +2704,24 @@ QRadioButton::indicator {
 
         self.active_match = self.current_round_matches[self.current_match_index]
         match = self.active_match
+        total_rounds = len(self.bracket) if self.bracket else 1
+        if hasattr(self, "round_badge"):
+            self.round_badge.setText(f"ROUND {self.current_round_number} / {total_rounds}")
         self.match_status_label.setText(
-            f"라운드 {self.current_round_number} · 매치 {self.current_match_index + 1}/{len(self.current_round_matches)}"
+            f"{match.match_id} · 라운드 {self.current_round_number}의 {self.current_match_index + 1}/{len(self.current_round_matches)} 매치"
         )
         self.helper_label.setText(
-            f"{match.song_a.artist} vs {match.song_b.artist}\n키보드 A/B/T/S로도 선택할 수 있어요."
+            f"{match.song_a.get_display_title()} vs {match.song_b.get_display_title()}\n키보드 A/B/T/S로도 빠르게 선택할 수 있어요."
         )
         self.update_song_card(self.card_a, match.song_a)
         self.update_song_card(self.card_b, match.song_b)
         progress_ratio = len(self.engine.match_history) / self.total_matches if self.total_matches else 0
         self.progress_bar.setValue(int(progress_ratio * 100))
+        if hasattr(self, "progress_summary_label"):
+            played = len(self.engine.match_history)
+            self.progress_summary_label.setText(
+                f"전체 {self.total_matches} 매치 중 {played} 완료 · 다음 선택: {match.match_id}"
+            )
 
     def on_choice(self, choice: str):
         if not self.active_match or not self.engine:
@@ -2495,6 +2763,7 @@ QRadioButton::indicator {
 
     def show_results_view(self):
         self.clear_content()
+        self.set_active_stage("results")
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -2529,43 +2798,62 @@ QRadioButton::indicator {
         recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
         self.recommendations = recommender.generate_recommendations(self.report["top_songs"])
 
+        summary_card = QFrame()
+        summary_card.setObjectName("InsightCard")
+        summary_layout = QVBoxLayout(summary_card)
+        summary_layout.setSpacing(8)
+
         champion_label = QLabel(f"우승 곡: {self.champion}")
         champion_label.setObjectName("ChampionTitle")
-        layout.addWidget(champion_label)
+        summary_layout.addWidget(champion_label)
+
         record_label = QLabel(
             f"레이팅 {self.champion.rating:.1f} · 전적 {self.champion.wins}승 {self.champion.losses}패"
         )
         record_label.setObjectName("BodyLabel")
-        layout.addWidget(record_label)
+        summary_layout.addWidget(record_label)
+
         summary_text = self.report.get("preference_summary") if self.report else None
         if summary_text:
             summary_label = QLabel(f"취향 요약: {summary_text}")
             summary_label.setObjectName("BodyLabel")
             summary_label.setWordWrap(True)
-            layout.addWidget(summary_label)
+            summary_layout.addWidget(summary_label)
+
         if self.champion.youtube_url:
             link = QLabel(f'<a href="{self.champion.youtube_url}">YouTube에서 우승 곡 듣기 ↗</a>')
             link.setTextFormat(Qt.TextFormat.RichText)
             link.setOpenExternalLinks(True)
             link.setProperty("role", "helper")
-            layout.addWidget(link)
+            summary_layout.addWidget(link)
 
         if self.report["top_songs"]:
             playlist_label = QLabel("상위 플레이리스트")
-            playlist_label.setObjectName("SectionSubtitle")
-            layout.addWidget(playlist_label)
+            playlist_label.setObjectName("RecommendationGroupLabel")
+            summary_layout.addWidget(playlist_label)
             for idx, song in enumerate(self.report["top_songs"], 1):
                 song_label = QLabel(f"{idx}. {song}")
                 song_label.setObjectName("BodyLabel")
-                layout.addWidget(song_label)
+                summary_layout.addWidget(song_label)
+
+        layout.addWidget(summary_card)
 
         stats = self.report["choice_distribution"]
+        stats_card = QFrame()
+        stats_card.setObjectName("InsightCard")
+        stats_layout = QVBoxLayout(stats_card)
+        stats_layout.setSpacing(6)
+        stats_title = QLabel("선택 통계")
+        stats_title.setObjectName("RecommendationGroupLabel")
+        stats_layout.addWidget(stats_title)
         stats_label = QLabel(
             f"총 매치 {self.report['total_matches']} · A {stats.get('A', 0)} · B {stats.get('B', 0)} · 둘 다 {stats.get('T', 0)} · 건너뛰기 {stats.get('S', 0)}"
         )
+        stats_label.setObjectName("BodyLabel")
         stats_label.setProperty("role", "helper")
         stats_label.setWordWrap(True)
-        layout.addWidget(stats_label)
+        stats_layout.addWidget(stats_label)
+        layout.addWidget(stats_card)
 
         self.render_recommendations(layout)
         self.render_match_history(layout)
@@ -2708,39 +2996,47 @@ QRadioButton::indicator {
         section_title = QLabel("맞춤 추천")
         section_title.setObjectName("SectionSubtitle")
         layout.addWidget(section_title)
+        card = QFrame()
+        card.setObjectName("InsightCard")
+        card_layout = QVBoxLayout(card)
+        card_layout.setSpacing(10)
         core_recs = self.recommendations.get("core", []) if self.recommendations else []
         fresh_recs = self.recommendations.get("fresh", []) if self.recommendations else []
         if not core_recs and not fresh_recs:
             empty_label = QLabel("추천할 곡이 없습니다.")
             empty_label.setObjectName("BodyLabel")
-            layout.addWidget(empty_label)
+            card_layout.addWidget(empty_label)
+            layout.addWidget(card)
             return
         for title, entries in (("🎯 취향 저격 트랙", core_recs), ("🌱 새롭게 시도해볼 곡", fresh_recs)):
             if not entries:
                 continue
             group_label = QLabel(title)
-            group_label.setObjectName("BodyLabel")
-            layout.addWidget(group_label)
+            group_label.setObjectName("RecommendationGroupLabel")
+            card_layout.addWidget(group_label)
             for idx, entry in enumerate(entries, 1):
                 song = entry["song"]
                 reason = entry["reason"]
                 song_label = QLabel(f"{idx}. {song}")
                 song_label.setObjectName("BodyLabel")
-                layout.addWidget(song_label)
+                card_layout.addWidget(song_label)
                 reason_label = QLabel(reason)
                 reason_label.setObjectName("BodyLabel")
                 reason_label.setProperty("role", "helper")
                 reason_label.setWordWrap(True)
-                layout.addWidget(reason_label)
+                card_layout.addWidget(reason_label)
                 if song.youtube_url:
                     link = QLabel(f'<a href="{song.youtube_url}">YouTube에서 듣기 ↗</a>')
                     link.setTextFormat(Qt.TextFormat.RichText)
                     link.setOpenExternalLinks(True)
                     link.setProperty("role", "helper")
-                    layout.addWidget(link)
+                    card_layout.addWidget(link)
+            card_layout.addSpacing(6)
+        layout.addWidget(card)
 
     def render_match_history(self, layout: QVBoxLayout):
         group = QGroupBox("매치 히스토리")
+        group.setObjectName("InsightGroup")
         group_layout = QVBoxLayout(group)
         group_layout.setSpacing(12)
 
@@ -2798,6 +3094,7 @@ QRadioButton::indicator {
         if len(history) > self.history_max_rows:
             toggle_button = QPushButton("전체 보기" if not self.history_show_all else "최근만 보기")
             toggle_button.setCursor(Qt.CursorShape.PointingHandCursor)
+            toggle_button.setProperty("variant", "ghost")
 
             def toggle_history():
                 self.history_show_all = not self.history_show_all
