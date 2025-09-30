@@ -2858,7 +2858,9 @@ QHeaderView::section {
         summary_layout = QVBoxLayout(summary_card)
         summary_layout.setSpacing(8)
 
-        champion_label = QLabel(f"우승 곡: {self.champion}")
+        champion_label = QLabel(
+            f"우승 곡: {self.champion.artist} - {self.champion.get_display_title()}"
+        )
         champion_label.setObjectName("ChampionTitle")
         summary_layout.addWidget(champion_label)
 
@@ -2887,7 +2889,9 @@ QHeaderView::section {
             playlist_label.setObjectName("RecommendationGroupLabel")
             summary_layout.addWidget(playlist_label)
             for idx, song in enumerate(self.report["top_songs"], 1):
-                song_label = QLabel(f"{idx}. {song}")
+                song_label = QLabel(
+                    f"{idx}. {song.artist} - {song.get_display_title()}"
+                )
                 song_label.setObjectName("BodyLabel")
                 summary_layout.addWidget(song_label)
 
@@ -2982,7 +2986,7 @@ QHeaderView::section {
             top_song_entries.append(
                 {
                     "index": idx,
-                    "title": song.title,
+                    "title": song.get_display_title(),
                     "artist": song.artist,
                     "rating": song.rating,
                 }
@@ -3001,7 +3005,7 @@ QHeaderView::section {
                     continue
                 items.append(
                     {
-                        "title": song.title,
+                        "title": song.get_display_title(),
                         "artist": song.artist,
                         "reason": entry.get("reason") if isinstance(entry, dict) else None,
                     }
@@ -3012,7 +3016,7 @@ QHeaderView::section {
         return {
             "generated_at": datetime.now(),
             "champion": {
-                "title": champion.title if champion else "-",
+                "title": champion.get_display_title() if champion else "-",
                 "artist": champion.artist if champion else "-",
                 "rating": champion.rating if champion else None,
                 "record": f"{champion.wins}승 {champion.losses}패" if champion else None,
@@ -3306,7 +3310,9 @@ QHeaderView::section {
             for idx, entry in enumerate(entries, 1):
                 song = entry["song"]
                 reason = entry["reason"]
-                song_label = QLabel(f"{idx}. {song}")
+                song_label = QLabel(
+                    f"{idx}. {song.artist} - {song.get_display_title()}"
+                )
                 song_label.setObjectName("BodyLabel")
                 card_layout.addWidget(song_label)
                 reason_label = QLabel(reason)
