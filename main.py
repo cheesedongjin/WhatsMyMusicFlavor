@@ -24,6 +24,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QGridLayout,
     QGroupBox,
+    QHeaderView,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -33,6 +34,8 @@ from PyQt6.QtWidgets import (
     QRadioButton,
     QScrollArea,
     QStatusBar,
+    QTreeWidget,
+    QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
 )
@@ -1832,6 +1835,8 @@ class MusicTournamentGUI(QMainWindow):
         self.resize(1000, 760)
 
         self.shortcuts: List[QShortcut] = []
+        self.history_show_all = False
+        self.history_max_rows = 10
 
         central = QWidget()
         central.setObjectName("CentralWidget")
@@ -2104,6 +2109,7 @@ QRadioButton::indicator {
         self.report: Dict[str, Any] = {}
         self.recommendations: Dict[str, List[Dict[str, Any]]] = {"core": [], "fresh": []}
         self.seed_scores: Dict[str, float] = {}
+        self.history_show_all = False
 
 
     def clear_content(self):
@@ -2562,6 +2568,7 @@ QRadioButton::indicator {
         layout.addWidget(stats_label)
 
         self.render_recommendations(layout)
+        self.render_match_history(layout)
 
         back_button = QPushButton("처음으로 돌아가기")
         back_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -2579,7 +2586,7 @@ QRadioButton::indicator {
         layout.addLayout(button_row)
         layout.addStretch(1)
 
-        self.update_status("결과를 확인하고 추천곡을 감상해보세요.")
+        self.update_status("결과를 확인하고 추천곡과 매치 히스토리를 아래에서 확인해보세요.")
 
     def export_results(self):
         if not getattr(self, "report", None):
@@ -2731,6 +2738,76 @@ QRadioButton::indicator {
                     link.setOpenExternalLinks(True)
                     link.setProperty("role", "helper")
                     layout.addWidget(link)
+
+    def render_match_history(self, layout: QVBoxLayout):
+        group = QGroupBox("매치 히스토리")
+        group_layout = QVBoxLayout(group)
+        group_layout.setSpacing(12)
+
+        if not self.engine or not self.engine.match_history:
+            empty_label = QLabel("진행된 매치가 없습니다.")
+            empty_label.setObjectName("BodyLabel")
+            empty_label.setProperty("role", "helper")
+            group_layout.addWidget(empty_label)
+            layout.addWidget(group)
+            return
+
+        tree = QTreeWidget()
+        tree.setObjectName("MatchHistoryTree")
+        tree.setColumnCount(4)
+        tree.setHeaderLabels(["매치", "대진", "선택", "승자"])
+        tree.setRootIsDecorated(False)
+        tree.setAlternatingRowColors(True)
+        header = tree.header()
+        header.setStretchLastSection(True)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        group_layout.addWidget(tree)
+
+        history: List[Match] = list(self.engine.match_history)
+
+        def format_choice(match: Match) -> str:
+            mapping = {
+                "A": f"A - {match.song_a}",
+                "B": f"B - {match.song_b}",
+                "T": "둘 다 선택",
+                "S": "건너뛰기",
+            }
+            return mapping.get(match.choice or "", "-")
+
+        def refresh_tree():
+            tree.clear()
+            if self.history_show_all or len(history) <= self.history_max_rows:
+                rows = history
+            else:
+                rows = history[-self.history_max_rows :]
+            for match in reversed(rows):
+                pairing = f"{match.song_a} vs {match.song_b}"
+                winner_text = str(match.winner) if match.winner else "-"
+                item = QTreeWidgetItem([
+                    match.match_id,
+                    pairing,
+                    format_choice(match),
+                    winner_text,
+                ])
+                tree.addTopLevelItem(item)
+
+        refresh_tree()
+
+        if len(history) > self.history_max_rows:
+            toggle_button = QPushButton("전체 보기" if not self.history_show_all else "최근만 보기")
+            toggle_button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+            def toggle_history():
+                self.history_show_all = not self.history_show_all
+                toggle_button.setText("최근만 보기" if self.history_show_all else "전체 보기")
+                refresh_tree()
+
+            toggle_button.clicked.connect(toggle_history)
+            group_layout.addWidget(toggle_button, alignment=Qt.AlignmentFlag.AlignLeft)
+
+        layout.addWidget(group)
 
     def run(self):
         if not self.valid:
