@@ -17,7 +17,7 @@ from sklearn.cluster import KMeans
 from datetime import datetime
 from html import escape
 
-from PyQt6.QtCore import Qt, QMarginsF
+from PyQt6.QtCore import Qt, QMarginsF, QSizeF
 from PyQt6.QtGui import (
     QKeySequence,
     QShortcut,
@@ -3231,8 +3231,12 @@ QHeaderView::section {
         document.setHtml(html)
 
         writer = QPdfWriter(str(file_path))
+        writer.setResolution(96)
         writer.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
         writer.setPageMargins(QMarginsF(12, 12, 12, 12))
+
+        layout_rect = writer.pageLayout().paintRectPixels(writer.resolution())
+        document.setPageSize(QSizeF(layout_rect.size()))
 
         document.print(writer)
 
