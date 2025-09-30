@@ -16,6 +16,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeySequence, QShortcut
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
@@ -1829,6 +1830,8 @@ class MusicTournamentGUI(QMainWindow):
         self.setWindowTitle("Whats My Music Flavor · 음악 취향 테스트")
         self.resize(1000, 760)
 
+        self.shortcuts: List[QShortcut] = []
+
         central = QWidget()
         central.setObjectName("CentralWidget")
         self.setCentralWidget(central)
@@ -2103,6 +2106,11 @@ QRadioButton::indicator {
 
 
     def clear_content(self):
+        if self.shortcuts:
+            for shortcut in self.shortcuts:
+                shortcut.setEnabled(False)
+                shortcut.deleteLater()
+            self.shortcuts.clear()
         while self.content_layout.count():
             item = self.content_layout.takeAt(0)
             widget = item.widget()
@@ -2342,7 +2350,7 @@ QRadioButton::indicator {
         cards_layout.addWidget(self.card_b["box"])
         layout.addWidget(cards_container)
 
-        self.helper_label = QLabel("마음에 드는 곡을 선택하세요.")
+        self.helper_label = QLabel("키보드 A/B/T/S로도 선택할 수 있어요.")
         self.helper_label.setProperty("role", "helper")
         layout.addWidget(self.helper_label)
 
@@ -2363,6 +2371,12 @@ QRadioButton::indicator {
         add_button("둘 다 좋아요", 1, 0, "T")
         add_button("건너뛰기", 1, 1, "S")
         layout.addWidget(button_row)
+
+        shortcut_map = {"A": "A", "B": "B", "T": "T", "S": "S"}
+        for key, choice in shortcut_map.items():
+            shortcut = QShortcut(QKeySequence(key), self)
+            shortcut.activated.connect(lambda c=choice: self.on_choice(c))
+            self.shortcuts.append(shortcut)
 
         self.content_layout.addWidget(container)
         self.update_status("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
@@ -2426,7 +2440,9 @@ QRadioButton::indicator {
         self.match_status_label.setText(
             f"라운드 {self.current_round_number} · 매치 {self.current_match_index + 1}/{len(self.current_round_matches)}"
         )
-        self.helper_label.setText(f"{match.song_a.artist} vs {match.song_b.artist}")
+        self.helper_label.setText(
+            f"{match.song_a.artist} vs {match.song_b.artist}\n키보드 A/B/T/S로도 선택할 수 있어요."
+        )
         self.update_song_card(self.card_a, match.song_a)
         self.update_song_card(self.card_b, match.song_b)
         progress_ratio = len(self.engine.match_history) / self.total_matches if self.total_matches else 0
