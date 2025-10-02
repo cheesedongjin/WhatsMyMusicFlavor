@@ -43,7 +43,7 @@ WhatsMyMusicFlavor는 사용자를 설문 조사, 토너먼트 방식의 곡 선
 4. 의존성을 설치합니다.
 
    ```powershell
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 5. 프로젝트 루트에 `songs.json` 파일이 있는지 확인합니다.
 6. 애플리케이션을 실행합니다.
@@ -75,7 +75,7 @@ WhatsMyMusicFlavor는 사용자를 설문 조사, 토너먼트 방식의 곡 선
 4. 의존성을 설치합니다.
 
    ```bash
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 5. 프로젝트 루트에 `songs.json` 파일이 있는지 확인합니다.
 6. 애플리케이션을 실행합니다.
@@ -113,7 +113,7 @@ WhatsMyMusicFlavor는 사용자를 설문 조사, 토너먼트 방식의 곡 선
 5. 의존성을 설치합니다.
 
    ```bash
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 6. 프로젝트 루트에 `songs.json` 파일이 있는지 확인합니다.
 7. 애플리케이션을 실행합니다.
@@ -131,7 +131,13 @@ WhatsMyMusicFlavor는 사용자를 설문 조사, 토너먼트 방식의 곡 선
 3. **토너먼트 참여**: 토너먼트 형식으로 제시되는 곡 쌍에서 선호하는 곡을 선택합니다. 두 곡 모두 선택하거나 건너뛸 수도 있습니다.
 4. **결과 확인**: 토너먼트 종료 후 우승 곡, 최고 평점 곡, 음악 취향 요약을 확인합니다.
 5. **추천 탐색**: "core"(취향에 부합)와 "fresh"(새로운 발견) 카테고리로 나뉜 맞춤 추천을 받아 봅니다.
-6. **곡과 상호작용**: 곡에 연결된 YouTube 링크(있는 경우)를 클릭해 바로 감상할 수 있습니다.
+6. **곡과 상호작용**: 곡 카드와 추천 목록의 "미리 듣기" 버튼으로 앱 내부에서 YouTube 프리뷰를 재생할 수 있습니다. PyQt6-WebEngine이 설치되지 않은 환경에서는 버튼이 자동으로 비활성화되고 대체 안내 문구가 표시됩니다.
+
+## 미리 듣기 기능 안내
+
+- **필수 의존성**: 앱 내부에서 YouTube 임베드를 재생하려면 `PyQt6-WebEngine` 모듈이 필요합니다. 이 모듈이 없는 환경에서는 미리 듣기 버튼이 비활성화되며, 설치 안내 메시지가 표시됩니다.
+- **지원 링크 형식**: 현재는 `songs.json`의 `youtube_url` 필드를 사용해 YouTube 동영상을 임베드합니다. 표준 `watch` 혹은 `youtu.be` 링크가 자동으로 `embed` 형식으로 변환됩니다.
+- **대체 시나리오**: 사내 네트워크 정책이나 패키지 미지원 등으로 인해 `PyQt6-WebEngine`을 사용할 수 없는 경우, 버튼을 통해 외부 링크 대신 안내 문구를 확인하게 되며 앱이 비정상 종료되지 않습니다.
 
 ## 추천 알고리즘 업데이트
 
@@ -188,13 +194,14 @@ WhatsMyMusicFlavor는 사용자를 설문 조사, 토너먼트 방식의 곡 선
 
 - **Python 3.8+**
 - **PyQt6**: 그래픽 사용자 인터페이스용.
+- **PyQt6-WebEngine**: 앱 내 YouTube 미리 듣기 재생용.
 - **NumPy**: 추천 알고리즘의 수치 계산용.
 - **scikit-learn**: 선호도 분석과 MiniBatch/KMeans 기반 곡 클러스터링에 사용.
 - **JSON**: 곡 데이터베이스 로드 및 파싱에 사용.
 
 의존성 설치 명령:
 ```bash
-pip install PyQt6 numpy scikit-learn
+pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
 ```
 
 ## 라이선스

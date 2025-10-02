@@ -8,16 +8,18 @@ import math
 import random
 import sys
 import webbrowser
+import importlib.util
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Set, Any, Iterable
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict, Counter
+from urllib.parse import urlparse, parse_qs
 import numpy as np
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from datetime import datetime
 from html import escape
 
-from PyQt6.QtCore import Qt, QMarginsF, QSizeF, QEvent, QTimer
+from PyQt6.QtCore import Qt, QMarginsF, QSizeF, QEvent, QTimer, QUrl
 from PyQt6.QtGui import (
     QKeySequence,
     QShortcut,
@@ -49,6 +51,23 @@ from PyQt6.QtWidgets import (
     QWidget,
     QSizePolicy,
 )
+
+WEB_ENGINE_AVAILABLE = False
+MULTIMEDIA_AVAILABLE = False
+QWebEngineView = None  # type: ignore
+QMediaPlayer = None  # type: ignore
+QAudioOutput = None  # type: ignore
+
+if importlib.util.find_spec("PyQt6.QtWebEngineWidgets"):
+    from PyQt6.QtWebEngineWidgets import QWebEngineView  # type: ignore
+
+    WEB_ENGINE_AVAILABLE = True
+
+if importlib.util.find_spec("PyQt6.QtMultimedia"):
+    from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput  # type: ignore
+
+    MULTIMEDIA_AVAILABLE = True
+
 
 # ============================================================================
 # JSON 구조 & 인덱스 가이드
@@ -382,6 +401,52 @@ def _decode_index(value: int, lookup: List[str]) -> Optional[str]:
     if isinstance(value, int) and 0 <= value < len(lookup):
         return lookup[value]
     return None
+
+
+def build_youtube_embed_url(url: str) -> Optional[str]:
+    if not url:
+        return None
+
+    normalized = url.strip()
+    if not normalized:
+        return None
+
+    parsed = urlparse(normalized)
+    if not parsed.scheme:
+        normalized = "https://" + normalized
+        parsed = urlparse(normalized)
+
+    host = parsed.netloc.lower()
+    path = parsed.path
+
+    # Direct embed links can be reused as-is
+    if ("youtube.com" in host or "youtube-nocookie.com" in host) and path.startswith("/embed/"):
+        base_host = "https://www.youtube.com" if "youtube.com" in host else "https://www.youtube-nocookie.com"
+        if parsed.query:
+            return f"{base_host}{path}?{parsed.query}"
+        return f"{base_host}{path}"
+
+    video_id: Optional[str] = None
+
+    if host.endswith("youtu.be"):
+        video_id = path.lstrip("/") or None
+    elif "youtube.com" in host or "youtube-nocookie.com" in host:
+        if path.startswith("/watch"):
+            query = parse_qs(parsed.query)
+            video_id = query.get("v", [None])[0]
+        elif path.startswith("/shorts/"):
+            video_id = path.split("/shorts/")[-1].split("/")[0]
+        elif path.startswith("/v/"):
+            video_id = path.split("/v/")[-1].split("/")[0]
+
+    if not video_id:
+        return None
+
+    video_id = video_id.strip()
+    if not video_id:
+        return None
+
+    return f"https://www.youtube.com/embed/{video_id}?rel=0"
 
 # ============================================================================
 # 데이터 모델
@@ -2073,6 +2138,96 @@ class MusicTournamentApp:
 
 
 
+class TrackPreviewWidget(QFrame):
+    def __init__(self, parent: Optional[QWidget] = None):
+        super().__init__(parent)
+        self.setObjectName("TrackPreviewWidget")
+        self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.setSpacing(10)
+
+        self.header_label = QLabel("곡 미리 듣기")
+        self.header_label.setObjectName("SectionSubtitle")
+        layout.addWidget(self.header_label)
+
+        self.status_label = QLabel()
+        self.status_label.setObjectName("BodyLabel")
+        self.status_label.setWordWrap(True)
+        layout.addWidget(self.status_label)
+
+        self.web_view: Optional[QWebEngineView] = None
+        if WEB_ENGINE_AVAILABLE:
+            self.web_view = QWebEngineView()
+            self.web_view.setObjectName("TrackPreviewView")
+            self.web_view.setMinimumHeight(260)
+            layout.addWidget(self.web_view, 1)
+
+        self.current_song: Optional[Song] = None
+
+        self.reset()
+
+    def is_available(self) -> bool:
+        return self.web_view is not None
+
+    def reset(self, message: Optional[str] = None) -> None:
+        self.current_song = None
+        if self.web_view:
+            self.web_view.setUrl(QUrl("about:blank"))
+        if not self.is_available():
+            self.status_label.setText(
+                "미리 듣기를 지원하려면 PyQt6-WebEngine이 필요합니다. 환경 설정을 확인해주세요."
+            )
+            return
+        if message:
+            self.status_label.setText(message)
+        else:
+            self.status_label.setText("미리 듣기 버튼을 누르면 곡을 재생합니다.")
+
+    def prepare_for_match(self, songs: List[Song]) -> None:
+        titles = " vs ".join(f"{song.artist} - {song.get_display_title()}" for song in songs if song)
+        if not titles:
+            self.reset()
+            return
+        self.reset(f"{titles}\n원하는 곡의 미리 듣기 버튼을 눌러보세요.")
+
+    def can_preview(self, song: Optional[Song]) -> bool:
+        if not song:
+            return False
+        if not self.is_available():
+            return False
+        return build_youtube_embed_url(song.youtube_url) is not None
+
+    def unavailable_message(self, song: Optional[Song] = None) -> str:
+        if not self.is_available():
+            return "이 환경에서는 미리 듣기를 사용할 수 없습니다. PyQt6-WebEngine을 설치해주세요."
+        if not song or not song.youtube_url:
+            return "이 곡은 미리 듣기 링크가 제공되지 않았습니다."
+        return "이 곡의 링크는 미리 듣기 형식으로 변환할 수 없습니다."
+
+    def load_song(self, song: Optional[Song]) -> None:
+        if not song:
+            self.reset()
+            return
+
+        if not self.can_preview(song):
+            self.status_label.setText(self.unavailable_message(song))
+            if self.web_view:
+                self.web_view.setUrl(QUrl("about:blank"))
+            return
+
+        embed_url = build_youtube_embed_url(song.youtube_url)
+        if not embed_url or not self.web_view:
+            self.status_label.setText(self.unavailable_message(song))
+            return
+
+        self.current_song = song
+        self.status_label.setText(f"{song.artist} - {song.get_display_title()} 미리 듣는 중…")
+        self.web_view.setUrl(QUrl(embed_url))
+
+
 class MusicTournamentGUI(QMainWindow):
     GENRE_PAIRS = [
         ("Rock", "Pop"),
@@ -2153,6 +2308,7 @@ class MusicTournamentGUI(QMainWindow):
         self.stage_summary_label: Optional[QLabel] = None
         self.unlocked_stages: Set[str] = {"start", "survey"}
         self.active_stage = "start"
+        self.preview_widget = TrackPreviewWidget()
 
         central = QWidget()
         central.setObjectName("CentralWidget")
@@ -2689,6 +2845,11 @@ QHeaderView::section {
             item = self.content_layout.takeAt(0)
             widget = item.widget()
             if widget is not None:
+                if widget is self.preview_widget:
+                    self.preview_widget.reset()
+                    self.preview_widget.setParent(None)
+                    self.preview_widget.hide()
+                    continue
                 widget.deleteLater()
 
     def show_start_view(self):
@@ -3022,6 +3183,12 @@ QHeaderView::section {
         cards_layout.addWidget(self.card_b["box"], 1)
         layout.addWidget(cards_container)
 
+        if self.preview_widget:
+            self.preview_widget.setParent(container)
+            self.preview_widget.reset("토너먼트 곡의 미리 듣기를 이 영역에서 확인할 수 있습니다.")
+            self.preview_widget.show()
+            layout.addWidget(self.preview_widget)
+
         self.helper_label = QLabel("키보드 A/B/T/S로도 선택할 수 있어요.")
         self.helper_label.setProperty("role", "helper")
         self.helper_label.setWordWrap(True)
@@ -3072,12 +3239,22 @@ QHeaderView::section {
         tag_label.setWordWrap(True)
         tag_label.setProperty("role", "helper")
         layout.addWidget(tag_label)
-        link_label = QLabel()
-        link_label.setTextFormat(Qt.TextFormat.RichText)
-        link_label.setOpenExternalLinks(True)
-        link_label.setProperty("role", "helper")
-        layout.addWidget(link_label)
-        return {"box": box, "title": name_label, "meta": meta_label, "tag": tag_label, "link": link_label}
+        preview_button = QPushButton("미리 듣기")
+        preview_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        preview_button.clicked.connect(lambda _=False, s=side: self.handle_preview_request(s))
+        layout.addWidget(preview_button)
+        preview_info = QLabel()
+        preview_info.setWordWrap(True)
+        preview_info.setProperty("role", "helper")
+        layout.addWidget(preview_info)
+        return {
+            "box": box,
+            "title": name_label,
+            "meta": meta_label,
+            "tag": tag_label,
+            "preview_button": preview_button,
+            "preview_info": preview_info,
+        }
 
 
     def update_song_card(self, card: Dict[str, QLabel], song: Song):
@@ -3099,12 +3276,26 @@ QHeaderView::section {
         if getattr(self, "seed_scores", None) and song.id in self.seed_scores:
             details.append(f"시드 {self.seed_scores[song.id]:.0f}")
         card["tag"].setText(" · ".join(details))
-        if song.youtube_url:
-            card["link"].setOpenExternalLinks(True)
-            card["link"].setText(f'<a href="{song.youtube_url}">YouTube에서 듣기 ↗</a>')
+        supports_preview = self.preview_widget.can_preview(song) if self.preview_widget else False
+        card["preview_button"].setEnabled(supports_preview)
+        if supports_preview:
+            card["preview_button"].setToolTip("YouTube 미리 듣기를 재생합니다.")
+            card["preview_info"].setText("미리 듣기 버튼을 누르면 브라우저 내에서 바로 재생됩니다.")
         else:
-            card["link"].setOpenExternalLinks(False)
-            card["link"].setText("<span style='color:#9ca3af;'>링크 정보가 없습니다</span>")
+            card["preview_button"].setToolTip("")
+            card["preview_info"].setText(self.preview_widget.unavailable_message(song) if self.preview_widget else "")
+
+    def handle_preview_request(self, side: str):
+        if not self.preview_widget:
+            return
+        if not self.active_match:
+            self.preview_widget.reset()
+            return
+        if side == "A":
+            song = self.active_match.song_a
+        else:
+            song = self.active_match.song_b
+        self.preview_widget.load_song(song)
 
     def display_current_match(self):
         if not self.current_round_matches:
@@ -3135,6 +3326,8 @@ QHeaderView::section {
             self.progress_summary_label.setText(
                 f"전체 {self.total_matches} 매치 중 {played} 완료 · 다음 선택: {match.match_id}"
             )
+        if self.preview_widget:
+            self.preview_widget.prepare_for_match([match.song_a, match.song_b])
 
     def on_choice(self, choice: str):
         if not self.active_match or not self.engine:
@@ -3211,6 +3404,12 @@ QHeaderView::section {
         recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
         self.recommendations = recommender.generate_recommendations(self.report["top_songs"])
 
+        if self.preview_widget:
+            self.preview_widget.setParent(container)
+            self.preview_widget.reset("추천곡의 미리 듣기 버튼을 누르면 이 영역에서 재생됩니다.")
+            self.preview_widget.show()
+            layout.addWidget(self.preview_widget)
+
         summary_card = QFrame()
         summary_card.setObjectName("InsightCard")
         summary_layout = QVBoxLayout(summary_card)
@@ -3236,11 +3435,21 @@ QHeaderView::section {
             summary_layout.addWidget(summary_label)
 
         if self.champion.youtube_url:
-            link = QLabel(f'<a href="{self.champion.youtube_url}">YouTube에서 우승 곡 듣기 ↗</a>')
-            link.setTextFormat(Qt.TextFormat.RichText)
-            link.setOpenExternalLinks(True)
-            link.setProperty("role", "helper")
-            summary_layout.addWidget(link)
+            champion_preview = QPushButton("우승 곡 미리 듣기")
+            champion_preview.setCursor(Qt.CursorShape.PointingHandCursor)
+            champion_preview.clicked.connect(lambda _=False, s=self.champion: self.preview_widget.load_song(s))
+            supports_preview = self.preview_widget.can_preview(self.champion) if self.preview_widget else False
+            champion_preview.setEnabled(supports_preview)
+            summary_layout.addWidget(champion_preview)
+            helper = QLabel()
+            helper.setObjectName("BodyLabel")
+            helper.setProperty("role", "helper")
+            helper.setWordWrap(True)
+            if supports_preview:
+                helper.setText("버튼을 누르면 상단 미리 듣기 영역에서 우승 곡이 재생됩니다.")
+            else:
+                helper.setText(self.preview_widget.unavailable_message(self.champion) if self.preview_widget else "미리 듣기를 지원하지 않는 환경입니다.")
+            summary_layout.addWidget(helper)
 
         if self.report["top_songs"]:
             playlist_label = QLabel("상위 플레이리스트")
@@ -3678,12 +3887,21 @@ QHeaderView::section {
                 reason_label.setProperty("role", "helper")
                 reason_label.setWordWrap(True)
                 card_layout.addWidget(reason_label)
-                if song.youtube_url:
-                    link = QLabel(f'<a href="{song.youtube_url}">YouTube에서 듣기 ↗</a>')
-                    link.setTextFormat(Qt.TextFormat.RichText)
-                    link.setOpenExternalLinks(True)
-                    link.setProperty("role", "helper")
-                    card_layout.addWidget(link)
+                preview_button = QPushButton("미리 듣기")
+                preview_button.setCursor(Qt.CursorShape.PointingHandCursor)
+                preview_button.clicked.connect(lambda _=False, s=song: self.preview_widget.load_song(s))
+                supports_preview = self.preview_widget.can_preview(song) if self.preview_widget else False
+                preview_button.setEnabled(supports_preview)
+                helper = QLabel()
+                helper.setObjectName("BodyLabel")
+                helper.setProperty("role", "helper")
+                helper.setWordWrap(True)
+                if supports_preview:
+                    helper.setText("버튼을 누르면 상단 미리 듣기 영역에서 재생됩니다.")
+                else:
+                    helper.setText(self.preview_widget.unavailable_message(song) if self.preview_widget else "미리 듣기를 지원하지 않는 환경입니다.")
+                card_layout.addWidget(preview_button)
+                card_layout.addWidget(helper)
             card_layout.addSpacing(6)
         layout.addWidget(card)
 

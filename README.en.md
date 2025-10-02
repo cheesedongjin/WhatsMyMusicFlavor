@@ -41,7 +41,7 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 4. Install dependencies:
 
    ```powershell
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 5. Ensure a `songs.json` file exists in the project root.
 6. Run the application:
@@ -73,7 +73,7 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 4. Install dependencies:
 
    ```bash
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 5. Ensure a `songs.json` file exists in the project root.
 6. Run the application:
@@ -111,7 +111,7 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 5. Install dependencies:
 
    ```bash
-   pip install PyQt6 numpy scikit-learn
+   pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
    ```
 6. Ensure a `songs.json` file exists in the project root.
 7. Run the application:
@@ -129,7 +129,13 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 3. **Participate in the Tournament**: Choose between pairs of songs in a bracket-style competition. Options include selecting one song, choosing both, or skipping.
 4. **View Results**: After the tournament, review the winning song, top-rated songs, and a summary of your music taste.
 5. **Explore Recommendations**: Receive tailored song recommendations split into "core" (aligned with your taste) and "fresh" (new discoveries) categories.
-6. **Interact with Songs**: Click YouTube links (if available) to listen to songs directly from the interface.
+6. **Interact with Songs**: Use the "Preview" buttons on match cards and recommendation entries to play embedded YouTube previews within the app. When `PyQt6-WebEngine` is not available, the buttons are disabled and a fallback notice is shown instead.
+
+## Preview playback notes
+
+- **Required dependency**: Embedded playback relies on the `PyQt6-WebEngine` module. Without it, preview buttons remain disabled and the UI explains how to enable the feature.
+- **Supported link format**: The player currently uses the `youtube_url` field in `songs.json`. Standard `watch` and `youtu.be` URLs are automatically converted to embeddable links.
+- **Graceful fallback**: In restricted environments where WebEngine cannot be installed, the application keeps running and surfaces an informational message instead of opening external browsers.
 
 ## Recommendation Algorithm Updates
 
@@ -186,13 +192,14 @@ See the source code comments for the full list of codes.
 
 - **Python 3.8+**
 - **PyQt6**: For the graphical user interface.
+- **PyQt6-WebEngine**: Powers the in-app YouTube preview player.
 - **NumPy**: For numerical computations in recommendation algorithms.
 - **scikit-learn**: Powers KMeans/MiniBatchKMeans clustering for preference analysis.
 - **JSON**: For loading and parsing the song database.
 
 Install dependencies using:
 ```bash
-pip install PyQt6 numpy scikit-learn
+pip install PyQt6 PyQt6-WebEngine numpy scikit-learn
 ```
 
 ## License
