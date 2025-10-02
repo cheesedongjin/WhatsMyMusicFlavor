@@ -9,6 +9,7 @@ import random
 import sys
 import webbrowser
 import importlib.util
+import copy
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Set, Any, Iterable
 from dataclasses import dataclass, field, asdict
@@ -2054,6 +2055,64 @@ TOURNAMENT_SIZE_PRESETS: List[Tuple[str, int]] = [
 DEFAULT_TOURNAMENT_SIZE = 32
 
 
+BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
+    "k_pop_quick": {
+        "title": "K-POP 퀵 매치",
+        "description": "최신 K-POP과 글로벌 팝을 빠르게 탐색해보세요.",
+        "tournament_size": 16,
+        "survey_profile": {
+            "genre_scores": {"K-Pop": 4, "Pop": 3, "Electronic": 2},
+            "preferred_era": 2015,
+            "preferred_energy": 0.75,
+            "preferred_popularity": 0.6,
+            "preferred_language": "ko",
+            "preferred_languages": ["en", "ko"],
+            "language_strict": False,
+            "preferred_moods": ["energetic", "upbeat", "playful"],
+            "mood_weight": 0.9,
+            "preferred_instrumentations": ["synth", "vocals", "drums"],
+            "regional_focus": "k_prefer",
+        },
+    },
+    "chill_indie": {
+        "title": "차분한 인디 감성",
+        "description": "포근한 인디와 어쿠스틱 사운드로 여유롭게 시작해요.",
+        "tournament_size": 16,
+        "survey_profile": {
+            "genre_scores": {"Indie": 4, "Rock": 2, "Jazz": 1},
+            "preferred_era": 2000,
+            "preferred_energy": 0.45,
+            "preferred_popularity": 0.4,
+            "preferred_language": None,
+            "preferred_languages": [],
+            "language_strict": False,
+            "preferred_moods": ["dreamy", "mellow", "introspective"],
+            "mood_weight": 0.8,
+            "preferred_instrumentations": ["guitar", "piano", "vocals"],
+            "regional_focus": "neutral",
+        },
+    },
+    "global_energy": {
+        "title": "글로벌 에너지 믹스",
+        "description": "신스와 리듬이 살아있는 글로벌 댄스 플로어를 느껴보세요.",
+        "tournament_size": 32,
+        "survey_profile": {
+            "genre_scores": {"Electronic": 4, "Pop": 3, "Hip-Hop": 2},
+            "preferred_era": 2015,
+            "preferred_energy": 0.85,
+            "preferred_popularity": 0.55,
+            "preferred_language": "en",
+            "preferred_languages": ["en", "es", "fr"],
+            "language_strict": False,
+            "preferred_moods": ["energetic", "empowering", "uplifting"],
+            "mood_weight": 0.85,
+            "preferred_instrumentations": ["synth", "samples", "drums"],
+            "regional_focus": "global",
+        },
+    },
+}
+
+
 def determine_effective_tournament_size(
     desired: int,
     available: int,
@@ -3015,6 +3074,15 @@ QHeaderView::section {
         self.history_show_all = False
         self.tournament_size_combo = None
         self.selected_tournament_size = DEFAULT_TOURNAMENT_SIZE
+        self.beginner_preset_active = False
+        self.genre_groups: List[Tuple[QButtonGroup, Tuple[str, str]]] = []
+        self.era_group: Optional[QButtonGroup] = None
+        self.energy_group: Optional[QButtonGroup] = None
+        self.popularity_group: Optional[QButtonGroup] = None
+        self.language_group: Optional[QButtonGroup] = None
+        self.mood_group: Optional[QButtonGroup] = None
+        self.sound_group: Optional[QButtonGroup] = None
+        self.regional_focus_group: Optional[QButtonGroup] = None
         self.unlocked_stages = {"start", "survey"}
         self.active_stage = "start"
         self.update_stage_indicator()
@@ -3081,6 +3149,60 @@ QHeaderView::section {
             bullet.setWordWrap(True)
             layout.addWidget(bullet)
 
+        if BEGINNER_PRESETS:
+            preset_section = QFrame()
+            preset_section.setObjectName("PresetSection")
+            preset_layout = QVBoxLayout(preset_section)
+            preset_layout.setContentsMargins(20, 16, 20, 16)
+            preset_layout.setSpacing(12)
+
+            preset_title = QLabel("⏱️ 바로 시작하고 싶다면 프리셋을 선택해보세요")
+            preset_title.setObjectName("SectionSubtitle")
+            preset_title.setWordWrap(True)
+            preset_layout.addWidget(preset_title)
+
+            cards_container = QFrame()
+            cards_container.setObjectName("PresetCardContainer")
+            cards_layout = QHBoxLayout(cards_container)
+            cards_layout.setContentsMargins(0, 0, 0, 0)
+            cards_layout.setSpacing(16)
+
+            for key, config in BEGINNER_PRESETS.items():
+                card = QFrame()
+                card.setObjectName("PresetCard")
+                card_layout = QVBoxLayout(card)
+                card_layout.setContentsMargins(18, 16, 18, 16)
+                card_layout.setSpacing(10)
+
+                name_label = QLabel(config.get("title", key))
+                name_label.setObjectName("PresetTitle")
+                name_label.setWordWrap(True)
+                card_layout.addWidget(name_label)
+
+                desc_label = QLabel(config.get("description", ""))
+                desc_label.setObjectName("BodyLabel")
+                desc_label.setProperty("role", "helper")
+                desc_label.setWordWrap(True)
+                card_layout.addWidget(desc_label)
+
+                size_label = QLabel(f"규모: {config.get('tournament_size', DEFAULT_TOURNAMENT_SIZE)}강")
+                size_label.setProperty("role", "helper")
+                size_label.setWordWrap(True)
+                card_layout.addWidget(size_label)
+
+                preset_button = QPushButton("프리셋으로 바로 시작")
+                preset_button.setCursor(Qt.CursorShape.PointingHandCursor)
+                preset_button.setProperty("variant", "secondary")
+                preset_button.clicked.connect(lambda _=False, preset_key=key: self.apply_beginner_preset(preset_key))
+                card_layout.addWidget(preset_button)
+
+                card_layout.addStretch(1)
+                cards_layout.addWidget(card)
+
+            cards_layout.addStretch(1)
+            preset_layout.addWidget(cards_container)
+            layout.addWidget(preset_section)
+
         start_button = QPushButton("지금 시작하기")
         start_button.setProperty("variant", "primary")
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -3091,6 +3213,29 @@ QHeaderView::section {
 
         self.content_layout.addWidget(widget)
         self.update_status("간단한 설문부터 시작해볼까요?")
+
+    def apply_beginner_preset(self, preset_key: str):
+        preset = BEGINNER_PRESETS.get(preset_key)
+        if not preset:
+            QMessageBox.warning(self, "프리셋 오류", "선택한 프리셋을 찾을 수 없습니다. 다시 시도해주세요.")
+            return
+
+        profile_data = preset.get("survey_profile", {})
+        if not isinstance(profile_data, dict):
+            profile_data = {}
+
+        self.survey_profile = copy.deepcopy(profile_data)
+
+        tournament_size = preset.get("tournament_size", DEFAULT_TOURNAMENT_SIZE)
+        try:
+            self.selected_tournament_size = int(tournament_size)
+        except (TypeError, ValueError):
+            self.selected_tournament_size = DEFAULT_TOURNAMENT_SIZE
+
+        self.beginner_preset_active = True
+        self.set_active_stage("tournament")
+        self.update_status(f"'{preset.get('title', '프리셋')}' 프리셋으로 토너먼트를 준비합니다.")
+        self.begin_tournament()
 
     def show_survey_view(self):
         self.clear_content()
@@ -3261,66 +3406,156 @@ QHeaderView::section {
         return group
 
     def begin_tournament(self):
-        genre_scores: Dict[str, int] = defaultdict(int)
-        for group, (g1, g2) in self.genre_groups:
-            button = group.checkedButton()
-            if not button:
-                continue
-            value = button.property("value")
-            if value == "1":
-                genre_scores[g1] += 1
-            elif value == "2":
-                genre_scores[g2] += 1
+        preset_active = bool(getattr(self, "beginner_preset_active", False))
 
-        era_map = {"1": 1980, "2": 2000, "3": 2015, "4": None}
-        energy_map = {"1": 0.2, "2": 0.5, "3": 0.7, "4": 0.9}
-        pop_map = {"1": 0.8, "2": 0.5, "3": 0.2}
-        language_pref_map = {
-            "1": {"preferred": "ko", "languages": {"ko"}, "strict": False},
-            "2": {"preferred": "en", "languages": {"en", "es", "fr"}, "strict": False},
-            "3": {"preferred": None, "languages": set(), "strict": False},
-            "4": {"preferred": "instrumental", "languages": {"instrumental"}, "strict": True},
+        if not preset_active:
+            genre_scores: Dict[str, int] = defaultdict(int)
+            for group, (g1, g2) in self.genre_groups:
+                button = group.checkedButton() if group else None
+                if not button:
+                    continue
+                value = button.property("value")
+                if value == "1":
+                    genre_scores[g1] += 1
+                elif value == "2":
+                    genre_scores[g2] += 1
+
+            era_map = {"1": 1980, "2": 2000, "3": 2015, "4": None}
+            energy_map = {"1": 0.2, "2": 0.5, "3": 0.7, "4": 0.9}
+            pop_map = {"1": 0.8, "2": 0.5, "3": 0.2}
+            language_pref_map = {
+                "1": {"preferred": "ko", "languages": {"ko"}, "strict": False},
+                "2": {"preferred": "en", "languages": {"en", "es", "fr"}, "strict": False},
+                "3": {"preferred": None, "languages": set(), "strict": False},
+                "4": {"preferred": "instrumental", "languages": {"instrumental"}, "strict": True},
+            }
+            mood_map = {
+                "1": {"moods": {"energetic", "empowering", "upbeat"}, "weight": 0.9},
+                "2": {"moods": {"romantic", "dreamy", "mellow"}, "weight": 0.7},
+                "3": {"moods": {"groovy", "funky", "soulful"}, "weight": 0.8},
+                "4": {"moods": {"introspective", "nocturnal", "melancholic"}, "weight": 0.85},
+            }
+            sound_map = {
+                "1": {"instrumentations": {"guitar", "drums", "bass", "vocals"}},
+                "2": {"instrumentations": {"synth", "electronic_beats", "samples"}},
+                "3": {"instrumentations": {"piano", "strings", "vocals"}},
+                "4": {"instrumentations": {"saxophone", "trumpet", "bass"}},
+            }
+            regional_focus_map = {"1": "k_only", "2": "k_prefer", "3": "global", "4": "neutral"}
+
+            def group_value(group: Optional[QButtonGroup], default: str) -> str:
+                if not group:
+                    return default
+                button = group.checkedButton()
+                return button.property("value") if button else default
+
+            language_pref = language_pref_map.get(
+                group_value(self.language_group, "3"),
+                {"preferred": None, "languages": set(), "strict": False},
+            )
+            mood_pref = mood_map.get(
+                group_value(self.mood_group, "2"),
+                {"moods": set(), "weight": 0.0},
+            )
+            sound_pref = sound_map.get(
+                group_value(self.sound_group, "1"),
+                {"instrumentations": set()},
+            )
+            regional_focus = regional_focus_map.get(
+                group_value(self.regional_focus_group, "4"),
+                "neutral",
+            )
+
+            survey_profile: Dict[str, Any] = {
+                "genre_scores": dict(genre_scores),
+                "preferred_era": era_map.get(group_value(self.era_group, "2")),
+                "preferred_energy": energy_map.get(group_value(self.energy_group, "3"), 0.5),
+                "preferred_popularity": pop_map.get(group_value(self.popularity_group, "2"), 0.5),
+                "preferred_language": language_pref["preferred"],
+                "preferred_languages": sorted(language_pref["languages"]),
+                "language_strict": language_pref["strict"],
+                "preferred_moods": sorted(mood_pref["moods"]),
+                "mood_weight": mood_pref["weight"],
+                "preferred_instrumentations": sorted(sound_pref["instrumentations"]),
+                "regional_focus": regional_focus,
+            }
+        else:
+            survey_profile = (
+                copy.deepcopy(self.survey_profile)
+                if isinstance(self.survey_profile, dict)
+                else {}
+            )
+
+        def _coerce_float(value: Any, default: float) -> float:
+            if value is None:
+                return default
+            try:
+                return float(value)
+            except (TypeError, ValueError):
+                return default
+
+        def _coerce_int(value: Any) -> Optional[int]:
+            if value is None:
+                return None
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                return None
+
+        genre_scores = survey_profile.get("genre_scores", {})
+        if not isinstance(genre_scores, dict):
+            genre_scores = {}
+        survey_profile["genre_scores"] = {
+            str(k): int(v)
+            for k, v in genre_scores.items()
+            if isinstance(k, str) and isinstance(v, (int, float))
         }
-        mood_map = {
-            "1": {"moods": {"energetic", "empowering", "upbeat"}, "weight": 0.9},
-            "2": {"moods": {"romantic", "dreamy", "mellow"}, "weight": 0.7},
-            "3": {"moods": {"groovy", "funky", "soulful"}, "weight": 0.8},
-            "4": {"moods": {"introspective", "nocturnal", "melancholic"}, "weight": 0.85},
-        }
-        sound_map = {
-            "1": {"instrumentations": {"guitar", "drums", "bass", "vocals"}},
-            "2": {"instrumentations": {"synth", "electronic_beats", "samples"}},
-            "3": {"instrumentations": {"piano", "strings", "vocals"}},
-            "4": {"instrumentations": {"saxophone", "trumpet", "bass"}},
-        }
-        regional_focus_map = {"1": "k_only", "2": "k_prefer", "3": "global", "4": "neutral"}
 
-        def group_value(group: QButtonGroup, default: str) -> str:
-            button = group.checkedButton()
-            return button.property("value") if button else default
+        languages = survey_profile.get("preferred_languages", [])
+        if isinstance(languages, (list, tuple, set)):
+            language_list = sorted({str(lang) for lang in languages if isinstance(lang, str) and lang})
+        else:
+            language_list = []
+        survey_profile["preferred_languages"] = language_list
 
-        language_pref = language_pref_map.get(group_value(self.language_group, "3"), {"preferred": None, "languages": set(), "strict": False})
-        mood_pref = mood_map.get(group_value(self.mood_group, "2"), {"moods": set(), "weight": 0.0})
-        sound_pref = sound_map.get(group_value(self.sound_group, "1"), {"instrumentations": set()})
-        regional_focus = regional_focus_map.get(group_value(self.regional_focus_group, "4"), "neutral")
+        moods = survey_profile.get("preferred_moods", [])
+        if isinstance(moods, (list, tuple, set)):
+            mood_list = sorted({str(mood) for mood in moods if isinstance(mood, str) and mood})
+        else:
+            mood_list = []
+        survey_profile["preferred_moods"] = mood_list
 
-        self.survey_profile = {
-            "genre_scores": dict(genre_scores),
-            "preferred_era": era_map.get(group_value(self.era_group, "2")),
-            "preferred_energy": energy_map.get(group_value(self.energy_group, "3"), 0.5),
-            "preferred_popularity": pop_map.get(group_value(self.popularity_group, "2"), 0.5),
-            "preferred_language": language_pref["preferred"],
-            "preferred_languages": sorted(language_pref["languages"]),
-            "language_strict": language_pref["strict"],
-            "preferred_moods": sorted(mood_pref["moods"]),
-            "mood_weight": mood_pref["weight"],
-            "preferred_instrumentations": sorted(sound_pref["instrumentations"]),
-            "regional_focus": regional_focus,
-        }
+        instruments = survey_profile.get("preferred_instrumentations", [])
+        if isinstance(instruments, (list, tuple, set)):
+            instrument_list = sorted({str(inst) for inst in instruments if isinstance(inst, str) and inst})
+        else:
+            instrument_list = []
+        survey_profile["preferred_instrumentations"] = instrument_list
 
+        survey_profile["preferred_era"] = _coerce_int(survey_profile.get("preferred_era"))
+        survey_profile["preferred_energy"] = _coerce_float(survey_profile.get("preferred_energy"), 0.5)
+        survey_profile["preferred_popularity"] = _coerce_float(
+            survey_profile.get("preferred_popularity"),
+            0.5,
+        )
+        survey_profile["preferred_language"] = (
+            survey_profile.get("preferred_language")
+            if isinstance(survey_profile.get("preferred_language"), str)
+            else None
+        )
+        survey_profile["language_strict"] = bool(survey_profile.get("language_strict", False))
+        survey_profile["mood_weight"] = _coerce_float(survey_profile.get("mood_weight"), 0.0)
+
+        regional_focus = survey_profile.get("regional_focus", "neutral")
+        if regional_focus not in {"k_only", "k_prefer", "global", "neutral"}:
+            regional_focus = "neutral"
+        survey_profile["regional_focus"] = regional_focus
+
+        self.survey_profile = survey_profile
+        self.beginner_preset_active = False
 
         desired_size = self.selected_tournament_size
-        if self.tournament_size_combo:
+        if not preset_active and self.tournament_size_combo:
             data = self.tournament_size_combo.currentData()
             if isinstance(data, int):
                 desired_size = data
