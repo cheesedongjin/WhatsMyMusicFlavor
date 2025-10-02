@@ -2286,6 +2286,97 @@ class MusicTournamentGUI(QMainWindow):
 
     TOURNAMENT_SIZE_OPTIONS = TOURNAMENT_SIZE_PRESETS
 
+    MOOD_DESCRIPTIONS = {
+        "abstract": "추상적인 무드",
+        "aggressive": "과감한 에너지",
+        "angst": "거친 감정선",
+        "atmospheric": "공간감 있는 분위기",
+        "avant_garde": "실험적인 기조",
+        "bold": "대담한 무드",
+        "bright": "밝은 톤",
+        "building": "차곡차곡 고조되는 전개",
+        "celebratory": "축제 같은 분위기",
+        "cheerful": "경쾌한 기운",
+        "complex": "복합적인 진행",
+        "confident": "자신감 넘치는 바이브",
+        "contemplative": "사색적인 정서",
+        "danceable": "몸이 저절로 움직이는 리듬",
+        "dark": "어두운 기운",
+        "defiant": "거침없는 태도",
+        "dramatic": "드라마틱한 전개",
+        "dreamy": "몽환적인 무드",
+        "driving": "질주감 있는 비트",
+        "dynamic": "다이내믹한 흐름",
+        "elegant": "우아한 감성",
+        "emotional": "감성 짙은 표현",
+        "empowering": "힘이 되는 메시지",
+        "energetic": "에너지 폭발",
+        "epic": "장대한 스케일",
+        "ethereal": "신비로운 공기감",
+        "euphoric": "황홀한 고조",
+        "fierce": "날 선 텐션",
+        "funky": "펑키한 그루브",
+        "groovy": "그루비한 리듬",
+        "haunting": "잔향이 남는 여운",
+        "hopeful": "희망찬 기운",
+        "intense": "강렬한 몰입감",
+        "intimate": "속삭이듯 친밀한 무드",
+        "introspective": "내면을 들여다보는 감성",
+        "ironic": "위트 있는 반전",
+        "luxurious": "고급스러운 결",
+        "melancholic": "쓸쓸한 감성",
+        "mellow": "부드러운 결",
+        "minimalist": "미니멀한 사운드",
+        "modern": "현대적인 터치",
+        "mysterious": "오묘한 긴장감",
+        "mystical": "신비로운 의식감",
+        "nocturnal": "야간 드라이브 감성",
+        "nostalgic": "향수를 자극하는 무드",
+        "passionate": "열정적인 호흡",
+        "peaceful": "평온한 정서",
+        "playful": "장난기 어린 리듬",
+        "powerful": "압도적인 힘",
+        "raw": "날것의 에너지",
+        "rebellious": "반항적인 기운",
+        "reflective": "되돌아보는 정서",
+        "relaxed": "느긋한 흐름",
+        "romantic": "로맨틱한 감성",
+        "satirical": "풍자적인 뉘앙스",
+        "seductive": "매혹적인 분위기",
+        "serene": "고요한 공기",
+        "smooth": "매끈한 질감",
+        "sophisticated": "세련된 무드",
+        "soulful": "소울풀한 감성",
+        "surreal": "초현실적인 기운",
+        "trippy": "헤롱거리는 사이키델릭",
+        "unsettling": "살짝 불안한 긴장감",
+        "upbeat": "업비트 에너지",
+        "uplifting": "들어올려 주는 무드",
+        "warm": "따뜻한 온기",
+        "whimsical": "기발한 상상력",
+        "youthful": "청량한 젊은 기운",
+    }
+
+    INSTRUMENT_DESCRIPTIONS = {
+        "808": "808 베이스 웨이브",
+        "bass": "두터운 베이스 라인",
+        "drums": "라이브 드럼 질감",
+        "electronic_beats": "전자 비트 드라이브",
+        "guitar": "기타 리프 중심",
+        "keyboards": "키보드 패드",
+        "palmas": "플라멩코 박수 리듬",
+        "percussion": "퍼커션 리듬 포인트",
+        "piano": "피아노 중심 선율",
+        "recorder": "리코더 선율",
+        "samples": "샘플링 텍스처",
+        "saxophone": "색소폰 솔로",
+        "strings": "스트링 편곡",
+        "synth": "반짝이는 전자 사운드",
+        "trumpet": "트럼펫 브라스",
+        "vocals": "보컬 하모니 강조",
+        "vocoder": "보코더 이펙트",
+    }
+
     def __init__(self, songs_file: str):
         super().__init__()
         self.songs_file = songs_file
@@ -3223,6 +3314,158 @@ QHeaderView::section {
         self.update_status("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
         self.display_current_match()
 
+    def format_song_summary(self, song: Song) -> Dict[str, Optional[str]]:
+        tags = song.tags if isinstance(song.tags, dict) else {}
+
+        era_label = self._format_era_label(tags.get("era_year"))
+        genre_label = self._primary_genre_label(song)
+        base_segment = " ".join(part for part in (era_label, genre_label) if part).strip()
+
+        subgenre_phrase = self._subgenre_descriptor(tags.get("subgenres"))
+        instrumentation_phrase = self._instrumentation_descriptor(tags.get("instrumentation"))
+        mood_phrase = self._mood_descriptor(tags.get("mood"))
+
+        detail_candidates = [subgenre_phrase, instrumentation_phrase, mood_phrase]
+        detail_parts: List[str] = []
+        for phrase in detail_candidates:
+            if phrase and phrase not in detail_parts:
+                detail_parts.append(phrase)
+
+        summary_segments: List[str] = []
+        if base_segment:
+            summary_segments.append(base_segment)
+        for phrase in detail_parts:
+            if phrase not in summary_segments:
+                summary_segments.append(phrase)
+            if len(summary_segments) >= 3:
+                break
+
+        if summary_segments:
+            summary_text = " · ".join(summary_segments)
+        else:
+            summary_text = "태그 정보가 충분하지 않습니다"
+
+        highlight: Optional[str] = None
+        focus: Optional[str] = None
+        if detail_parts:
+            selected = detail_parts[:2]
+            if len(selected) == 1:
+                focus = selected[0]
+            else:
+                conjunction = self._select_conjunction(selected[0])
+                focus = f"{selected[0]}{conjunction} {selected[1]}"
+        elif genre_label:
+            focus = genre_label
+        elif era_label:
+            focus = era_label
+
+        if focus:
+            focus_with_particle = self._attach_object_particle(focus)
+            highlight = f"이런 분께 추천: {focus_with_particle} 좋아한다면"
+
+        return {"summary": summary_text, "highlight": highlight}
+
+    def _format_era_label(self, era_year: Optional[Any]) -> Optional[str]:
+        if not isinstance(era_year, int):
+            return None
+        year = era_year
+        if year >= 2024:
+            return "2020년대 중반"
+        if year >= 2020:
+            return "2020년대 초반"
+        if year >= 2018:
+            return "2010년대 후반"
+        if year >= 2012:
+            return "2010년대 중반"
+        if year >= 2006:
+            return "2000년대 후반"
+        if year >= 1998:
+            return "90년대 말~2000년대 초"
+        if year >= 1990:
+            return "90년대 초중반"
+        if year >= 1980:
+            return "80년대"
+        if year >= 1970:
+            return "70년대"
+        if year >= 1960:
+            return "60년대"
+        return "60년대 이전"
+
+    def _primary_genre_label(self, song: Song) -> Optional[str]:
+        genres = song.genres or []
+        if not genres and song.genre_codes:
+            genres = decode_genre_names(song.genre_codes)
+        if not genres:
+            return None
+        primary = genres[0]
+        return PreferenceSummarizer.GENRE_LABELS.get(primary, primary)
+
+    def _subgenre_descriptor(self, subgenres: Optional[Any]) -> Optional[str]:
+        if not isinstance(subgenres, list):
+            return None
+        for item in subgenres:
+            if not isinstance(item, str):
+                continue
+            descriptor = PreferenceSummarizer.SUBGENRE_TONES.get(item)
+            if descriptor:
+                return descriptor
+        for item in subgenres:
+            if isinstance(item, str):
+                return item.replace("_", " ") + " 무드"
+        return None
+
+    def _mood_descriptor(self, moods: Optional[Any]) -> Optional[str]:
+        if not isinstance(moods, list):
+            return None
+        for mood in moods:
+            if not isinstance(mood, str):
+                continue
+            descriptor = self.MOOD_DESCRIPTIONS.get(mood)
+            if descriptor:
+                return descriptor
+        for mood in moods:
+            if isinstance(mood, str):
+                return mood.replace("_", " ") + " 무드"
+        return None
+
+    def _instrumentation_descriptor(self, instrumentation: Optional[Any]) -> Optional[str]:
+        if not isinstance(instrumentation, list):
+            return None
+        for inst in instrumentation:
+            if not isinstance(inst, str):
+                continue
+            descriptor = self.INSTRUMENT_DESCRIPTIONS.get(inst)
+            if descriptor:
+                return descriptor
+        for inst in instrumentation:
+            if isinstance(inst, str):
+                return inst.replace("_", " ") + " 사운드"
+        return None
+
+    @staticmethod
+    def _attach_object_particle(phrase: str) -> str:
+        trimmed = phrase.strip()
+        if not trimmed:
+            return trimmed
+        last_char = trimmed[-1]
+        if "가" <= last_char <= "힣":
+            code = ord(last_char) - 0xAC00
+            particle = "를" if code % 28 == 0 else "을"
+        else:
+            particle = "를"
+        return f"{trimmed}{particle}"
+
+    @staticmethod
+    def _select_conjunction(phrase: str) -> str:
+        trimmed = phrase.strip()
+        if not trimmed:
+            return "와"
+        last_char = trimmed[-1]
+        if "가" <= last_char <= "힣":
+            code = ord(last_char) - 0xAC00
+            return "과" if code % 28 != 0 else "와"
+        return "와"
+
     def create_song_card(self, parent: QWidget, title: str, side: str):
         box = QGroupBox(title)
         box.setObjectName("SongCard")
@@ -3238,6 +3481,7 @@ QHeaderView::section {
         tag_label = QLabel()
         tag_label.setWordWrap(True)
         tag_label.setProperty("role", "helper")
+        tag_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.MinimumExpanding)
         layout.addWidget(tag_label)
         preview_button = QPushButton("미리 듣기")
         preview_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -3261,21 +3505,15 @@ QHeaderView::section {
         card["title"].setText(song.get_display_title())
         rating = song.rating if song.rating else 1500
         card["meta"].setText(f"{song.artist} · 예상 레이팅 {rating:.0f}")
-        details: List[str] = []
-        if song.tags.get("era_year"):
-            details.append(f"{song.tags['era_year']}년대")
-        if song.tags.get("energy") is not None:
-            details.append(f"에너지 {song.tags['energy']*100:.0f}%")
-        if song.genres:
-            details.append("장르 " + ", ".join(song.genres[:2]))
-        elif song.genre_codes:
-            details.append("장르 코드 " + ", ".join(map(str, song.genre_codes[:3])))
-        moods = song.tags.get("mood") if isinstance(song.tags, dict) else None
-        if moods:
-            details.append("무드 " + ", ".join(moods[:2]))
-        if getattr(self, "seed_scores", None) and song.id in self.seed_scores:
-            details.append(f"시드 {self.seed_scores[song.id]:.0f}")
-        card["tag"].setText(" · ".join(details))
+        summary_info = self.format_song_summary(song)
+        lines: List[str] = []
+        summary_text = summary_info.get("summary")
+        if summary_text:
+            lines.append(summary_text)
+        highlight = summary_info.get("highlight")
+        if highlight:
+            lines.append(highlight)
+        card["tag"].setText("\n".join(lines))
         supports_preview = self.preview_widget.can_preview(song) if self.preview_widget else False
         card["preview_button"].setEnabled(supports_preview)
         if supports_preview:
@@ -3546,16 +3784,21 @@ QHeaderView::section {
         champion: Optional[Song] = report.get("champion") or getattr(self, "champion", None)
         top_songs: List[Song] = report.get("top_songs") or []
 
+        champion_summary = self.format_song_summary(champion) if champion else {"summary": None, "highlight": None}
+
         top_song_entries: List[Dict[str, Any]] = []
         for idx, song in enumerate(top_songs, 1):
             if not song:
                 continue
+            summary_info = self.format_song_summary(song)
             top_song_entries.append(
                 {
                     "index": idx,
                     "title": song.get_display_title(),
                     "artist": song.artist,
                     "rating": song.rating,
+                    "summary": summary_info.get("summary"),
+                    "highlight": summary_info.get("highlight"),
                 }
             )
 
@@ -3570,11 +3813,14 @@ QHeaderView::section {
                 song = entry.get("song") if isinstance(entry, dict) else None
                 if not song:
                     continue
+                summary_info = self.format_song_summary(song)
                 items.append(
                     {
                         "title": song.get_display_title(),
                         "artist": song.artist,
                         "reason": entry.get("reason") if isinstance(entry, dict) else None,
+                        "summary": summary_info.get("summary"),
+                        "highlight": summary_info.get("highlight"),
                     }
                 )
             if items:
@@ -3587,6 +3833,8 @@ QHeaderView::section {
                 "artist": champion.artist if champion else "-",
                 "rating": champion.rating if champion else None,
                 "record": f"{champion.wins}승 {champion.losses}패" if champion else None,
+                "summary": champion_summary.get("summary"),
+                "highlight": champion_summary.get("highlight"),
             },
             "summary": report.get("preference_summary"),
             "total_matches": report.get("total_matches"),
@@ -3600,6 +3848,12 @@ QHeaderView::section {
             if text is None:
                 return ""
             return escape(str(text))
+
+        def render_text_block(text: Optional[Any], css_class: str) -> str:
+            if not text:
+                return ""
+            escaped = safe(text).replace("\n", "<br>")
+            return f"<div class='{css_class}'>{escaped}</div>"
 
         generated_at = context.get("generated_at")
         generated_text = generated_at.strftime("%Y.%m.%d %H:%M") if generated_at else ""
@@ -3617,6 +3871,8 @@ QHeaderView::section {
         else:
             champion_rating_display = "-"
         champion_record = champion.get("record") or "-"
+        champion_summary_html = render_text_block(champion.get("summary"), "champion-summary")
+        champion_highlight_html = render_text_block(champion.get("highlight"), "champion-highlight")
 
         top_song_html = ""
         if top_songs:
@@ -3624,12 +3880,17 @@ QHeaderView::section {
             for entry in top_songs:
                 rating = entry.get("rating")
                 rating_text = f" · 레이팅 {rating:.1f}" if isinstance(rating, (int, float)) else ""
-                items.append(
-                    f"<li><span class='song-title'>{safe(entry.get('title'))}</span>"
+                header = (
+                    "<div class='song-header'>"
+                    f"<span class='song-title'>{safe(entry.get('title'))}</span>"
                     f"<span class='song-artist'> — {safe(entry.get('artist'))}</span>"
-                    f"<span class='song-meta'>{safe(rating_text)}</span></li>"
+                    + (f"<span class='song-meta'>{safe(rating_text)}</span>" if rating_text else "")
+                    + "</div>"
                 )
-            top_song_html = "<h2>상위 플레이리스트</h2><ol>" + "".join(items) + "</ol>"
+                summary_block = render_text_block(entry.get("summary"), "song-summary")
+                highlight_block = render_text_block(entry.get("highlight"), "song-highlight")
+                items.append("<li>" + header + summary_block + highlight_block + "</li>")
+            top_song_html = "<section><h2>상위 플레이리스트</h2><ol>" + "".join(items) + "</ol></section>"
 
         recommendation_html = ""
         if recommendations:
@@ -3637,14 +3898,16 @@ QHeaderView::section {
             for group in recommendations:
                 rows = []
                 for idx, item in enumerate(group.get("items", []), 1):
-                    reason = safe(item.get("reason"))
-                    if reason:
-                        reason = reason.replace("\n", "<br>")
+                    summary_block = render_text_block(item.get("summary"), "recommendation-summary")
+                    highlight_block = render_text_block(item.get("highlight"), "recommendation-highlight")
+                    reason_block = render_text_block(item.get("reason"), "recommendation-reason")
                     rows.append(
                         "<div class='recommendation-item'>"
                         f"<div class='recommendation-title'>{idx}. {safe(item.get('title'))}</div>"
                         f"<div class='recommendation-artist'>{safe(item.get('artist'))}</div>"
-                        + (f"<div class='recommendation-reason'>{reason}</div>" if reason else "")
+                        + summary_block
+                        + highlight_block
+                        + reason_block
                         + "</div>"
                     )
                 sections.append(
@@ -3745,24 +4008,57 @@ QHeaderView::section {
             font-size: 14px;
             color: #0f172a;
         }}
+        .champion-summary {{
+            margin-top: 12px;
+            color: #334155;
+            line-height: 1.6;
+        }}
+        .champion-highlight {{
+            margin-top: 6px;
+            color: #0f172a;
+            font-size: 13px;
+            font-weight: 600;
+        }}
+        section {{
+            margin-top: 24px;
+        }}
         ol {{
             margin: 0;
             padding-left: 20px;
         }}
         ol li {{
-            margin-bottom: 6px;
+            margin-bottom: 12px;
             font-size: 14px;
+        }}
+        .song-header {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: baseline;
         }}
         .song-title {{
             font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
         }}
         .song-artist {{
             color: #475569;
-            margin-left: 6px;
+            font-size: 13px;
         }}
         .song-meta {{
             color: #64748b;
-            margin-left: 4px;
+            font-size: 13px;
+        }}
+        .song-summary {{
+            margin-top: 4px;
+            color: #475569;
+            line-height: 1.5;
+        }}
+        .song-highlight {{
+            margin-top: 2px;
+            color: #0f172a;
+            font-size: 13px;
+            font-weight: 500;
         }}
         .stat-row {{
             display: flex;
@@ -3792,14 +4088,29 @@ QHeaderView::section {
         }}
         .recommendation-item {{
             margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: #f8fafc;
         }}
         .recommendation-title {{
             font-weight: 600;
             font-size: 15px;
+            color: #1e293b;
         }}
         .recommendation-artist {{
             color: #475569;
             font-size: 13px;
+        }}
+        .recommendation-summary {{
+            margin-top: 6px;
+            color: #334155;
+            line-height: 1.5;
+        }}
+        .recommendation-highlight {{
+            margin-top: 4px;
+            color: #0f172a;
+            font-size: 13px;
+            font-weight: 500;
         }}
         .recommendation-reason {{
             color: #334155;
@@ -3827,6 +4138,8 @@ QHeaderView::section {
             <span>레이팅 {safe(champion_rating_display)}</span>
             <span>{safe(champion_record)}</span>
         </div>
+        {champion_summary_html}
+        {champion_highlight_html}
     </section>
     {summary_html}
     {stats_html}
