@@ -9,11 +9,11 @@ import random
 import sys
 import webbrowser
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set, Any
+from typing import List, Dict, Tuple, Optional, Set, Any, Iterable
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict, Counter
 import numpy as np
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
 from datetime import datetime
 from html import escape
 
@@ -1407,6 +1407,17 @@ class RecommendationEngine:
         self.preferred_instrumentations: Set[str] = set(self.profile.get('preferred_instrumentations') or [])
         self.selector = CandidateSelector(all_songs, self.profile)
 
+        self._genre_index = self._build_index(
+            genre for song in all_songs for genre in (song.genres or []) if genre
+        )
+        self._mood_index = self._build_index(
+            mood for song in all_songs for mood in (song.tags.get('mood') or []) if mood
+        )
+        self._feature_cache: Dict[str, np.ndarray] = {}
+        self._cluster_labels: Dict[str, int] = {}
+        self._cluster_model: Optional[Any] = None
+        self._clusters_ready: bool = False
+
     def generate_recommendations(
         self,
         top_songs: List[Song],
@@ -1421,6 +1432,16 @@ class RecommendationEngine:
         top_winners = top_songs[:3]
         candidates = [s for s in self.all_songs if s.id not in self.participated]
 
+        self._ensure_clusters()
+        winner_clusters = Counter()
+        for winner in top_winners:
+            label = self._cluster_labels.get(winner.id)
+            if label is not None:
+                winner_clusters[label] += 1
+
+        dominant_clusters: Set[int] = {label for label, _ in winner_clusters.most_common(2)}
+        cluster_balance_enabled = bool(self._cluster_labels) and bool(dominant_clusters)
+
         scored_entries: List[Dict[str, Any]] = []
         for song in candidates:
             base_score = self.selector.compute_base_score(song, self.language_whitelist, self.language_strict)
@@ -1431,6 +1452,8 @@ class RecommendationEngine:
 
             if base_score <= 0 and similarity_score <= 0:
                 continue
+
+            cluster_label = self._cluster_labels.get(song.id)
 
             language_note = self._describe_language_fit(song)
             region_note = self._describe_region_fit(song)
@@ -1449,6 +1472,7 @@ class RecommendationEngine:
                 'freshness_note': freshness_note,
                 'mood_note': mood_note,
                 'instrumentation_note': instrumentation_note,
+                'cluster_label': cluster_label,
             })
 
         if not scored_entries:
@@ -1472,16 +1496,57 @@ class RecommendationEngine:
         fresh_candidates.sort(key=lambda item: (item['freshness'], item['score']), reverse=True)
 
         fresh_recs: List[Dict[str, Any]] = []
-        for entry in fresh_candidates[:n_fresh]:
+
+        def select_balanced(entries: List[Dict[str, Any]], count: int) -> List[Dict[str, Any]]:
+            if count <= 0:
+                return []
+
+            filtered = [entry for entry in entries if entry['song'].id not in used_ids]
+            if not filtered:
+                return []
+
+            if not cluster_balance_enabled:
+                return filtered[:count]
+
+            new_cluster: List[Dict[str, Any]] = []
+            familiar_cluster: List[Dict[str, Any]] = []
+            for entry in filtered:
+                label = entry.get('cluster_label')
+                if label is not None and label not in dominant_clusters:
+                    new_cluster.append(entry)
+                else:
+                    familiar_cluster.append(entry)
+
+            selected: List[Dict[str, Any]] = []
+            new_target = min(len(new_cluster), max(1, math.ceil(count * 0.5))) if new_cluster else 0
+            selected.extend(new_cluster[:new_target])
+
+            if len(selected) < count:
+                selected.extend(familiar_cluster[:count - len(selected)])
+
+            if len(selected) < count and len(new_cluster) > new_target:
+                selected.extend(new_cluster[new_target:new_target + (count - len(selected))])
+
+            return selected[:count]
+
+        selected_fresh_entries = select_balanced(fresh_candidates, n_fresh)
+        for entry in selected_fresh_entries:
+            if cluster_balance_enabled:
+                label = entry.get('cluster_label')
+                if label is not None and label not in dominant_clusters:
+                    entry['cluster_note'] = "새로운 군집 탐색으로 발견한 사운드"
             formatted = self._format_entry(entry, category='fresh')
             fresh_recs.append(formatted)
             used_ids.add(entry['song'].id)
 
         if len(fresh_recs) < n_fresh:
             remaining = [entry for entry in scored_entries if entry['song'].id not in used_ids]
-            for entry in remaining:
-                if len(fresh_recs) >= n_fresh:
-                    break
+            additional_entries = select_balanced(remaining, n_fresh - len(fresh_recs))
+            for entry in additional_entries:
+                if cluster_balance_enabled:
+                    label = entry.get('cluster_label')
+                    if label is not None and label not in dominant_clusters:
+                        entry['cluster_note'] = "새로운 군집 탐색으로 발견한 사운드"
                 formatted = self._format_entry(entry, category='fresh')
                 fresh_recs.append(formatted)
                 used_ids.add(entry['song'].id)
@@ -1518,6 +1583,11 @@ class RecommendationEngine:
                 print(f"\n{idx}. {song}")
                 print(f"   이유: {reason}")
                 print(f"   링크: {song.youtube_url}")
+
+    @staticmethod
+    def _build_index(values: Iterable[str]) -> Dict[str, int]:
+        unique_values = [value for value in dict.fromkeys(values)]
+        return {value: idx for idx, value in enumerate(unique_values)}
 
     def _analyze_similarity(self, song: Song, winners: List[Song]) -> Tuple[float, Optional[Song], List[str]]:
         """상위 곡과의 유사도를 계산한다."""
@@ -1636,6 +1706,124 @@ class RecommendationEngine:
     def _format_tag_name(tag: str) -> str:
         return tag.replace('_', ' ').title()
 
+    def _build_feature_vector(self, song: Song) -> np.ndarray:
+        if song.id in self._feature_cache:
+            return self._feature_cache[song.id]
+
+        genre_vec = np.zeros(len(self._genre_index), dtype=float)
+        for genre in song.genres or []:
+            idx = self._genre_index.get(genre)
+            if idx is not None:
+                genre_vec[idx] = 1.0
+
+        mood_vec = np.zeros(len(self._mood_index), dtype=float)
+        song_moods = song.tags.get('mood') or []
+        if song_moods:
+            weight = 1.0 / len(song_moods)
+            for mood in song_moods:
+                idx = self._mood_index.get(mood)
+                if idx is not None:
+                    mood_vec[idx] += weight
+
+        def safe_float(value: Any) -> float:
+            return float(value) if isinstance(value, (int, float)) else 0.0
+
+        energy = safe_float(song.tags.get('energy'))
+        valence = safe_float(song.tags.get('valence'))
+        balance = energy - valence
+        tempo = safe_float(song.tags.get('tempo_bpm')) / 200.0
+        era_norm = safe_float(song.tags.get('era_year')) / 2100.0
+        awareness = safe_float(song.popularity.get('awareness_idx'))
+        yt_views = safe_float(song.popularity.get('yt_views'))
+        log_views = math.log10(yt_views + 1.0) / 8.0 if yt_views > 0 else 0.0
+        duration_norm = safe_float((song.meta or {}).get('duration_sec')) / 600.0
+
+        numeric_features = np.array([
+            energy,
+            valence,
+            balance,
+            tempo,
+            era_norm,
+            awareness,
+            log_views,
+            duration_norm,
+        ], dtype=float)
+
+        segments: List[np.ndarray] = []
+        if genre_vec.size:
+            segments.append(genre_vec)
+        if mood_vec.size:
+            segments.append(mood_vec)
+        segments.append(numeric_features)
+
+        feature_vector = np.concatenate(segments) if len(segments) > 1 else segments[0]
+        self._feature_cache[song.id] = feature_vector
+        return feature_vector
+
+    def _ensure_clusters(self):
+        if self._clusters_ready:
+            return
+
+        feature_matrix: List[np.ndarray] = []
+        songs_for_clustering: List[Song] = []
+        for song in self.all_songs:
+            vector = self._build_feature_vector(song)
+            if vector.size == 0:
+                continue
+            feature_matrix.append(vector)
+            songs_for_clustering.append(song)
+
+        if not songs_for_clustering:
+            self._clusters_ready = True
+            return
+
+        if len(songs_for_clustering) == 1:
+            self._cluster_labels[songs_for_clustering[0].id] = 0
+            self._clusters_ready = True
+            return
+
+        matrix = np.vstack(feature_matrix)
+        n_songs = len(songs_for_clustering)
+
+        profile_k = self.profile.get('cluster_count') if isinstance(self.profile, dict) else None
+        n_clusters = 0
+        if isinstance(profile_k, int) and profile_k >= 2:
+            n_clusters = min(profile_k, n_songs)
+
+        if not n_clusters:
+            heuristic = max(2, int(round(math.sqrt(n_songs))))
+            n_clusters = min(max(2, heuristic), min(20, n_songs))
+
+        if n_clusters > n_songs:
+            n_clusters = n_songs
+
+        if n_clusters <= 1:
+            for idx, song in enumerate(songs_for_clustering):
+                self._cluster_labels[song.id] = idx
+            self._clusters_ready = True
+            return
+
+        if n_songs > 80:
+            model = MiniBatchKMeans(
+                n_clusters=n_clusters,
+                random_state=42,
+                batch_size=min(256, n_songs),
+                n_init=10,
+            )
+        else:
+            model = KMeans(
+                n_clusters=n_clusters,
+                random_state=42,
+                n_init=10,
+            )
+
+        labels = model.fit_predict(matrix)
+        for song, label in zip(songs_for_clustering, labels):
+            self._cluster_labels[song.id] = int(label)
+
+        self._cluster_model = model
+        self._clusters_ready = True
+
     def _freshness_profile(self, song: Song) -> Tuple[float, Optional[str]]:
         era_year = song.tags.get('era_year')
         awareness = song.popularity.get('awareness_idx')
@@ -1690,6 +1878,10 @@ class RecommendationEngine:
         instrumentation_note = entry.get('instrumentation_note')
         if instrumentation_note:
             parts.append(instrumentation_note)
+
+        cluster_note = entry.get('cluster_note')
+        if cluster_note:
+            parts.append(cluster_note)
 
         freshness_note = entry.get('freshness_note')
         if freshness_note and (category == 'fresh' or entry.get('freshness', 0) >= 0.5):
