@@ -2214,6 +2214,66 @@ class MusicTournamentApp:
 
 
 
+def build_track_preview_html(embed_url: str) -> str:
+    """YouTube 플레이어를 DOMContentLoaded 이후에 초기화하는 HTML 스니펫을 생성한다."""
+
+    # json.dumps 를 이용해 URL을 안전하게 이스케이프한다.
+    safe_embed_url = json.dumps(embed_url)
+
+    return f"""
+<!DOCTYPE html>
+<html lang=\"ko\">
+<head>
+    <meta charset=\"utf-8\" />
+    <style>
+        html, body {{
+            margin: 0;
+            padding: 0;
+            background: #000;
+            height: 100%;
+        }}
+        #player-container {{
+            position: absolute;
+            inset: 0;
+        }}
+        iframe {{
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }}
+    </style>
+</head>
+<body>
+    <div id=\"player-container\"></div>
+    <script>
+        const embedUrl = {safe_embed_url};
+
+        function mountPlayer() {{
+            const container = document.getElementById('player-container');
+            if (!container || container.dataset.initialized === 'true') {{
+                return;
+            }}
+
+            const iframe = document.createElement('iframe');
+            iframe.src = embedUrl;
+            iframe.title = 'YouTube video player';
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            iframe.allowFullscreen = true;
+            container.appendChild(iframe);
+            container.dataset.initialized = 'true';
+        }}
+
+        if (document.readyState === 'loading') {{
+            document.addEventListener('DOMContentLoaded', mountPlayer);
+        }} else {{
+            mountPlayer();
+        }}
+    </script>
+</body>
+</html>
+"""
+
+
 class TrackPreviewWidget(QFrame):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
@@ -2301,7 +2361,8 @@ class TrackPreviewWidget(QFrame):
 
         self.current_song = song
         self.status_label.setText(f"{song.artist} - {song.get_display_title()} 미리 듣는 중…")
-        self.web_view.setUrl(QUrl(embed_url))
+        preview_html = build_track_preview_html(embed_url)
+        self.web_view.setHtml(preview_html, QUrl("https://www.youtube.com"))
 
 
 class MusicTournamentGUI(QMainWindow):
