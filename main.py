@@ -2259,7 +2259,15 @@ def build_track_preview_html(embed_url: str) -> str:
             const iframe = document.createElement('iframe');
             iframe.src = embedUrl;
             iframe.title = 'YouTube video player';
-            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            const featurePermissions = [
+                'accelerometer',
+                'autoplay',
+                'clipboard-write',
+                'encrypted-media',
+                'gyroscope',
+                'picture-in-picture'
+            ];
+            iframe.setAttribute('allow', featurePermissions.join('; '));
             iframe.allowFullscreen = true;
             container.appendChild(iframe);
             container.dataset.initialized = 'true';
