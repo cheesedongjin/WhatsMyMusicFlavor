@@ -46,6 +46,8 @@ from PyQt6.QtWidgets import (
     QRadioButton,
     QScrollArea,
     QStatusBar,
+    QStyle,
+    QToolButton,
     QTreeWidget,
     QTreeWidgetItem,
     QVBoxLayout,
@@ -1174,6 +1176,37 @@ class PreferenceSummarizer:
         "keyboards": "키보드 사운드",
     }
 
+    _TERM_GLOSSARY: Dict[str, Dict[str, str]] = {}
+
+    @classmethod
+    def glossary(cls) -> Dict[str, Dict[str, str]]:
+        if cls._TERM_GLOSSARY:
+            return cls._TERM_GLOSSARY
+
+        glossary: Dict[str, Dict[str, str]] = {}
+
+        for code, label in cls.GENRE_LABELS.items():
+            glossary[code] = {
+                "label": label,
+                "description": f"{label} 장르의 정서를 의미해요 (원문: {code}).",
+            }
+
+        for code, tone in cls.SUBGENRE_TONES.items():
+            pretty = code.replace("_", " ")
+            glossary[code] = {
+                "label": tone,
+                "description": f"{tone} 무드는 세부 장르 '{pretty}'의 매력을 설명합니다.",
+            }
+
+        for code, tone in cls.INSTRUMENT_TONES.items():
+            glossary[code] = {
+                "label": tone,
+                "description": f"{tone} 사운드가 편성의 핵심이라는 뜻이에요.",
+            }
+
+        cls._TERM_GLOSSARY = glossary
+        return cls._TERM_GLOSSARY
+
     def summarize(self, champion: Optional[Song], top_songs: List[Song]) -> str:
         songs: List[Song] = []
         if champion:
@@ -2032,6 +2065,10 @@ class RecommendationEngine:
         if freshness_note and (category == 'fresh' or entry.get('freshness', 0) >= 0.5):
             parts.append(freshness_note)
 
+        usage_tip = self._suggest_usage_context(song)
+        if usage_tip:
+            parts.append(f"이 곡은 언제 어울려요: {usage_tip}")
+
         unique_parts = list(dict.fromkeys(parts))
         reason = " / ".join(unique_parts) if unique_parts else "토너먼트 기록 기반으로 엄선했어요"
 
@@ -2039,7 +2076,65 @@ class RecommendationEngine:
             'song': song,
             'reason': reason,
             'category': category,
+            'usage_tip': usage_tip,
         }
+
+    def _suggest_usage_context(self, song: Song) -> Optional[str]:
+        tags = song.tags if isinstance(song.tags, dict) else {}
+
+        def as_float(value: Any) -> Optional[float]:
+            return float(value) if isinstance(value, (int, float)) else None
+
+        energy = as_float(tags.get('energy'))
+        valence = as_float(tags.get('valence'))
+        tempo = as_float(tags.get('tempo_bpm'))
+        moods = [m for m in (tags.get('mood') or []) if isinstance(m, str)]
+
+        if energy is not None and valence is not None:
+            if energy >= 0.72 and valence >= 0.55:
+                return "출근길이나 운동 전에 기분을 끌어올리고 싶을 때"
+            if energy >= 0.7 and valence < 0.5:
+                return "격하게 집중하거나 러닝으로 텐션을 끌어올리고 싶을 때"
+            if energy <= 0.4 and valence >= 0.55:
+                return "늦은 저녁 포근하게 휴식하고 싶을 때"
+            if energy <= 0.4 and valence < 0.45:
+                return "새벽 감성으로 잔잔하게 몰입하고 싶을 때"
+
+        if energy is not None:
+            if energy >= 0.65:
+                return "주말 드라이브처럼 에너지가 필요할 때"
+            if energy <= 0.35:
+                return "집에서 조용히 쉬고 싶을 때"
+
+        if valence is not None:
+            if valence >= 0.65:
+                return "마음이 가벼워지는 밝은 순간을 만들고 싶을 때"
+            if valence <= 0.4:
+                return "차분한 분위기 속에 사색하고 싶을 때"
+
+        if tempo is not None:
+            if tempo >= 128:
+                return "파티나 운동처럼 리듬감이 필요한 순간"
+            if tempo <= 80:
+                return "늦은 밤 잔잔한 무드로 하루를 정리하고 싶을 때"
+
+        mood_sets = {
+            "relaxed": {"relaxed", "serene", "peaceful", "mellow"},
+            "energetic": {"energetic", "upbeat", "empowering", "driving", "dynamic"},
+            "dreamy": {"dreamy", "nocturnal", "ambient", "mystical", "ethereal"},
+            "romantic": {"romantic", "intimate", "warm"},
+        }
+        mood_set = set(moods)
+        if mood_sets["relaxed"] & mood_set:
+            return "카페에서 느긋하게 쉴 때"
+        if mood_sets["energetic"] & mood_set:
+            return "기분 전환이 필요할 때"
+        if mood_sets["dreamy"] & mood_set:
+            return "밤 산책처럼 몽환적인 분위기를 즐기고 싶을 때"
+        if mood_sets["romantic"] & mood_set:
+            return "잔잔한 데이트나 감성적인 순간"
+
+        return None
 
 # ============================================================================
 # 메인 애플리케이션
@@ -3694,19 +3789,26 @@ QHeaderView::section {
         self.update_status("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
         self.display_current_match()
 
-    def format_song_summary(self, song: Song) -> Dict[str, Optional[str]]:
+    def format_song_summary(self, song: Song) -> Dict[str, Any]:
         tags = song.tags if isinstance(song.tags, dict) else {}
 
         era_label = self._format_era_label(tags.get("era_year"))
-        genre_label = self._primary_genre_label(song)
+        genre_label, genre_key = self._primary_genre_label(song)
         base_segment = " ".join(part for part in (era_label, genre_label) if part).strip()
 
-        subgenre_phrase = self._subgenre_descriptor(tags.get("subgenres"))
-        instrumentation_phrase = self._instrumentation_descriptor(tags.get("instrumentation"))
+        subgenre_phrase, subgenre_key = self._subgenre_descriptor(tags.get("subgenres"))
+        instrumentation_phrase, inst_key = self._instrumentation_descriptor(tags.get("instrumentation"))
         mood_phrase = self._mood_descriptor(tags.get("mood"))
 
         detail_candidates = [subgenre_phrase, instrumentation_phrase, mood_phrase]
         detail_parts: List[str] = []
+        glossary_keys: List[str] = []
+        if genre_key:
+            glossary_keys.append(genre_key)
+        for key in (subgenre_key, inst_key):
+            if key and key not in glossary_keys:
+                glossary_keys.append(key)
+
         for phrase in detail_candidates:
             if phrase and phrase not in detail_parts:
                 detail_parts.append(phrase)
@@ -3743,7 +3845,11 @@ QHeaderView::section {
             focus_with_particle = self._attach_object_particle(focus)
             highlight = f"이런 분께 추천: {focus_with_particle} 좋아한다면"
 
-        return {"summary": summary_text, "highlight": highlight}
+        return {
+            "summary": summary_text,
+            "highlight": highlight,
+            "glossary_keys": glossary_keys,
+        }
 
     def _format_era_label(self, era_year: Optional[Any]) -> Optional[str]:
         if not isinstance(era_year, int):
@@ -3771,28 +3877,30 @@ QHeaderView::section {
             return "60년대"
         return "60년대 이전"
 
-    def _primary_genre_label(self, song: Song) -> Optional[str]:
+    def _primary_genre_label(self, song: Song) -> Tuple[Optional[str], Optional[str]]:
         genres = song.genres or []
         if not genres and song.genre_codes:
             genres = decode_genre_names(song.genre_codes)
         if not genres:
-            return None
+            return None, None
         primary = genres[0]
-        return PreferenceSummarizer.GENRE_LABELS.get(primary, primary)
+        label = PreferenceSummarizer.GENRE_LABELS.get(primary, primary)
+        key = primary if primary in PreferenceSummarizer.GENRE_LABELS else None
+        return label, key
 
-    def _subgenre_descriptor(self, subgenres: Optional[Any]) -> Optional[str]:
+    def _subgenre_descriptor(self, subgenres: Optional[Any]) -> Tuple[Optional[str], Optional[str]]:
         if not isinstance(subgenres, list):
-            return None
+            return None, None
         for item in subgenres:
             if not isinstance(item, str):
                 continue
             descriptor = PreferenceSummarizer.SUBGENRE_TONES.get(item)
             if descriptor:
-                return descriptor
+                return descriptor, item
         for item in subgenres:
             if isinstance(item, str):
-                return item.replace("_", " ") + " 무드"
-        return None
+                return item.replace("_", " ") + " 무드", None
+        return None, None
 
     def _mood_descriptor(self, moods: Optional[Any]) -> Optional[str]:
         if not isinstance(moods, list):
@@ -3808,19 +3916,22 @@ QHeaderView::section {
                 return mood.replace("_", " ") + " 무드"
         return None
 
-    def _instrumentation_descriptor(self, instrumentation: Optional[Any]) -> Optional[str]:
+    def _instrumentation_descriptor(self, instrumentation: Optional[Any]) -> Tuple[Optional[str], Optional[str]]:
         if not isinstance(instrumentation, list):
-            return None
+            return None, None
         for inst in instrumentation:
             if not isinstance(inst, str):
                 continue
+            descriptor = PreferenceSummarizer.INSTRUMENT_TONES.get(inst)
+            if descriptor:
+                return descriptor, inst
             descriptor = self.INSTRUMENT_DESCRIPTIONS.get(inst)
             if descriptor:
-                return descriptor
+                return descriptor, inst
         for inst in instrumentation:
             if isinstance(inst, str):
-                return inst.replace("_", " ") + " 사운드"
-        return None
+                return inst.replace("_", " ") + " 사운드", None
+        return None, None
 
     @staticmethod
     def _attach_object_particle(phrase: str) -> str:
@@ -3863,6 +3974,16 @@ QHeaderView::section {
         tag_label.setProperty("role", "helper")
         tag_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.MinimumExpanding)
         layout.addWidget(tag_label)
+        glossary_button = QToolButton()
+        glossary_button.setObjectName("GlossaryButton")
+        glossary_button.setText("용어 설명 보기")
+        glossary_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation))
+        glossary_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        glossary_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        glossary_button.setProperty("role", "helper")
+        glossary_button.setVisible(False)
+        glossary_button.clicked.connect(self._handle_glossary_button_click)
+        layout.addWidget(glossary_button, alignment=Qt.AlignmentFlag.AlignLeft)
         preview_embed = SongPreviewEmbed(box, minimum_height=160)
         layout.addWidget(preview_embed)
         layout.addStretch(1)
@@ -3876,6 +3997,7 @@ QHeaderView::section {
             "title": name_label,
             "meta": meta_label,
             "tag": tag_label,
+            "glossary_button": glossary_button,
             "preview_embed": preview_embed,
             "button": select_button,
         }
@@ -3894,7 +4016,46 @@ QHeaderView::section {
         if highlight:
             lines.append(highlight)
         card["tag"].setText("\n".join(lines))
+        glossary_button = card.get("glossary_button")
+        glossary_keys = summary_info.get("glossary_keys") if isinstance(summary_info, dict) else None
+        keys_list = list(glossary_keys or [])
+        if glossary_button:
+            glossary_button.setProperty("glossaryKeys", keys_list)
+            glossary_button.setVisible(bool(keys_list))
+            glossary_button.setEnabled(bool(keys_list))
+            if keys_list:
+                glossary_button.setToolTip("요약에 등장하는 용어 설명을 확인해보세요.")
+            else:
+                glossary_button.setToolTip("")
         card["preview_embed"].set_song(song)
+
+    def _handle_glossary_button_click(self):
+        sender = self.sender()
+        if not sender:
+            return
+        keys = sender.property("glossaryKeys") if hasattr(sender, "property") else None
+        key_list: List[str] = []
+        if isinstance(keys, (list, tuple, set)):
+            key_list = [str(key) for key in keys]
+        elif isinstance(keys, str):
+            key_list = [keys]
+        self.show_glossary_popup(key_list)
+
+    def show_glossary_popup(self, keys: Iterable[str]):
+        glossary = PreferenceSummarizer.glossary()
+        rows: List[str] = []
+        for key in keys:
+            info = glossary.get(str(key))
+            if not info:
+                continue
+            label = info.get("label", str(key))
+            description = info.get("description", "")
+            rows.append(f"• {label}: {description}")
+        if not rows:
+            QMessageBox.information(self, "용어 설명", "설명할 용어가 없습니다.")
+            return
+        message = "\n".join(rows)
+        QMessageBox.information(self, "용어 설명", message)
 
     def display_current_match(self):
         if not self.current_round_matches:
@@ -4124,7 +4285,11 @@ QHeaderView::section {
         champion: Optional[Song] = report.get("champion") or getattr(self, "champion", None)
         top_songs: List[Song] = report.get("top_songs") or []
 
-        champion_summary = self.format_song_summary(champion) if champion else {"summary": None, "highlight": None}
+        champion_summary = (
+            self.format_song_summary(champion)
+            if champion
+            else {"summary": None, "highlight": None, "glossary_keys": []}
+        )
 
         top_song_entries: List[Dict[str, Any]] = []
         for idx, song in enumerate(top_songs, 1):
@@ -4139,6 +4304,7 @@ QHeaderView::section {
                     "rating": song.rating,
                     "summary": summary_info.get("summary"),
                     "highlight": summary_info.get("highlight"),
+                    "glossary_keys": summary_info.get("glossary_keys"),
                 }
             )
 
@@ -4161,6 +4327,8 @@ QHeaderView::section {
                         "reason": entry.get("reason") if isinstance(entry, dict) else None,
                         "summary": summary_info.get("summary"),
                         "highlight": summary_info.get("highlight"),
+                        "glossary_keys": summary_info.get("glossary_keys"),
+                        "usage_tip": entry.get("usage_tip") if isinstance(entry, dict) else None,
                     }
                 )
             if items:
@@ -4175,12 +4343,14 @@ QHeaderView::section {
                 "record": f"{champion.wins}승 {champion.losses}패" if champion else None,
                 "summary": champion_summary.get("summary"),
                 "highlight": champion_summary.get("highlight"),
+                "glossary_keys": champion_summary.get("glossary_keys"),
             },
             "summary": report.get("preference_summary"),
             "total_matches": report.get("total_matches"),
             "choice_distribution": report.get("choice_distribution", {}),
             "top_songs": top_song_entries,
             "recommendations": recommendation_groups,
+            "glossary": PreferenceSummarizer.glossary(),
         }
 
     def _build_export_html(self, context: Dict[str, Any]) -> str:
@@ -4194,6 +4364,34 @@ QHeaderView::section {
                 return ""
             escaped = safe(text).replace("\n", "<br>")
             return f"<div class='{css_class}'>{escaped}</div>"
+
+        glossary_map: Dict[str, Dict[str, str]] = context.get("glossary", {}) or {}
+
+        def render_glossary_block(keys: Optional[Any]) -> str:
+            if not keys:
+                return ""
+            rows = []
+            for key in keys:
+                info = glossary_map.get(str(key))
+                if not info:
+                    continue
+                label = safe(info.get("label"))
+                description = safe(info.get("description"))
+                rows.append(
+                    f"<li><span class='annotation-term'>{label}</span><span class='annotation-desc'>{description}</span></li>"
+                )
+            if not rows:
+                return ""
+            return "<div class='annotation-block'><div class='annotation-title'>용어 노트</div><ul class='annotation-list'>" + "".join(rows) + "</ul></div>"
+
+        def render_usage_block(tip: Optional[Any]) -> str:
+            if not tip:
+                return ""
+            return (
+                "<div class='annotation-block usage-block'>"
+                "<div class='annotation-title'>이 곡은 언제 어울려요</div>"
+                f"<p class='annotation-text'>{safe(tip)}</p></div>"
+            )
 
         generated_at = context.get("generated_at")
         generated_text = generated_at.strftime("%Y.%m.%d %H:%M") if generated_at else ""
@@ -4213,6 +4411,7 @@ QHeaderView::section {
         champion_record = champion.get("record") or "-"
         champion_summary_html = render_text_block(champion.get("summary"), "champion-summary")
         champion_highlight_html = render_text_block(champion.get("highlight"), "champion-highlight")
+        champion_glossary_html = render_glossary_block(champion.get("glossary_keys"))
 
         top_song_html = ""
         if top_songs:
@@ -4229,7 +4428,8 @@ QHeaderView::section {
                 )
                 summary_block = render_text_block(entry.get("summary"), "song-summary")
                 highlight_block = render_text_block(entry.get("highlight"), "song-highlight")
-                items.append("<li>" + header + summary_block + highlight_block + "</li>")
+                glossary_block = render_glossary_block(entry.get("glossary_keys"))
+                items.append("<li>" + header + summary_block + highlight_block + glossary_block + "</li>")
             top_song_html = "<section><h2>상위 플레이리스트</h2><ol>" + "".join(items) + "</ol></section>"
 
         recommendation_html = ""
@@ -4241,6 +4441,8 @@ QHeaderView::section {
                     summary_block = render_text_block(item.get("summary"), "recommendation-summary")
                     highlight_block = render_text_block(item.get("highlight"), "recommendation-highlight")
                     reason_block = render_text_block(item.get("reason"), "recommendation-reason")
+                    usage_block = render_usage_block(item.get("usage_tip"))
+                    glossary_block = render_glossary_block(item.get("glossary_keys"))
                     rows.append(
                         "<div class='recommendation-item'>"
                         f"<div class='recommendation-title'>{idx}. {safe(item.get('title'))}</div>"
@@ -4248,6 +4450,8 @@ QHeaderView::section {
                         + summary_block
                         + highlight_block
                         + reason_block
+                        + usage_block
+                        + glossary_block
                         + "</div>"
                     )
                 sections.append(
@@ -4458,6 +4662,37 @@ QHeaderView::section {
             margin-top: 4px;
             line-height: 1.5;
         }}
+        .annotation-block {{
+            margin-top: 6px;
+            padding: 8px 10px;
+            border-left: 3px solid #94a3b8;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 12px;
+        }}
+        .annotation-title {{
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #0f172a;
+        }}
+        .annotation-list {{
+            margin: 0;
+            padding-left: 16px;
+        }}
+        .annotation-list li {{
+            margin-bottom: 2px;
+        }}
+        .annotation-term {{
+            font-weight: 600;
+            margin-right: 4px;
+        }}
+        .annotation-desc {{
+            color: #1f2937;
+        }}
+        .annotation-text {{
+            margin: 0;
+            line-height: 1.6;
+        }}
         footer {{
             margin-top: 32px;
             font-size: 12px;
@@ -4480,6 +4715,7 @@ QHeaderView::section {
         </div>
         {champion_summary_html}
         {champion_highlight_html}
+        {champion_glossary_html}
     </section>
     {summary_html}
     {stats_html}
@@ -4530,16 +4766,56 @@ QHeaderView::section {
             for idx, entry in enumerate(entries, 1):
                 song = entry["song"]
                 reason = entry["reason"]
+                summary_info = self.format_song_summary(song)
+                summary_text = summary_info.get("summary") if isinstance(summary_info, dict) else None
+                highlight_text = summary_info.get("highlight") if isinstance(summary_info, dict) else None
+                glossary_keys = list(summary_info.get("glossary_keys") or []) if isinstance(summary_info, dict) else []
                 song_label = QLabel(
                     f"{idx}. {song.artist} - {song.get_display_title()}"
                 )
                 song_label.setObjectName("BodyLabel")
                 card_layout.addWidget(song_label)
+                if summary_text:
+                    summary_label = QLabel(summary_text)
+                    summary_label.setObjectName("BodyLabel")
+                    summary_label.setWordWrap(True)
+                    card_layout.addWidget(summary_label)
+                if highlight_text:
+                    highlight_label = QLabel(highlight_text)
+                    highlight_label.setObjectName("BodyLabel")
+                    highlight_label.setProperty("role", "helper")
+                    highlight_label.setWordWrap(True)
+                    card_layout.addWidget(highlight_label)
                 reason_label = QLabel(reason)
                 reason_label.setObjectName("BodyLabel")
                 reason_label.setProperty("role", "helper")
                 reason_label.setWordWrap(True)
+                usage_tip = entry.get("usage_tip")
+                usage_sentence = f"이 곡은 언제 어울려요: {usage_tip}" if usage_tip else None
+                if usage_sentence and usage_sentence in reason:
+                    parts = [part for part in reason.split(" / ") if part and part != usage_sentence]
+                    reason_display = " / ".join(parts)
+                    if not reason_display:
+                        reason_display = usage_sentence
+                else:
+                    reason_display = reason
+                reason_label.setText(reason_display)
                 card_layout.addWidget(reason_label)
+                if usage_sentence and usage_sentence != reason_display:
+                    usage_label = QLabel(usage_sentence)
+                    usage_label.setObjectName("BodyLabel")
+                    usage_label.setWordWrap(True)
+                    card_layout.addWidget(usage_label)
+                glossary_button = QToolButton(card)
+                glossary_button.setObjectName("GlossaryButton")
+                glossary_button.setText("용어 설명 보기")
+                glossary_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation))
+                glossary_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+                glossary_button.setCursor(Qt.CursorShape.PointingHandCursor)
+                glossary_button.setProperty("glossaryKeys", glossary_keys)
+                glossary_button.clicked.connect(self._handle_glossary_button_click)
+                glossary_button.setVisible(bool(glossary_keys))
+                card_layout.addWidget(glossary_button, alignment=Qt.AlignmentFlag.AlignLeft)
                 embed = SongPreviewEmbed(card, minimum_height=160)
                 embed.set_song(song)
                 card_layout.addWidget(embed)
