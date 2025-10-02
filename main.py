@@ -1954,7 +1954,14 @@ class RecommendationEngine:
             parts.append(freshness_note)
 
         unique_parts = list(dict.fromkeys(parts))
-        reason = " / ".join(unique_parts) if unique_parts else "토너먼트 기록 기반으로 엄선했어요"
+        if unique_parts:
+            reason = " / ".join(unique_parts)
+        else:
+            reason = (
+                "기본 취향 프로필을 바탕으로 엄선했어요"
+                if isinstance(self.profile, dict) and self.profile.get("quick_mode")
+                else "토너먼트 기록 기반으로 엄선했어요"
+            )
 
         return {
             'song': song,
@@ -2285,6 +2292,7 @@ class MusicTournamentGUI(QMainWindow):
     ]
 
     TOURNAMENT_SIZE_OPTIONS = TOURNAMENT_SIZE_PRESETS
+    QUICK_RECOMMENDATION_SIZE = 16
 
     def __init__(self, songs_file: str):
         super().__init__()
@@ -2309,6 +2317,7 @@ class MusicTournamentGUI(QMainWindow):
         self.unlocked_stages: Set[str] = {"start", "survey"}
         self.active_stage = "start"
         self.preview_widget = TrackPreviewWidget()
+        self.quick_mode_active = False
 
         central = QWidget()
         central.setObjectName("CentralWidget")
@@ -2833,6 +2842,7 @@ QHeaderView::section {
         self.unlocked_stages = {"start", "survey"}
         self.active_stage = "start"
         self.update_stage_indicator()
+        self.quick_mode_active = False
 
 
     def clear_content(self):
@@ -2906,11 +2916,101 @@ QHeaderView::section {
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
         start_button.setMinimumHeight(48)
         start_button.clicked.connect(self.show_survey_view)
-        layout.addWidget(start_button, alignment=Qt.AlignmentFlag.AlignLeft)
+
+        quick_button = QPushButton("빠르게 추천 받기")
+        quick_button.setProperty("variant", "ghost")
+        quick_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        quick_button.setMinimumHeight(48)
+        quick_button.clicked.connect(self.start_quick_recommendations)
+
+        button_row = QHBoxLayout()
+        button_row.setSpacing(12)
+        button_row.addWidget(start_button)
+        button_row.addWidget(quick_button)
+        button_row.addStretch(1)
+        layout.addLayout(button_row)
         layout.addStretch(1)
 
         self.content_layout.addWidget(widget)
         self.update_status("간단한 설문부터 시작해볼까요?")
+
+    def start_quick_recommendations(self):
+        if not self.songs:
+            QMessageBox.warning(self, "데이터 없음", "추천에 사용할 곡 데이터를 찾을 수 없습니다.")
+            return
+
+        self.reset_state()
+        self.quick_mode_active = True
+        self.survey_profile = self._build_quick_profile()
+
+        quick_size = min(self.QUICK_RECOMMENDATION_SIZE, len(self.songs))
+        if quick_size <= 0:
+            QMessageBox.warning(self, "추천 불가", "추천을 생성할 수 있는 곡이 없습니다.")
+            self.show_start_view()
+            return
+
+        selector = CandidateSelector(self.songs, self.survey_profile)
+        self.candidates = selector.select_candidates(k=quick_size)
+        self.seed_scores = selector.get_seed_scores()
+
+        if not self.candidates:
+            QMessageBox.warning(self, "추천 불가", "추천에 활용할 수 있는 후보를 찾지 못했습니다.")
+            self.show_start_view()
+            return
+
+        if not self._prepare_quick_mode_results():
+            QMessageBox.warning(self, "추천 불가", "빠른 추천 결과를 생성하지 못했습니다.")
+            self.show_start_view()
+            return
+
+        self.unlocked_stages.add("results")
+        self.update_stage_indicator()
+        self.update_status("빠른 추천 모드로 결과를 바로 준비했어요.")
+        self.show_results_view()
+
+    def _build_quick_profile(self) -> Dict[str, Any]:
+        return {
+            "genre_scores": {},
+            "preferred_era": 2015,
+            "preferred_energy": 0.6,
+            "preferred_popularity": 0.5,
+            "preferred_language": None,
+            "preferred_languages": [],
+            "language_strict": False,
+            "preferred_moods": [],
+            "mood_weight": 0.0,
+            "preferred_instrumentations": [],
+            "regional_focus": "neutral",
+            "quick_mode": True,
+        }
+
+    def _prepare_quick_mode_results(self) -> bool:
+        if not self.candidates:
+            return False
+
+        if not self.champion:
+            self.champion = self.candidates[0]
+
+        champion = self.champion
+        if not champion:
+            return False
+
+        top_songs = self.candidates[:5]
+        summarizer = PreferenceSummarizer()
+        summary = summarizer.summarize(champion, top_songs)
+
+        self.report = {
+            "champion": champion,
+            "top_songs": top_songs,
+            "total_matches": None,
+            "choice_distribution": {},
+            "preference_summary": summary,
+            "mode": "quick",
+        }
+
+        recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
+        self.recommendations = recommender.generate_recommendations(top_songs)
+        return True
 
     def show_survey_view(self):
         self.clear_content()
@@ -3380,15 +3480,63 @@ QHeaderView::section {
         layout.setContentsMargins(32, 32, 32, 32)
         layout.setSpacing(18)
 
-        title = QLabel("토너먼트 결과")
+        quick_mode = getattr(self, "quick_mode_active", False)
+        title = QLabel("빠른 추천 결과" if quick_mode else "토너먼트 결과")
         title.setObjectName("SectionTitle")
         layout.addWidget(title)
 
         scroll.setWidget(container)
         self.content_layout.addWidget(scroll)
 
-        if not self.champion or not self.engine:
-            message = QLabel("토너먼트 결과가 존재하지 않습니다.")
+        if quick_mode:
+            if not self.candidates:
+                message = QLabel("빠른 추천을 준비할 후보가 없습니다.")
+                message.setObjectName("BodyLabel")
+                layout.addWidget(message)
+                back = QPushButton("처음으로")
+                back.setCursor(Qt.CursorShape.PointingHandCursor)
+                back.clicked.connect(self.show_start_view)
+                layout.addWidget(back, alignment=Qt.AlignmentFlag.AlignLeft)
+                layout.addStretch(1)
+                self.update_status("빠른 추천 결과가 없습니다.")
+                return
+            if not self.report or self.report.get("mode") != "quick":
+                if not self._prepare_quick_mode_results():
+                    message = QLabel("빠른 추천 결과를 구성하지 못했습니다.")
+                    message.setObjectName("BodyLabel")
+                    layout.addWidget(message)
+                    back = QPushButton("처음으로")
+                    back.setCursor(Qt.CursorShape.PointingHandCursor)
+                    back.clicked.connect(self.show_start_view)
+                    layout.addWidget(back, alignment=Qt.AlignmentFlag.AlignLeft)
+                    layout.addStretch(1)
+                    self.update_status("빠른 추천 결과가 없습니다.")
+                    return
+        else:
+            if not self.champion or not self.engine:
+                message = QLabel("토너먼트 결과가 존재하지 않습니다.")
+                message.setObjectName("BodyLabel")
+                layout.addWidget(message)
+                back = QPushButton("처음으로")
+                back.setCursor(Qt.CursorShape.PointingHandCursor)
+                back.clicked.connect(self.show_start_view)
+                layout.addWidget(back, alignment=Qt.AlignmentFlag.AlignLeft)
+                layout.addStretch(1)
+                self.update_status("토너먼트 결과가 없습니다.")
+                return
+
+            analyzer = ResultAnalyzer(self.engine.match_history, self.candidates)
+            self.report = analyzer.generate_report(self.champion)
+            recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
+            self.recommendations = recommender.generate_recommendations(self.report.get("top_songs", []))
+
+        report = self.report or {}
+        if quick_mode and report.get("mode") != "quick":
+            report["mode"] = "quick"
+
+        champion = self.champion or report.get("champion")
+        if not champion:
+            message = QLabel("결과를 표시할 수 있는 대표 곡이 없습니다.")
             message.setObjectName("BodyLabel")
             layout.addWidget(message)
             back = QPushButton("처음으로")
@@ -3396,17 +3544,17 @@ QHeaderView::section {
             back.clicked.connect(self.show_start_view)
             layout.addWidget(back, alignment=Qt.AlignmentFlag.AlignLeft)
             layout.addStretch(1)
-            self.update_status("토너먼트 결과가 없습니다.")
+            self.update_status("결과가 없습니다.")
             return
-
-        analyzer = ResultAnalyzer(self.engine.match_history, self.candidates)
-        self.report = analyzer.generate_report(self.champion)
-        recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
-        self.recommendations = recommender.generate_recommendations(self.report["top_songs"])
 
         if self.preview_widget:
             self.preview_widget.setParent(container)
-            self.preview_widget.reset("추천곡의 미리 듣기 버튼을 누르면 이 영역에서 재생됩니다.")
+            preview_message = (
+                "빠른 추천 결과의 미리 듣기 버튼을 누르면 이 영역에서 재생됩니다."
+                if quick_mode
+                else "추천곡의 미리 듣기 버튼을 누르면 이 영역에서 재생됩니다."
+            )
+            self.preview_widget.reset(preview_message)
             self.preview_widget.show()
             layout.addWidget(self.preview_widget)
 
@@ -3415,30 +3563,56 @@ QHeaderView::section {
         summary_layout = QVBoxLayout(summary_card)
         summary_layout.setSpacing(8)
 
+        if quick_mode:
+            badge = QLabel("⚡ 빠른 추천 모드")
+            badge.setObjectName("HighlightChip")
+            badge.setAlignment(Qt.AlignmentFlag.AlignLeft)
+            badge.setWordWrap(True)
+            summary_layout.addWidget(badge)
+
         champion_label = QLabel(
-            f"우승 곡: {self.champion.artist} - {self.champion.get_display_title()}"
+            (
+                f"대표 추천 곡: {champion.artist} - {champion.get_display_title()}"
+                if quick_mode
+                else f"우승 곡: {champion.artist} - {champion.get_display_title()}"
+            )
         )
         champion_label.setObjectName("ChampionTitle")
         summary_layout.addWidget(champion_label)
 
-        record_label = QLabel(
-            f"레이팅 {self.champion.rating:.1f} · 전적 {self.champion.wins}승 {self.champion.losses}패"
-        )
-        record_label.setObjectName("BodyLabel")
-        summary_layout.addWidget(record_label)
+        if quick_mode:
+            info_label = QLabel("토너먼트를 건너뛰고 기본 취향 프로필로 선별된 결과입니다.")
+            info_label.setObjectName("BodyLabel")
+            info_label.setProperty("role", "helper")
+            info_label.setWordWrap(True)
+            summary_layout.addWidget(info_label)
+        else:
+            rating_value = getattr(champion, "rating", None)
+            wins = getattr(champion, "wins", 0)
+            losses = getattr(champion, "losses", 0)
+            if isinstance(rating_value, (int, float)):
+                rating_text = f"레이팅 {rating_value:.1f}"
+            else:
+                rating_text = "레이팅 정보 없음"
+            record_label = QLabel(
+                f"{rating_text} · 전적 {wins}승 {losses}패"
+            )
+            record_label.setObjectName("BodyLabel")
+            summary_layout.addWidget(record_label)
 
-        summary_text = self.report.get("preference_summary") if self.report else None
+        summary_text = report.get("preference_summary") if report else None
         if summary_text:
             summary_label = QLabel(f"취향 요약: {summary_text}")
             summary_label.setObjectName("BodyLabel")
             summary_label.setWordWrap(True)
             summary_layout.addWidget(summary_label)
 
-        if self.champion.youtube_url:
-            champion_preview = QPushButton("우승 곡 미리 듣기")
+        if champion.youtube_url:
+            preview_button_text = "대표 추천 곡 미리 듣기" if quick_mode else "우승 곡 미리 듣기"
+            champion_preview = QPushButton(preview_button_text)
             champion_preview.setCursor(Qt.CursorShape.PointingHandCursor)
-            champion_preview.clicked.connect(lambda _=False, s=self.champion: self.preview_widget.load_song(s))
-            supports_preview = self.preview_widget.can_preview(self.champion) if self.preview_widget else False
+            champion_preview.clicked.connect(lambda _=False, s=champion: self.preview_widget.load_song(s))
+            supports_preview = self.preview_widget.can_preview(champion) if self.preview_widget else False
             champion_preview.setEnabled(supports_preview)
             summary_layout.addWidget(champion_preview)
             helper = QLabel()
@@ -3446,16 +3620,21 @@ QHeaderView::section {
             helper.setProperty("role", "helper")
             helper.setWordWrap(True)
             if supports_preview:
-                helper.setText("버튼을 누르면 상단 미리 듣기 영역에서 우승 곡이 재생됩니다.")
+                helper.setText(
+                    "버튼을 누르면 상단 미리 듣기 영역에서 대표 추천 곡이 재생됩니다."
+                    if quick_mode
+                    else "버튼을 누르면 상단 미리 듣기 영역에서 우승 곡이 재생됩니다."
+                )
             else:
-                helper.setText(self.preview_widget.unavailable_message(self.champion) if self.preview_widget else "미리 듣기를 지원하지 않는 환경입니다.")
+                helper.setText(self.preview_widget.unavailable_message(champion) if self.preview_widget else "미리 듣기를 지원하지 않는 환경입니다.")
             summary_layout.addWidget(helper)
 
-        if self.report["top_songs"]:
+        top_songs = list(report.get("top_songs", []))
+        if top_songs:
             playlist_label = QLabel("상위 플레이리스트")
             playlist_label.setObjectName("RecommendationGroupLabel")
             summary_layout.addWidget(playlist_label)
-            for idx, song in enumerate(self.report["top_songs"], 1):
+            for idx, song in enumerate(top_songs, 1):
                 song_label = QLabel(
                     f"{idx}. {song.artist} - {song.get_display_title()}"
                 )
@@ -3464,17 +3643,22 @@ QHeaderView::section {
 
         layout.addWidget(summary_card)
 
-        stats = self.report["choice_distribution"]
+        stats_data = report.get("choice_distribution") or {}
         stats_card = QFrame()
         stats_card.setObjectName("InsightCard")
         stats_layout = QVBoxLayout(stats_card)
         stats_layout.setSpacing(6)
-        stats_title = QLabel("선택 통계")
+        stats_title_text = "진행 정보" if quick_mode else "선택 통계"
+        stats_title = QLabel(stats_title_text)
         stats_title.setObjectName("RecommendationGroupLabel")
         stats_layout.addWidget(stats_title)
-        stats_label = QLabel(
-            f"총 매치 {self.report['total_matches']} · A {stats.get('A', 0)} · B {stats.get('B', 0)} · 둘 다 {stats.get('T', 0)} · 건너뛰기 {stats.get('S', 0)}"
-        )
+        if quick_mode:
+            stats_label = QLabel("빠른 추천 모드에서는 토너먼트를 진행하지 않아 매치 통계가 제공되지 않습니다.")
+        else:
+            total_matches = report.get("total_matches", 0)
+            stats_label = QLabel(
+                f"총 매치 {total_matches} · A {stats_data.get('A', 0)} · B {stats_data.get('B', 0)} · 둘 다 {stats_data.get('T', 0)} · 건너뛰기 {stats_data.get('S', 0)}"
+            )
         stats_label.setObjectName("BodyLabel")
         stats_label.setProperty("role", "helper")
         stats_label.setWordWrap(True)
@@ -3500,7 +3684,10 @@ QHeaderView::section {
         layout.addLayout(button_row)
         layout.addStretch(1)
 
-        self.update_status("결과를 확인하고 추천곡과 매치 히스토리를 아래에서 확인해보세요.")
+        if quick_mode:
+            self.update_status("빠른 추천 모드 결과를 확인하고 추천곡을 들어보세요.")
+        else:
+            self.update_status("결과를 확인하고 추천곡과 매치 히스토리를 아래에서 확인해보세요.")
 
     def export_results(self):
         if not getattr(self, "report", None):
@@ -3544,7 +3731,8 @@ QHeaderView::section {
         recommendations: Dict[str, Any] = getattr(self, "recommendations", {}) or {}
 
         champion: Optional[Song] = report.get("champion") or getattr(self, "champion", None)
-        top_songs: List[Song] = report.get("top_songs") or []
+        top_songs: List[Song] = list(report.get("top_songs") or [])
+        quick_mode = bool(self.quick_mode_active or report.get("mode") == "quick")
 
         top_song_entries: List[Dict[str, Any]] = []
         for idx, song in enumerate(top_songs, 1):
@@ -3586,13 +3774,18 @@ QHeaderView::section {
                 "title": champion.get_display_title() if champion else "-",
                 "artist": champion.artist if champion else "-",
                 "rating": champion.rating if champion else None,
-                "record": f"{champion.wins}승 {champion.losses}패" if champion else None,
+                "record": (
+                    None
+                    if quick_mode or not champion
+                    else f"{champion.wins}승 {champion.losses}패"
+                ),
             },
             "summary": report.get("preference_summary"),
             "total_matches": report.get("total_matches"),
             "choice_distribution": report.get("choice_distribution", {}),
             "top_songs": top_song_entries,
             "recommendations": recommendation_groups,
+            "quick_mode": quick_mode,
         }
 
     def _build_export_html(self, context: Dict[str, Any]) -> str:
@@ -3610,13 +3803,25 @@ QHeaderView::section {
         stats = context.get("choice_distribution", {}) or {}
         total_matches = context.get("total_matches")
         summary = context.get("summary")
+        quick_mode = bool(context.get("quick_mode"))
 
         champion_rating_value = champion.get("rating")
         if isinstance(champion_rating_value, (int, float)):
             champion_rating_display = f"{champion_rating_value:.1f}"
         else:
             champion_rating_display = "-"
-        champion_record = champion.get("record") or "-"
+        champion_record = champion.get("record")
+        if quick_mode:
+            champion_record = "토너먼트 생략"
+        elif not champion_record:
+            champion_record = "-"
+
+        quick_note_html = ""
+        if quick_mode:
+            quick_note_html = (
+                "<p class='meta'>⚡ 빠른 추천 모드로 생성된 리포트입니다. "
+                "토너먼트를 건너뛰어 일부 통계가 제공되지 않습니다.</p>"
+            )
 
         top_song_html = ""
         if top_songs:
@@ -3819,6 +4024,7 @@ QHeaderView::section {
     <header>
         <h1>WhatsMyMusicFlavor · 결과 리포트</h1>
         <div class='meta'>생성일시 {safe(generated_text)}</div>
+        {quick_note_html}
     </header>
     <section class='champion-card'>
         <div class='champion-title'>{safe(champion.get('title'))}</div>
