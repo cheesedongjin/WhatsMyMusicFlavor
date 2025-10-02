@@ -11,6 +11,7 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 - **Interactive Survey**: Collects user preferences on genres, eras, energy levels, popularity, and language focus to tailor the experience.
 - **Tournament System**: Engages users in head-to-head song matchups to refine their music taste profile using an Elo rating system.
 - **Personalized Recommendations**: Generates "core" and "fresh" song recommendations based on survey responses and tournament outcomes.
+- **Cluster-Aware Fresh Picks**: Builds feature vectors from genre one-hot encodings, mood weights, energy, and popularity to cluster songs and surface options from contrasting groups.
 - **Real-Time Visual Feedback**: Displays progress with a progress bar and detailed song information during the tournament.
 - **Responsive GUI**: Modern, user-friendly interface with touch-friendly controls, optimized for desktop use.
 - **Korean Language Support**: Fully supports Korean text for song titles, artist names, and UI elements.
@@ -130,6 +131,13 @@ WhatsMyMusicFlavor is a Python-based music taste discovery system that guides us
 5. **Explore Recommendations**: Receive tailored song recommendations split into "core" (aligned with your taste) and "fresh" (new discoveries) categories.
 6. **Interact with Songs**: Click YouTube links (if available) to listen to songs directly from the interface.
 
+## Recommendation Algorithm Updates
+
+- Songs are embedded into feature vectors that mix genre one-hot encodings, mood weights, energy/valence balance, tempo, and popularity metrics.
+- The library trains a KMeans or MiniBatchKMeans model once and caches the cluster assignments so recommendation calls reuse them instantly.
+- "Fresh" picks intentionally include a minimum share of tracks from clusters that differ from the user's tournament favorites.
+- Recommendations highlight these discoveries with notes such as "Exploring a new cluster" to explain why they feel novel.
+
 ## JSON Structure
 
 The application relies on a `songs.json` file to load song data. Below is the required structure for each song entry:
@@ -179,7 +187,7 @@ See the source code comments for the full list of codes.
 - **Python 3.8+**
 - **PyQt6**: For the graphical user interface.
 - **NumPy**: For numerical computations in recommendation algorithms.
-- **scikit-learn**: For KMeans clustering in preference analysis.
+- **scikit-learn**: Powers KMeans/MiniBatchKMeans clustering for preference analysis.
 - **JSON**: For loading and parsing the song database.
 
 Install dependencies using:
