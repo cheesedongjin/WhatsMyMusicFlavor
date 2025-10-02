@@ -28,6 +28,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
+    QComboBox,
     QFileDialog,
     QFrame,
     QGridLayout,
@@ -1708,6 +1709,60 @@ class RecommendationEngine:
 # 메인 애플리케이션
 # ============================================================================
 
+
+TOURNAMENT_SIZE_PRESETS: List[Tuple[str, int]] = [
+    ("빠른 토너먼트 (16강)", 16),
+    ("표준 토너먼트 (32강)", 32),
+    ("확장 토너먼트 (64강)", 64),
+]
+
+DEFAULT_TOURNAMENT_SIZE = 32
+
+
+def determine_effective_tournament_size(
+    desired: int,
+    available: int,
+    allowed_sizes: Optional[List[int]] = None,
+) -> Tuple[int, bool]:
+    """Return a feasible tournament size within available songs.
+
+    Parameters
+    ----------
+    desired: int
+        Requested bracket size (e.g., 16, 32, 64).
+    available: int
+        Number of songs that can be used as candidates.
+    allowed_sizes: Optional[List[int]]
+        Whitelisted preset sizes. Defaults to the preset values.
+
+    Returns
+    -------
+    Tuple[int, bool]
+        (effective_size, adjusted_flag)
+    """
+
+    if allowed_sizes is None:
+        allowed_sizes = [value for _, value in TOURNAMENT_SIZE_PRESETS]
+
+    if available <= 0:
+        return 0, desired != 0
+
+    if desired <= available:
+        return desired, False
+
+    fallback_candidates = [size for size in allowed_sizes if size <= available]
+    if fallback_candidates:
+        fallback = max(fallback_candidates)
+    else:
+        if available < 2:
+            fallback = available
+        else:
+            power = 2 ** int(math.floor(math.log2(available)))
+            fallback = max(2, power)
+
+    return fallback, True
+
+
 class MusicTournamentApp:
     def __init__(self, songs_file: str):
         self.songs_file = songs_file
@@ -1716,7 +1771,8 @@ class MusicTournamentApp:
         self.candidates = []
         self.champion = None
         self.seed_scores: Dict[str, float] = {}
-        
+        self.tournament_size = DEFAULT_TOURNAMENT_SIZE
+
     def run(self):
         """전체 프로세스 실행"""
         print("\n" + "="*60)
@@ -1739,9 +1795,34 @@ class MusicTournamentApp:
         
         # 3. 후보 선택
         print("\n3️⃣ 후보곡 선정 중...")
+        desired_size = self.prompt_tournament_size()
+        available = len(self.songs)
+        effective_size, adjusted = determine_effective_tournament_size(desired_size, available)
+        if adjusted and effective_size > 0:
+            print(
+                f"⚠️ 선택한 토너먼트 규모({desired_size}강)가 사용 가능한 곡 수({available}곡)보다 많아 {effective_size}강으로 조정합니다."
+            )
+        if effective_size <= 0:
+            print("✗ 토너먼트를 구성할 곡이 없습니다. 프로그램을 종료합니다.")
+            return
+
+        self.tournament_size = effective_size
+
         selector = CandidateSelector(self.songs, self.survey_profile)
-        self.candidates = selector.select_candidates(k=32)
+        self.candidates = selector.select_candidates(k=effective_size)
         self.seed_scores = selector.get_seed_scores()
+
+        if len(self.candidates) < 2:
+            print("✗ 토너먼트를 진행하기에 곡이 부족합니다. 프로그램을 종료합니다.")
+            return
+
+        if len(self.candidates) % 2 == 1:
+            removed = self.candidates.pop()
+            if removed:
+                self.seed_scores.pop(removed.id, None)
+                print(
+                    f"⚠️ 홀수 후보 조정을 위해 {removed.artist} - {removed.get_display_title()} 곡을 제외합니다."
+                )
 
         # 4. 브래킷 생성
         print("\n4️⃣ 토너먼트 브래킷 생성 중...")
@@ -1774,6 +1855,25 @@ class MusicTournamentApp:
         print("\n" + "="*60)
         print("✨ 테스트 완료! 음악을 즐기세요 🎵")
         print("="*60)
+
+    def prompt_tournament_size(self) -> int:
+        print("\n원하는 토너먼트 규모를 선택하세요:")
+        for idx, (label, value) in enumerate(TOURNAMENT_SIZE_PRESETS, 1):
+            print(f"  {idx}. {label}")
+        print(f"  기본값: Enter 입력 시 {DEFAULT_TOURNAMENT_SIZE}강")
+
+        allowed_values = {value for _, value in TOURNAMENT_SIZE_PRESETS}
+        while True:
+            choice = input("선택 (번호 또는 강 수): ").strip()
+            if not choice:
+                return DEFAULT_TOURNAMENT_SIZE
+            if choice.isdigit():
+                number = int(choice)
+                if 1 <= number <= len(TOURNAMENT_SIZE_PRESETS):
+                    return TOURNAMENT_SIZE_PRESETS[number - 1][1]
+                if number in allowed_values:
+                    return number
+            print("지원하는 번호 또는 강 수(예: 16, 32, 64)를 입력해주세요.")
 
 # ============================================================================
 # GUI 애플리케이션
@@ -1837,6 +1937,8 @@ class MusicTournamentGUI(QMainWindow):
         ("잘 모르겠어요", "4"),
     ]
 
+    TOURNAMENT_SIZE_OPTIONS = TOURNAMENT_SIZE_PRESETS
+
     def __init__(self, songs_file: str):
         super().__init__()
         self.songs_file = songs_file
@@ -1846,6 +1948,8 @@ class MusicTournamentGUI(QMainWindow):
         self.shortcuts: List[QShortcut] = []
         self.history_show_all = False
         self.history_max_rows = 10
+        self.tournament_size_combo: Optional[QComboBox] = None
+        self.selected_tournament_size = DEFAULT_TOURNAMENT_SIZE
         self.stage_order: List[str] = ["start", "survey", "tournament", "results"]
         self.stage_descriptions: Dict[str, str] = {
             "start": "서비스 소개와 준비 단계",
@@ -2376,6 +2480,8 @@ QHeaderView::section {
         self.recommendations: Dict[str, List[Dict[str, Any]]] = {"core": [], "fresh": []}
         self.seed_scores: Dict[str, float] = {}
         self.history_show_all = False
+        self.tournament_size_combo = None
+        self.selected_tournament_size = DEFAULT_TOURNAMENT_SIZE
         self.unlocked_stages = {"start", "survey"}
         self.active_stage = "start"
         self.update_stage_indicator()
@@ -2503,6 +2609,35 @@ QHeaderView::section {
         self.sound_group = self.build_radio_section(form_layout, "사운드 질감", self.SOUND_OPTIONS, default="1")
         self.regional_focus_group = self.build_radio_section(form_layout, "국가/지역 취향", self.REGIONAL_FOCUS_OPTIONS, default="4")
 
+
+        size_box = QGroupBox("토너먼트 규모")
+        size_box.setObjectName("OptionGroup")
+        size_layout = QVBoxLayout(size_box)
+        size_layout.setSpacing(12)
+
+        size_description = QLabel("경기 수와 시간을 고려해 원하는 토너먼트 규모를 선택하세요.")
+        size_description.setProperty("role", "helper")
+        size_description.setWordWrap(True)
+        size_layout.addWidget(size_description)
+
+        combo = QComboBox()
+        combo.setCursor(Qt.CursorShape.PointingHandCursor)
+        default_index = 0
+        for idx, (label, value) in enumerate(self.TOURNAMENT_SIZE_OPTIONS):
+            combo.addItem(label, value)
+            if value == self.selected_tournament_size:
+                default_index = idx
+        combo.setCurrentIndex(default_index)
+        size_layout.addWidget(combo)
+        self.tournament_size_combo = combo
+
+        size_hint = QLabel("빠른 16강부터 확장 64강까지 선택할 수 있어요.")
+        size_hint.setProperty("role", "helper")
+        size_hint.setWordWrap(True)
+        size_layout.addWidget(size_hint)
+
+        form_layout.addWidget(size_box)
+
         start_button = QPushButton("토너먼트 시작")
         start_button.setProperty("variant", "primary")
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -2589,8 +2724,37 @@ QHeaderView::section {
             "regional_focus": regional_focus,
         }
 
+
+        desired_size = self.selected_tournament_size
+        if self.tournament_size_combo:
+            data = self.tournament_size_combo.currentData()
+            if isinstance(data, int):
+                desired_size = data
+            else:
+                try:
+                    desired_size = int(data)
+                except (TypeError, ValueError):
+                    desired_size = DEFAULT_TOURNAMENT_SIZE
+        available = len(self.songs)
+        effective_size, adjusted = determine_effective_tournament_size(desired_size, available)
+        if adjusted and effective_size > 0:
+            QMessageBox.warning(
+                self,
+                "후보 수 조정",
+                f"선택한 토너먼트 규모({desired_size}강)가 사용 가능한 곡 수({available}곡)보다 많아 {effective_size}강으로 조정했습니다.",
+            )
+        if effective_size <= 0:
+            QMessageBox.warning(
+                self,
+                "후보 부족",
+                "토너먼트를 구성할 곡이 없습니다. 데이터를 확인해주세요.",
+            )
+            self.show_start_view()
+            return
+        self.selected_tournament_size = effective_size
+
         selector = CandidateSelector(self.songs, self.survey_profile)
-        self.candidates = selector.select_candidates(k=min(32, len(self.songs)))
+        self.candidates = selector.select_candidates(k=effective_size)
         self.seed_scores = selector.get_seed_scores()
 
         if len(self.candidates) < 2:
@@ -2602,6 +2766,8 @@ QHeaderView::section {
             removed = self.candidates.pop()
             if removed:
                 self.seed_scores.pop(removed.id, None)
+
+        self.selected_tournament_size = len(self.candidates)
 
         self.engine = TournamentEngine()
         bracket_gen = BracketGenerator()
@@ -2615,9 +2781,9 @@ QHeaderView::section {
         self.current_round_matches = self.bracket[0] if self.bracket else []
         self.current_round_winners = []
         self.current_match_index = 0
-        self.total_matches = max(1, len(self.candidates) - 1)
+        self.total_matches = len(self.candidates) - 1 if len(self.candidates) >= 2 else 0
 
-        self.update_status("토너먼트를 준비 중입니다.")
+        self.update_status(f"{self.selected_tournament_size}강 토너먼트를 준비 중입니다.")
         self.show_match_view()
 
     def show_match_view(self):
