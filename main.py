@@ -2636,7 +2636,7 @@ QFrame#HeaderCard {
     border-radius: 24px;
 }
 QFrame#ContentFrame {
-    background-color: rgba(15, 23, 42, 0.65);
+    background-color: rgba(15, 23, 42, 0.45);
     border-radius: 24px;
     padding: 12px;
 }
@@ -2646,8 +2646,8 @@ QFrame#FooterFrame {
     padding: 0 16px;
 }
 QFrame#ContentSection {
-    background-color: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(56, 189, 248, 0.12);
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(4, 10, 28, 0.98), stop:1 rgba(2, 6, 23, 0.94));
+    border: 1px solid rgba(56, 189, 248, 0.16);
     border-radius: 20px;
     padding: 4px;
 }
