@@ -393,6 +393,77 @@ REGIONALITIES: List[str] = [
 ]
 
 
+# --------------------------------------------------------------------------
+# 설문 선택지 정의 (GUI/CLI 공용)
+# --------------------------------------------------------------------------
+SURVEY_GENRE_PAIRS: List[Tuple[Tuple[str, str, str], Tuple[str, str, str]]] = [
+    (
+        ("Rock", "1", "강렬한 기타 리프와 라이브 밴드 사운드 · Foo Fighters, Queen"),
+        ("Pop", "2", "멜로디와 훅이 돋보이는 팝 · Taylor Swift, Dua Lipa"),
+    ),
+    (
+        ("Hip-Hop", "1", "비트 위 랩과 그루브 중심 · Kendrick Lamar, 개코"),
+        ("Electronic", "2", "신스와 전자 비트 기반 · Daft Punk, Disclosure"),
+    ),
+    (
+        ("Jazz", "1", "즉흥과 스윙 감성 · Miles Davis, 김오키"),
+        ("Classical", "2", "관현악과 서정적 선율 · 베토벤, 이루마"),
+    ),
+    (
+        ("K-Pop", "1", "K-팝 아이돌/프로듀싱 사운드 · NewJeans, BTS"),
+        ("Indie", "2", "독립 레이블의 개성 있는 음색 · 혁오, Mac DeMarco"),
+    ),
+]
+
+SURVEY_ERA_OPTIONS: List[Tuple[str, str, str]] = [
+    ("레트로 감성 (70-80s)", "1", "디스코·시티팝 등 빈티지한 컬러"),
+    ("추억의 90-00s", "2", "발라드와 1세대 아이돌의 향수"),
+    ("최신 10s 이후", "3", "트렌디한 최신 프로덕션"),
+    ("시대 구애받지 않음", "4", "특정 시대보다 곡 분위기를 중시"),
+]
+
+SURVEY_ENERGY_OPTIONS: List[Tuple[str, str, str]] = [
+    ("차분한 무드", "1", "잔잔한 템포와 미니멀 편성"),
+    ("보통 에너지", "2", "균형 잡힌 리듬과 다이내믹"),
+    ("활기찬 느낌", "3", "경쾌한 비트와 밝은 텐션"),
+    ("강렬한 사운드", "4", "파워풀한 비트와 폭발감"),
+]
+
+SURVEY_POPULARITY_OPTIONS: List[Tuple[str, str, str]] = [
+    ("모두가 아는 히트곡", "1", "차트 상위권의 익숙한 멜로디"),
+    ("입소문이 난 곡", "2", "마니아층에서 주목받는 추천"),
+    ("숨겨진 보석 찾기", "3", "니치하고 실험적인 트랙"),
+]
+
+SURVEY_LANGUAGE_OPTIONS: List[Tuple[str, str, str]] = [
+    ("한국어 위주", "1", "가사 전달력과 공감을 중시"),
+    ("영어/글로벌", "2", "미국·유럽 팝 신을 즐김"),
+    ("언어 상관없음", "3", "언어보다 분위기를 우선"),
+    ("가사보다 사운드", "4", "보컬보다 연주·사운드 집중"),
+]
+
+SURVEY_MOOD_OPTIONS: List[Tuple[str, str, str]] = [
+    ("에너지 넘치는/업비트", "1", "업템포와 축제 같은 분위기"),
+    ("포근하고 감성적인", "2", "따뜻하고 서정적인 감성"),
+    ("그루비하고 리드미컬한", "3", "펑키한 베이스와 리듬"),
+    ("잔잔하고 야간 감성", "4", "심야 감성의 차분한 흐름"),
+]
+
+SURVEY_SOUND_OPTIONS: List[Tuple[str, str, str]] = [
+    ("밴드/어쿠스틱", "1", "기타·드럼이 살아있는 생동감"),
+    ("신스/전자음", "2", "신스 패드와 전자 비트"),
+    ("피아노/보컬 중심", "3", "피아노와 보컬의 섬세함"),
+    ("재즈/브라스 그루브", "4", "브라스 섹션과 스윙 리듬"),
+]
+
+SURVEY_REGIONAL_FOCUS_OPTIONS: List[Tuple[str, str, str]] = [
+    ("한국 음악만 추천해주세요", "1", "국내 아티스트 위주의 플레이리스트"),
+    ("한국·아시아 중심", "2", "한국과 아시아 씬을 넓게 소개"),
+    ("글로벌 다양성", "3", "전 세계 다양한 씬을 탐험"),
+    ("잘 모르겠어요", "4", "지역 구분 없이 골고루 추천"),
+]
+
+
 def _decode_index_list(values: List[int], lookup: List[str]) -> List[str]:
     return [lookup[v] for v in values if isinstance(v, int) and 0 <= v < len(lookup)]
 
@@ -585,46 +656,48 @@ class SurveyEngine:
         
         # 1. 장르 선호도 (쌍대 비교)
         print("\n[1단계] 두 장르 중 지금 더 끌리는 쪽을 골라보세요")
-        genre_pairs = [
-            ("Rock", "Pop"),
-            ("Hip-Hop", "Electronic"),
-            ("Jazz", "Classical"),
-            ("K-Pop", "Indie"),
-        ]
-        
+
         genre_scores = defaultdict(int)
-        for i, (g1, g2) in enumerate(genre_pairs, 1):
-            print(f"\n{i}. {g1} vs {g2}")
-            choice = input("   선택 (1/2/s=skip): ").strip()
-            if choice == '1':
-                genre_scores[g1] += 1
-            elif choice == '2':
-                genre_scores[g2] += 1
-        
+        for i, pair in enumerate(SURVEY_GENRE_PAIRS, 1):
+            (g1_label, g1_value, g1_desc), (g2_label, g2_value, g2_desc) = pair
+            print(f"\n{i}. {g1_label} vs {g2_label}")
+            print(f"   {g1_value}. {g1_label} - {g1_desc}")
+            print(f"   {g2_value}. {g2_label} - {g2_desc}")
+            print("   s. 잘 모르겠음 - 둘 다 좋아요 · 상황에 따라 달라요")
+            choice = input("   선택 (1/2/s): ").strip()
+            if choice == g1_value:
+                genre_scores[g1_label] += 1
+            elif choice == g2_value:
+                genre_scores[g2_label] += 1
+
         # 2. 시대 선호도
         print("\n[2단계] 플레이리스트의 분위기를 결정할 시대감은?")
-        print("1. 레트로 감성 (70-80s)  2. 추억의 90-00s  3. 최신 10s 이후  4. 시대 구애받지 않음")
+        for label, value, description in SURVEY_ERA_OPTIONS:
+            print(f" {value}. {label} - {description}")
         era = input("선택: ").strip()
         era_map = {'1': 1980, '2': 2000, '3': 2015, '4': None}
         preferred_era = era_map.get(era)
-        
+
         # 3. 에너지 레벨
         print("\n[3단계] 선호하는 에너지 레벨은?")
-        print("1. 차분함  2. 보통  3. 활기참  4. 매우 강렬함")
+        for label, value, description in SURVEY_ENERGY_OPTIONS:
+            print(f" {value}. {label} - {description}")
         energy = input("선택: ").strip()
         energy_map = {'1': 0.2, '2': 0.5, '3': 0.7, '4': 0.9}
         preferred_energy = energy_map.get(energy, 0.5)
-        
+
         # 4. 음악 발견 스타일
         print("\n[4단계] 어떤 방식의 음악 발견을 더 즐기나요?")
-        print("1. 모두가 아는 히트곡  2. 입소문이 난 곡  3. 숨겨진 보석 찾기")
+        for label, value, description in SURVEY_POPULARITY_OPTIONS:
+            print(f" {value}. {label} - {description}")
         popularity = input("선택: ").strip()
         pop_map = {'1': 0.8, '2': 0.5, '3': 0.2}
         preferred_popularity = pop_map.get(popularity, 0.5)
 
         # 5. 언어 선호
         print("\n[5단계] 가사 언어에 대해 어떤 취향에 가깝나요?")
-        print("1. 한국어 위주  2. 영어/글로벌  3. 언어는 크게 상관없음  4. 가사보다 사운드 중심")
+        for label, value, description in SURVEY_LANGUAGE_OPTIONS:
+            print(f" {value}. {label} - {description}")
         lang_choice = input("선택: ").strip()
         language_pref_map = {
             '1': {'preferred': 'ko', 'languages': {'ko'}, 'strict': False},
@@ -637,7 +710,8 @@ class SurveyEngine:
 
         # 6. 무드 선호
         print("\n[6단계] 이번 플레이리스트에서 느끼고 싶은 무드는?")
-        print("1. 에너지 넘치는/업비트  2. 포근하고 감성적인  3. 그루비하고 리드미컬한  4. 잔잔하고 야간 감성")
+        for label, value, description in SURVEY_MOOD_OPTIONS:
+            print(f" {value}. {label} - {description}")
         mood_choice = input("선택: ").strip()
         mood_map = {
             '1': {'moods': {'energetic', 'empowering', 'upbeat'}, 'weight': 0.9},
@@ -649,7 +723,8 @@ class SurveyEngine:
 
         # 7. 사운드 질감
         print("\n[7단계] 어떤 사운드 질감에 더 마음이 가나요?")
-        print("1. 밴드/어쿠스틱  2. 신스/전자음  3. 피아노/보컬 중심  4. 재즈/브라스 그루브")
+        for label, value, description in SURVEY_SOUND_OPTIONS:
+            print(f" {value}. {label} - {description}")
         sound_choice = input("선택: ").strip()
         sound_map = {
             '1': {'instrumentations': {'guitar', 'drums', 'bass', 'vocals'}},
@@ -661,7 +736,8 @@ class SurveyEngine:
 
         # 8. 지역/씬 집중도
         print("\n[8단계] 특정 지역의 음악에 마음이 가나요?")
-        print("1. 한국 음악 위주  2. 한국/아시아 중심  3. 글로벌 다양성  4. 잘 모르겠다")
+        for label, value, description in SURVEY_REGIONAL_FOCUS_OPTIONS:
+            print(f" {value}. {label} - {description}")
         regional_choice = input("선택: ").strip()
         regional_focus_map = {
             '1': 'k_only',
@@ -2229,60 +2305,21 @@ class TrackPreviewWidget(QFrame):
 
 
 class MusicTournamentGUI(QMainWindow):
-    GENRE_PAIRS = [
-        ("Rock", "Pop"),
-        ("Hip-Hop", "Electronic"),
-        ("Jazz", "Classical"),
-        ("K-Pop", "Indie"),
-    ]
+    GENRE_PAIRS = SURVEY_GENRE_PAIRS
 
-    ERA_OPTIONS = [
-        ("레트로 감성 (70-80s)", "1"),
-        ("추억의 90-00s", "2"),
-        ("최신 10s 이후", "3"),
-        ("시대 구애받지 않음", "4"),
-    ]
+    ERA_OPTIONS = SURVEY_ERA_OPTIONS
 
-    ENERGY_OPTIONS = [
-        ("차분한 무드", "1"),
-        ("보통 에너지", "2"),
-        ("활기찬 느낌", "3"),
-        ("강렬한 사운드", "4"),
-    ]
+    ENERGY_OPTIONS = SURVEY_ENERGY_OPTIONS
 
-    POPULARITY_OPTIONS = [
-        ("모두가 아는 히트곡", "1"),
-        ("입소문이 난 곡", "2"),
-        ("숨겨진 보석 찾기", "3"),
-    ]
+    POPULARITY_OPTIONS = SURVEY_POPULARITY_OPTIONS
 
-    LANGUAGE_OPTIONS = [
-        ("한국어 위주", "1"),
-        ("영어/글로벌", "2"),
-        ("언어 상관없음", "3"),
-        ("가사보다 사운드", "4"),
-    ]
+    LANGUAGE_OPTIONS = SURVEY_LANGUAGE_OPTIONS
 
-    MOOD_OPTIONS = [
-        ("에너지 넘치는/업비트", "1"),
-        ("포근하고 감성적인", "2"),
-        ("그루비하고 리드미컬한", "3"),
-        ("잔잔하고 야간 감성", "4"),
-    ]
+    MOOD_OPTIONS = SURVEY_MOOD_OPTIONS
 
-    SOUND_OPTIONS = [
-        ("밴드/어쿠스틱", "1"),
-        ("신스/전자음", "2"),
-        ("피아노/보컬 중심", "3"),
-        ("재즈/브라스 그루브", "4"),
-    ]
+    SOUND_OPTIONS = SURVEY_SOUND_OPTIONS
 
-    REGIONAL_FOCUS_OPTIONS = [
-        ("한국 음악만 추천해주세요", "1"),
-        ("한국·아시아 중심", "2"),
-        ("글로벌 다양성", "3"),
-        ("잘 모르겠어요", "4"),
-    ]
+    REGIONAL_FOCUS_OPTIONS = SURVEY_REGIONAL_FOCUS_OPTIONS
 
     TOURNAMENT_SIZE_OPTIONS = TOURNAMENT_SIZE_PRESETS
 
@@ -2940,18 +2977,35 @@ QHeaderView::section {
         form_layout.addSpacing(4)
 
         self.genre_groups: List[Tuple[QButtonGroup, Tuple[str, str]]] = []
-        for idx, (g1, g2) in enumerate(self.GENRE_PAIRS, 1):
-            box = QGroupBox(f"{idx}. {g1} vs {g2}")
+        for idx, pair in enumerate(self.GENRE_PAIRS, 1):
+            (g1_label, g1_value, g1_desc), (g2_label, g2_value, g2_desc) = pair
+            box = QGroupBox(f"{idx}. {g1_label} vs {g2_label}")
             box_layout = QHBoxLayout(box)
             box_layout.setSpacing(16)
             group = QButtonGroup(box)
-            for text, value in ((f"{g1} 선호", "1"), (f"{g2} 선호", "2"), ("잘 모르겠음", "s")):
-                btn = QRadioButton(text)
-                btn.setProperty("value", value)
-                btn.setCursor(Qt.CursorShape.PointingHandCursor)
-                group.addButton(btn)
-                box_layout.addWidget(btn)
-            self.genre_groups.append((group, (g1, g2)))
+            self.add_radio_option(
+                box_layout,
+                group,
+                f"{g1_label} 선호",
+                g1_value,
+                g1_desc,
+            )
+            self.add_radio_option(
+                box_layout,
+                group,
+                f"{g2_label} 선호",
+                g2_value,
+                g2_desc,
+            )
+            self.add_radio_option(
+                box_layout,
+                group,
+                "잘 모르겠음",
+                "s",
+                "둘 다 좋아요 · 상황에 따라 달라요",
+            )
+            box_layout.addStretch(1)
+            self.genre_groups.append((group, (g1_label, g2_label)))
             form_layout.addWidget(box)
 
         self.era_group = self.build_radio_section(form_layout, "시대 선호", self.ERA_OPTIONS, default="2")
@@ -3002,20 +3056,64 @@ QHeaderView::section {
         self.content_layout.addWidget(scroll)
         self.update_status("설문 응답을 바탕으로 맞춤 토너먼트를 준비합니다.")
 
-    def build_radio_section(self, layout: QVBoxLayout, title: str, options: List[Tuple[str, str]], default: Optional[str] = None) -> QButtonGroup:
+    def add_radio_option(
+        self,
+        parent_layout: QHBoxLayout,
+        group: QButtonGroup,
+        text: str,
+        value: str,
+        description: str,
+        checked: bool = False,
+    ) -> QRadioButton:
+        container = QWidget()
+        container_layout = QVBoxLayout(container)
+        container_layout.setContentsMargins(0, 0, 0, 0)
+        container_layout.setSpacing(4)
+        container.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        btn = QRadioButton(text)
+        btn.setProperty("value", value)
+        btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        if description:
+            btn.setToolTip(description)
+        if checked:
+            btn.setChecked(True)
+        group.addButton(btn)
+        container_layout.addWidget(btn)
+
+        if description:
+            helper = QLabel(description)
+            helper.setProperty("role", "helper")
+            helper.setWordWrap(True)
+            helper.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+            container_layout.addWidget(helper)
+
+        container_layout.addStretch(1)
+        parent_layout.addWidget(container)
+        return btn
+
+    def build_radio_section(
+        self,
+        layout: QVBoxLayout,
+        title: str,
+        options: List[Tuple[str, str, str]],
+        default: Optional[str] = None,
+    ) -> QButtonGroup:
         box = QGroupBox(title)
         box.setObjectName("OptionGroup")
         box_layout = QHBoxLayout(box)
         box_layout.setSpacing(16)
         group = QButtonGroup(box)
-        for text, value in options:
-            btn = QRadioButton(text)
-            btn.setProperty("value", value)
-            btn.setCursor(Qt.CursorShape.PointingHandCursor)
-            if default is not None and value == default:
-                btn.setChecked(True)
-            group.addButton(btn)
-            box_layout.addWidget(btn)
+        for text, value, description in options:
+            self.add_radio_option(
+                box_layout,
+                group,
+                text,
+                value,
+                description,
+                checked=bool(default is not None and value == default),
+            )
+        box_layout.addStretch(1)
         layout.addWidget(box)
         return group
 
