@@ -11,7 +11,7 @@ import webbrowser
 import importlib.util
 import copy
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set, Any, Iterable
+from typing import List, Dict, Tuple, Optional, Set, Any, Iterable, Callable
 from dataclasses import dataclass, field, asdict
 from collections import defaultdict, Counter
 from urllib.parse import urlparse, parse_qs
@@ -31,6 +31,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import (
     QApplication,
     QButtonGroup,
+    QCheckBox,
     QComboBox,
     QFileDialog,
     QFrame,
@@ -658,7 +659,46 @@ class SurveyEngine:
         print("\n" + "="*60)
         print("🎵 음악 취향 설문 시작 (약 2분 소요)")
         print("="*60)
-        
+
+        def prompt_multi_selection(title: str, options: List[Tuple[str, str]]) -> List[str]:
+            if not options:
+                return []
+
+            print(f"\n{title}")
+            for idx, (label, _) in enumerate(options, 1):
+                print(f" {idx}. {label}")
+            print("   (쉼표로 여러 개 선택 · 건너뛰려면 Enter)")
+
+            raw = input("   선택: ").strip()
+            if not raw:
+                return []
+
+            values: List[str] = []
+            normalized = [(label.lower(), value) for label, value in options]
+            value_lookup = {value.lower(): value for _, value in options}
+
+            for token in raw.split(','):
+                choice = token.strip()
+                if not choice:
+                    continue
+                if choice.isdigit():
+                    idx = int(choice)
+                    if 1 <= idx <= len(options):
+                        values.append(options[idx - 1][1])
+                    continue
+
+                lowered = choice.lower()
+                if lowered in value_lookup:
+                    values.append(value_lookup[lowered])
+                    continue
+
+                for label, value in normalized:
+                    if lowered == label:
+                        values.append(value)
+                        break
+
+            return sorted(dict.fromkeys(values))
+
         # 1. 장르 선호도 (쌍대 비교)
         print("\n[1단계] 두 장르 중 지금 더 끌리는 쪽을 골라보세요")
 
@@ -752,6 +792,30 @@ class SurveyEngine:
         }
         regional_focus = regional_focus_map.get(regional_choice, 'neutral')
 
+        genre_options = sorted({name for name in GENRE_CODE_TABLE.values()})
+        genre_pairs = [(label, label) for label in genre_options]
+        mood_pairs = [
+            (mood.replace('_', ' ').title(), mood)
+            for mood in MOODS
+        ]
+        instrumentation_pairs = [
+            (inst.replace('_', ' ').title(), inst)
+            for inst in INSTRUMENTATIONS
+        ]
+
+        excluded_genres = prompt_multi_selection(
+            "[9단계] 이번 플레이리스트에서 피하고 싶은 장르가 있다면 골라주세요",
+            genre_pairs,
+        )
+        excluded_moods = prompt_multi_selection(
+            "[10단계] 피하고 싶은 무드가 있다면 선택해주세요",
+            mood_pairs,
+        )
+        excluded_instrumentations = prompt_multi_selection(
+            "[11단계] 듣고 싶지 않은 편성/악기가 있나요?",
+            instrumentation_pairs,
+        )
+
         profile = {
             'genre_scores': dict(genre_scores),
             'preferred_era': preferred_era,
@@ -763,9 +827,12 @@ class SurveyEngine:
             'preferred_moods': sorted(mood_pref['moods']),
             'mood_weight': mood_pref['weight'],
             'preferred_instrumentations': sorted(sound_pref['instrumentations']),
-            'regional_focus': regional_focus
+            'regional_focus': regional_focus,
+            'excluded_genres': excluded_genres,
+            'excluded_moods': excluded_moods,
+            'excluded_instrumentations': excluded_instrumentations,
         }
-        
+
         print("\n✓ 설문 완료!")
         return profile
 
@@ -781,8 +848,35 @@ class CandidateSelector:
 
     def compute_base_score(self, song: Song, language_whitelist: Set[str], language_strict: bool) -> float:
         """설문 기반 초기 점수 계산"""
+        def _profile_set(key: str) -> Set[str]:
+            values = self.profile.get(key)
+            if isinstance(values, (list, tuple, set)):
+                return {str(item) for item in values if isinstance(item, str) and item}
+            return set()
+
+        excluded_genres = _profile_set('excluded_genres')
+        excluded_moods = _profile_set('excluded_moods')
+        excluded_instrumentations = _profile_set('excluded_instrumentations')
+
+        song_tags = song.tags if isinstance(song.tags, dict) else {}
+        song_genres = {genre for genre in (song.genres or []) if isinstance(genre, str)}
+        if excluded_genres and song_genres & excluded_genres:
+            return float('-inf')
+
+        song_moods = {
+            mood for mood in (song_tags.get('mood') or []) if isinstance(mood, str)
+        }
+        if excluded_moods and song_moods & excluded_moods:
+            return float('-inf')
+
+        song_instrumentations = {
+            inst for inst in (song_tags.get('instrumentation') or []) if isinstance(inst, str)
+        }
+        if excluded_instrumentations and song_instrumentations & excluded_instrumentations:
+            return float('-inf')
+
         score = 0.0
-        language = song.tags.get('language')
+        language = song_tags.get('language')
 
         if language_strict and language_whitelist and (not language or language not in language_whitelist):
             return float('-inf')
@@ -1207,7 +1301,89 @@ class PreferenceSummarizer:
         cls._TERM_GLOSSARY = glossary
         return cls._TERM_GLOSSARY
 
-    def summarize(self, champion: Optional[Song], top_songs: List[Song]) -> str:
+    @staticmethod
+    def _normalize_profile(profile: Optional[Dict[str, Any]]) -> Dict[str, Set[str]]:
+        keys = [
+            "preferred_moods",
+            "preferred_instrumentations",
+            "preferred_languages",
+            "excluded_genres",
+            "excluded_moods",
+            "excluded_instrumentations",
+        ]
+        normalized: Dict[str, Set[str]] = {key: set() for key in keys}
+        normalized["preferred_language"] = set()
+
+        if not isinstance(profile, dict):
+            return normalized
+
+        for key in keys:
+            values = profile.get(key)
+            if isinstance(values, (list, tuple, set)):
+                normalized[key] = {str(value) for value in values if isinstance(value, str) and value}
+
+        preferred_language = profile.get("preferred_language")
+        if isinstance(preferred_language, str) and preferred_language:
+            normalized["preferred_language"] = {preferred_language}
+
+        return normalized
+
+    @staticmethod
+    def _format_human_list(values: Iterable[str]) -> str:
+        items = [str(value) for value in values if value]
+        if not items:
+            return ""
+        preview = items[:3]
+        text = ", ".join(preview)
+        if len(items) > 3:
+            text += " 등"
+        return text
+
+    def _describe_exclusions(self, profile_info: Dict[str, Set[str]]) -> Optional[str]:
+        if not isinstance(profile_info, dict):
+            return None
+
+        fragments: List[str] = []
+
+        excluded_genres = profile_info.get("excluded_genres") or set()
+        if excluded_genres:
+            labels = [self._genre_label(value) for value in sorted(excluded_genres)]
+            label_text = self._format_human_list(labels)
+            if label_text:
+                fragments.append(f"{label_text} 장르")
+
+        excluded_moods = profile_info.get("excluded_moods") or set()
+        if excluded_moods:
+            labels = [
+                self.MOOD_DESCRIPTIONS.get(value, value.replace('_', ' ').title())
+                for value in sorted(excluded_moods)
+            ]
+            label_text = self._format_human_list(labels)
+            if label_text:
+                fragments.append(f"{label_text} 무드")
+
+        excluded_instruments = profile_info.get("excluded_instrumentations") or set()
+        if excluded_instruments:
+            labels = [
+                self.INSTRUMENT_TONES.get(value, value.replace('_', ' ').title())
+                for value in sorted(excluded_instruments)
+            ]
+            label_text = self._format_human_list(labels)
+            if label_text:
+                fragments.append(f"{label_text} 편성")
+
+        if not fragments:
+            return None
+
+        phrase = " · ".join(fragments)
+        return f"또한 {phrase}은(는) 되도록 피하고 싶어해요"
+
+    def summarize(
+        self,
+        champion: Optional[Song],
+        top_songs: List[Song],
+        profile: Optional[Dict[str, Any]] = None,
+    ) -> str:
         songs: List[Song] = []
         if champion:
             songs.append(champion)
@@ -1218,6 +1394,7 @@ class PreferenceSummarizer:
             return "취향 데이터를 확인할 수 없어 요약을 생성하지 못했습니다."
 
         features = self._analyze_features(songs, champion)
+        profile_info = self._normalize_profile(profile)
 
         body_clauses = [self._intro_clause(champion)]
         for builder in (
@@ -1230,6 +1407,9 @@ class PreferenceSummarizer:
             clause = builder(features)
             if clause:
                 body_clauses.append(clause)
+        exclusion_clause = self._describe_exclusions(profile_info)
+        if exclusion_clause:
+            body_clauses.append(exclusion_clause)
 
         tail = self._tail_clause(features)
 
@@ -1496,9 +1676,15 @@ class PreferenceSummarizer:
 # ============================================================================
 
 class ResultAnalyzer:
-    def __init__(self, match_history: List[Match], all_songs: List[Song]):
+    def __init__(
+        self,
+        match_history: List[Match],
+        all_songs: List[Song],
+        survey_profile: Optional[Dict[str, Any]] = None,
+    ):
         self.match_history = match_history
         self.all_songs = all_songs
+        self.survey_profile = survey_profile or {}
 
     def generate_report(self, champion: Song) -> Dict:
         """결과 리포트 생성"""
@@ -1533,7 +1719,7 @@ class ResultAnalyzer:
         print(f"   건너뛰기: {choice_counts['S']}")
 
         summarizer = PreferenceSummarizer()
-        preference_summary = summarizer.summarize(champion, participated[:5])
+        preference_summary = summarizer.summarize(champion, participated[:5], self.survey_profile)
 
         print(f"\n🧭 취향 한 줄 요약: {preference_summary}")
 
@@ -1576,13 +1762,21 @@ class RecommendationEngine:
         self.all_songs = all_songs
         self.participated = set(s.id for s in participated_songs)
         self.profile = survey_profile or {}
-        self.language_whitelist: Set[str] = set(self.profile.get('preferred_languages') or [])
+        def _to_set(key: str) -> Set[str]:
+            values = self.profile.get(key)
+            if isinstance(values, (list, tuple, set)):
+                return {str(item) for item in values if isinstance(item, str) and item}
+            return set()
+        self.language_whitelist: Set[str] = _to_set('preferred_languages')
         self.language_strict: bool = bool(self.profile.get('language_strict') and self.language_whitelist)
         self.preferred_language: Optional[str] = self.profile.get('preferred_language')
         self.regional_focus: str = self.profile.get('regional_focus', 'neutral')
-        self.preferred_moods: Set[str] = set(self.profile.get('preferred_moods') or [])
+        self.preferred_moods: Set[str] = _to_set('preferred_moods')
         self.mood_weight: float = float(self.profile.get('mood_weight') or 0.0)
-        self.preferred_instrumentations: Set[str] = set(self.profile.get('preferred_instrumentations') or [])
+        self.preferred_instrumentations: Set[str] = _to_set('preferred_instrumentations')
+        self.excluded_genres: Set[str] = _to_set('excluded_genres')
+        self.excluded_moods: Set[str] = _to_set('excluded_moods')
+        self.excluded_instrumentations: Set[str] = _to_set('excluded_instrumentations')
         self.selector = CandidateSelector(all_songs, self.profile)
 
         self._genre_index = self._build_index(
@@ -1622,6 +1816,8 @@ class RecommendationEngine:
 
         scored_entries: List[Dict[str, Any]] = []
         for song in candidates:
+            if self._violates_exclusions(song):
+                continue
             base_score = self.selector.compute_base_score(song, self.language_whitelist, self.language_strict)
             if base_score == float('-inf'):
                 continue
@@ -1638,6 +1834,7 @@ class RecommendationEngine:
             freshness_score, freshness_note = self._freshness_profile(song)
             mood_note = self._describe_mood_fit(song)
             instrumentation_note = self._describe_instrumentation_fit(song)
+            exclusion_note = self._describe_exclusion_alignment(song)
 
             scored_entries.append({
                 'song': song,
@@ -1650,6 +1847,7 @@ class RecommendationEngine:
                 'freshness_note': freshness_note,
                 'mood_note': mood_note,
                 'instrumentation_note': instrumentation_note,
+                'exclusion_note': exclusion_note,
                 'cluster_label': cluster_label,
             })
 
@@ -1766,6 +1964,96 @@ class RecommendationEngine:
     def _build_index(values: Iterable[str]) -> Dict[str, int]:
         unique_values = [value for value in dict.fromkeys(values)]
         return {value: idx for idx, value in enumerate(unique_values)}
+
+    def _violates_exclusions(self, song: Song) -> bool:
+        if not (self.excluded_genres or self.excluded_moods or self.excluded_instrumentations):
+            return False
+
+        tags = song.tags if isinstance(song.tags, dict) else {}
+        if self.excluded_genres and any(
+            isinstance(genre, str) and genre in self.excluded_genres
+            for genre in (song.genres or [])
+        ):
+            return True
+
+        if self.excluded_moods and any(
+            isinstance(mood, str) and mood in self.excluded_moods
+            for mood in (tags.get('mood') or [])
+        ):
+            return True
+
+        if self.excluded_instrumentations and any(
+            isinstance(inst, str) and inst in self.excluded_instrumentations
+            for inst in (tags.get('instrumentation') or [])
+        ):
+            return True
+
+        return False
+
+    @staticmethod
+    def _format_exclusion_values(values: Set[str], formatter: Optional[Callable[[str], str]] = None) -> Optional[str]:
+        if not values:
+            return None
+        labels: List[str] = []
+        for value in sorted(values):
+            if not isinstance(value, str):
+                continue
+            if formatter:
+                label = formatter(value)
+            else:
+                label = value.replace('_', ' ').title()
+            if label:
+                labels.append(label)
+        if not labels:
+            return None
+        preview = labels[:3]
+        text = ", ".join(preview)
+        if len(labels) > 3:
+            text += " 등"
+        return text
+
+    def _describe_exclusion_alignment(self, song: Song) -> Optional[str]:
+        if not (self.excluded_genres or self.excluded_moods or self.excluded_instrumentations):
+            return None
+
+        tags = song.tags if isinstance(song.tags, dict) else {}
+        fragments: List[str] = []
+
+        if self.excluded_genres and not any(
+            isinstance(genre, str) and genre in self.excluded_genres
+            for genre in (song.genres or [])
+        ):
+            text = self._format_exclusion_values(self.excluded_genres, lambda value: value)
+            if text:
+                fragments.append(f"장르 {text}")
+
+        if self.excluded_moods and not any(
+            isinstance(mood, str) and mood in self.excluded_moods
+            for mood in (tags.get('mood') or [])
+        ):
+            text = self._format_exclusion_values(
+                self.excluded_moods,
+                lambda value: value.replace('_', ' ').title(),
+            )
+            if text:
+                fragments.append(f"무드 {text}")
+
+        if self.excluded_instrumentations and not any(
+            isinstance(inst, str) and inst in self.excluded_instrumentations
+            for inst in (tags.get('instrumentation') or [])
+        ):
+            text = self._format_exclusion_values(
+                self.excluded_instrumentations,
+                lambda value: value.replace('_', ' ').title(),
+            )
+            if text:
+                fragments.append(f"편성 {text}")
+
+        if not fragments:
+            return None
+
+        joined = " · ".join(fragments)
+        return f"제외 요청한 조건 충족: {joined}"
 
     def _analyze_similarity(self, song: Song, winners: List[Song]) -> Tuple[float, Optional[Song], List[str]]:
         """상위 곡과의 유사도를 계산한다."""
@@ -2057,6 +2345,10 @@ class RecommendationEngine:
         if instrumentation_note:
             parts.append(instrumentation_note)
 
+        exclusion_note = entry.get('exclusion_note')
+        if exclusion_note:
+            parts.append(exclusion_note)
+
         cluster_note = entry.get('cluster_note')
         if cluster_note:
             parts.append(cluster_note)
@@ -2331,7 +2623,7 @@ class MusicTournamentApp:
         
         # 6. 결과 분석
         print("\n6️⃣ 결과 분석")
-        analyzer = ResultAnalyzer(engine.match_history, self.candidates)
+        analyzer = ResultAnalyzer(engine.match_history, self.candidates, self.survey_profile)
         report = analyzer.generate_report(self.champion)
         
         # 7. 추천
@@ -3360,6 +3652,9 @@ QHeaderView::section {
         form_layout.addSpacing(4)
 
         self.genre_groups: List[Tuple[QButtonGroup, Tuple[str, str]]] = []
+        self.excluded_genre_checks: List[QCheckBox] = []
+        self.excluded_mood_checks: List[QCheckBox] = []
+        self.excluded_instrument_checks: List[QCheckBox] = []
         for idx, pair in enumerate(self.GENRE_PAIRS, 1):
             (g1_label, g1_value, g1_desc), (g2_label, g2_value, g2_desc) = pair
             box = QGroupBox(f"{idx}. {g1_label} vs {g2_label}")
@@ -3398,6 +3693,58 @@ QHeaderView::section {
         self.mood_group = self.build_radio_section(form_layout, "무드", self.MOOD_OPTIONS, default="2")
         self.sound_group = self.build_radio_section(form_layout, "사운드 질감", self.SOUND_OPTIONS, default="1")
         self.regional_focus_group = self.build_radio_section(form_layout, "국가/지역 취향", self.REGIONAL_FOCUS_OPTIONS, default="4")
+
+        genre_options = sorted({name for name in GENRE_CODE_TABLE.values()})
+        mood_pairs = [
+            (self.MOOD_DESCRIPTIONS.get(mood, mood.replace('_', ' ').title()), mood)
+            for mood in MOODS
+        ]
+        mood_pairs.sort(key=lambda item: item[0])
+        instrument_pairs = [
+            (self.INSTRUMENT_DESCRIPTIONS.get(inst, inst.replace('_', ' ').title()), inst)
+            for inst in INSTRUMENTATIONS
+        ]
+        instrument_pairs.sort(key=lambda item: item[0])
+
+        self.excluded_genre_checks = self.build_checkbox_section(
+            form_layout,
+            "제외할 장르", 
+            [(label, label) for label in genre_options],
+            columns=3,
+            helper_text="듣고 싶지 않은 장르는 선택하지 않아도 괜찮아요.",
+        )
+        self.excluded_mood_checks = self.build_checkbox_section(
+            form_layout,
+            "제외할 무드",
+            mood_pairs,
+            columns=4,
+            helper_text="피하고 싶은 분위기가 있다면 체크해주세요.",
+        )
+        self.excluded_instrument_checks = self.build_checkbox_section(
+            form_layout,
+            "제외할 편성/악기",
+            instrument_pairs,
+            columns=3,
+            helper_text="귀에 거슬리는 악기가 있다면 선택해보세요.",
+        )
+
+        profile_snapshot = self.survey_profile if isinstance(self.survey_profile, dict) else {}
+
+        def apply_existing_checks(checks: List[QCheckBox], key: str) -> None:
+            if not isinstance(profile_snapshot, dict):
+                return
+            values = profile_snapshot.get(key)
+            if not isinstance(values, (list, tuple, set)):
+                return
+            selected = {str(v) for v in values if isinstance(v, str)}
+            for checkbox in checks:
+                value = checkbox.property("value")
+                if isinstance(value, str) and value in selected:
+                    checkbox.setChecked(True)
+
+        apply_existing_checks(self.excluded_genre_checks, "excluded_genres")
+        apply_existing_checks(self.excluded_mood_checks, "excluded_moods")
+        apply_existing_checks(self.excluded_instrument_checks, "excluded_instrumentations")
 
 
         size_box = QGroupBox("토너먼트 규모")
@@ -3500,6 +3847,42 @@ QHeaderView::section {
         layout.addWidget(box)
         return group
 
+    def build_checkbox_section(
+        self,
+        layout: QVBoxLayout,
+        title: str,
+        options: List[Tuple[str, str]],
+        columns: int = 3,
+        helper_text: Optional[str] = None,
+    ) -> List[QCheckBox]:
+        box = QGroupBox(title)
+        box.setObjectName("OptionGroup")
+        box_layout = QVBoxLayout(box)
+        box_layout.setSpacing(10)
+
+        if helper_text:
+            helper = QLabel(helper_text)
+            helper.setProperty("role", "helper")
+            helper.setWordWrap(True)
+            box_layout.addWidget(helper)
+
+        grid = QGridLayout()
+        grid.setSpacing(8)
+        grid.setHorizontalSpacing(16)
+        checkboxes: List[QCheckBox] = []
+        for idx, (label, value) in enumerate(options):
+            checkbox = QCheckBox(label)
+            checkbox.setProperty("value", value)
+            checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
+            row = idx // max(1, columns)
+            col = idx % max(1, columns)
+            grid.addWidget(checkbox, row, col)
+            checkboxes.append(checkbox)
+
+        box_layout.addLayout(grid)
+        layout.addWidget(box)
+        return checkboxes
+
     def begin_tournament(self):
         preset_active = bool(getattr(self, "beginner_preset_active", False))
 
@@ -3561,6 +3944,19 @@ QHeaderView::section {
                 "neutral",
             )
 
+            def collect_checked(checks: Optional[Iterable[QCheckBox]]) -> List[str]:
+                values: List[str] = []
+                if not checks:
+                    return values
+                for checkbox in checks:
+                    if not isinstance(checkbox, QCheckBox):
+                        continue
+                    if checkbox.isChecked():
+                        value = checkbox.property("value")
+                        if isinstance(value, str) and value:
+                            values.append(value)
+                return sorted(dict.fromkeys(values))
+
             survey_profile: Dict[str, Any] = {
                 "genre_scores": dict(genre_scores),
                 "preferred_era": era_map.get(group_value(self.era_group, "2")),
@@ -3573,6 +3969,9 @@ QHeaderView::section {
                 "mood_weight": mood_pref["weight"],
                 "preferred_instrumentations": sorted(sound_pref["instrumentations"]),
                 "regional_focus": regional_focus,
+                "excluded_genres": collect_checked(getattr(self, "excluded_genre_checks", [])),
+                "excluded_moods": collect_checked(getattr(self, "excluded_mood_checks", [])),
+                "excluded_instrumentations": collect_checked(getattr(self, "excluded_instrument_checks", [])),
             }
         else:
             survey_profile = (
@@ -3606,26 +4005,21 @@ QHeaderView::section {
             if isinstance(k, str) and isinstance(v, (int, float))
         }
 
-        languages = survey_profile.get("preferred_languages", [])
-        if isinstance(languages, (list, tuple, set)):
-            language_list = sorted({str(lang) for lang in languages if isinstance(lang, str) and lang})
-        else:
-            language_list = []
-        survey_profile["preferred_languages"] = language_list
+        def _normalize_str_list(value: Any) -> List[str]:
+            if isinstance(value, (list, tuple, set)):
+                return sorted({str(item) for item in value if isinstance(item, str) and item})
+            return []
 
-        moods = survey_profile.get("preferred_moods", [])
-        if isinstance(moods, (list, tuple, set)):
-            mood_list = sorted({str(mood) for mood in moods if isinstance(mood, str) and mood})
-        else:
-            mood_list = []
-        survey_profile["preferred_moods"] = mood_list
-
-        instruments = survey_profile.get("preferred_instrumentations", [])
-        if isinstance(instruments, (list, tuple, set)):
-            instrument_list = sorted({str(inst) for inst in instruments if isinstance(inst, str) and inst})
-        else:
-            instrument_list = []
-        survey_profile["preferred_instrumentations"] = instrument_list
+        survey_profile["preferred_languages"] = _normalize_str_list(survey_profile.get("preferred_languages"))
+        survey_profile["preferred_moods"] = _normalize_str_list(survey_profile.get("preferred_moods"))
+        survey_profile["preferred_instrumentations"] = _normalize_str_list(
+            survey_profile.get("preferred_instrumentations")
+        )
+        survey_profile["excluded_genres"] = _normalize_str_list(survey_profile.get("excluded_genres"))
+        survey_profile["excluded_moods"] = _normalize_str_list(survey_profile.get("excluded_moods"))
+        survey_profile["excluded_instrumentations"] = _normalize_str_list(
+            survey_profile.get("excluded_instrumentations")
+        )
 
         survey_profile["preferred_era"] = _coerce_int(survey_profile.get("preferred_era"))
         survey_profile["preferred_energy"] = _coerce_float(survey_profile.get("preferred_energy"), 0.5)
@@ -4157,7 +4551,7 @@ QHeaderView::section {
             self.update_status("토너먼트 결과가 없습니다.")
             return
 
-        analyzer = ResultAnalyzer(self.engine.match_history, self.candidates)
+        analyzer = ResultAnalyzer(self.engine.match_history, self.candidates, self.survey_profile)
         self.report = analyzer.generate_report(self.champion)
         recommender = RecommendationEngine(self.songs, self.candidates, self.survey_profile)
         self.recommendations = recommender.generate_recommendations(self.report["top_songs"])
