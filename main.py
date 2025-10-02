@@ -3353,6 +3353,10 @@ QHeaderView::section {
         self.clear_content()
         self.set_active_stage("tournament")
 
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
         container = QFrame()
         container.setObjectName("ContentSection")
         layout = QVBoxLayout(container)
@@ -3423,7 +3427,8 @@ QHeaderView::section {
             shortcut.activated.connect(lambda c=choice: self.on_choice(c))
             self.shortcuts.append(shortcut)
 
-        self.content_layout.addWidget(container)
+        scroll.setWidget(container)
+        self.content_layout.addWidget(scroll)
         self.update_status("토너먼트가 진행 중입니다. 클릭 한 번으로 선택하세요!")
         self.display_current_match()
 
