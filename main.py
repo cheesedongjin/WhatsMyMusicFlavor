@@ -55,11 +55,13 @@ from PyQt6.QtWidgets import (
 WEB_ENGINE_AVAILABLE = False
 MULTIMEDIA_AVAILABLE = False
 QWebEngineView = None  # type: ignore
+QWebEngineProfile = None  # type: ignore
 QMediaPlayer = None  # type: ignore
 QAudioOutput = None  # type: ignore
 
 if importlib.util.find_spec("PyQt6.QtWebEngineWidgets"):
     from PyQt6.QtWebEngineWidgets import QWebEngineView  # type: ignore
+    from PyQt6.QtWebEngineCore import QWebEngineProfile  # type: ignore
 
     WEB_ENGINE_AVAILABLE = True
 
@@ -2291,10 +2293,23 @@ class SongPreviewEmbed(QFrame):
         layout.addWidget(self.caption_label)
 
         self.web_view: Optional[QWebEngineView] = None
+        self._current_embed_url: Optional[str] = None
         if WEB_ENGINE_AVAILABLE:
             self.web_view = QWebEngineView()
             self.web_view.setObjectName("SongPreviewEmbedView")
             self.web_view.setMinimumHeight(minimum_height)
+
+            profile = self.web_view.page().profile()
+            cache_root = Path.home() / ".cache" / "whats-my-music-flavor"
+            http_cache_path = cache_root / "http-cache"
+            persistent_path = cache_root / "persistent-storage"
+            for directory in (http_cache_path, persistent_path):
+                directory.mkdir(parents=True, exist_ok=True)
+
+            profile.setHttpCacheType(QWebEngineProfile.HttpCacheType.DiskHttpCache)
+            profile.setCachePath(str(http_cache_path))
+            profile.setPersistentStoragePath(str(persistent_path))
+
             layout.addWidget(self.web_view)
 
         self.current_song: Optional[Song] = None
@@ -2321,12 +2336,20 @@ class SongPreviewEmbed(QFrame):
             self._show_message("이 환경에서는 영상 미리보기를 사용할 수 없습니다. PyQt6-WebEngine을 설치해주세요.")
             return
 
+        caption = f"{song.artist} - {song.get_display_title()} 영상 미리보기"
+
+        if self._current_embed_url == embed_url:
+            self.caption_label.setText(caption)
+            return
+
         preview_html = build_track_preview_html(embed_url)
         self.web_view.setHtml(preview_html, QUrl("https://www.youtube.com"))
-        self.caption_label.setText(f"{song.artist} - {song.get_display_title()} 영상 미리보기")
+        self._current_embed_url = embed_url
+        self.caption_label.setText(caption)
 
     def _show_message(self, message: str) -> None:
         self.caption_label.setText(message)
+        self._current_embed_url = None
         if self.web_view:
             self.web_view.setUrl(QUrl("about:blank"))
 
