@@ -3409,16 +3409,12 @@ QHeaderView::section {
 
         def add_button(text: str, row: int, col: int, choice: str):
             button = QPushButton(text)
-            if choice in {"A", "B"}:
-                button.setProperty("variant", "primary")
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(lambda _=False, c=choice: self.on_choice(c))
             button_layout.addWidget(button, row, col)
 
-        add_button("A 곡 선택", 0, 0, "A")
-        add_button("B 곡 선택", 0, 1, "B")
-        add_button("둘 다 좋아요", 1, 0, "T")
-        add_button("건너뛰기", 1, 1, "S")
+        add_button("둘 다 좋아요", 0, 0, "T")
+        add_button("건너뛰기", 0, 1, "S")
         layout.addWidget(button_row)
 
         shortcut_map = {"A": "A", "B": "B", "T": "T", "S": "S"}
@@ -3603,12 +3599,19 @@ QHeaderView::section {
         layout.addWidget(tag_label)
         preview_embed = SongPreviewEmbed(box, minimum_height=160)
         layout.addWidget(preview_embed)
+        layout.addStretch(1)
+        select_button = QPushButton(f"{side} 곡 선택")
+        select_button.setProperty("variant", "primary")
+        select_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        select_button.clicked.connect(lambda _=False, c=side: self.on_choice(c))
+        layout.addWidget(select_button)
         return {
             "box": box,
             "title": name_label,
             "meta": meta_label,
             "tag": tag_label,
             "preview_embed": preview_embed,
+            "button": select_button,
         }
 
 
