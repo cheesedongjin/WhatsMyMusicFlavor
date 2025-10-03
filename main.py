@@ -2497,6 +2497,42 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
             "regional_focus": "global",
         },
     },
+    "classic_k_rock": {
+        "title": "추억의 한국 락",
+        "description": "90-00년대 한국 락과 밴드 사운드의 향수를 느껴보세요.",
+        "tournament_size": 32,
+        "survey_profile": {
+            "genre_scores": {"Rock": 4, "Classic Rock": 3, "Indie": 2},
+            "preferred_era": 2000,
+            "preferred_energy": 0.7,
+            "preferred_popularity": 0.45,
+            "preferred_language": "ko",
+            "preferred_languages": ["ko"],
+            "language_strict": True,
+            "preferred_moods": ["nostalgic", "powerful", "emotional"],
+            "mood_weight": 0.9,
+            "preferred_instrumentations": ["guitar", "drums", "vocals"],
+            "regional_focus": "k_prefer",
+        },
+    },
+    "nighttime_dreampop": {
+        "title": "밤 감성 드림팝",
+        "description": "새벽 감성의 몽환적인 드림팝과 신스 사운드를 만나보세요.",
+        "tournament_size": 16,
+        "survey_profile": {
+            "genre_scores": {"Indie": 3, "Electronic": 3, "Pop": 2},
+            "preferred_era": 2010,
+            "preferred_energy": 0.4,
+            "preferred_popularity": 0.35,
+            "preferred_language": None,
+            "preferred_languages": ["en", "ko"],
+            "language_strict": False,
+            "preferred_moods": ["dreamy", "ethereal", "nocturnal"],
+            "mood_weight": 0.95,
+            "preferred_instrumentations": ["synth", "guitar", "vocals"],
+            "regional_focus": "neutral",
+        },
+    },
 }
 
 
