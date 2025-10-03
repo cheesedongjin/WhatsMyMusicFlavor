@@ -3641,7 +3641,7 @@ QHeaderView::section {
             preset_layout.addWidget(cards_container)
             layout.addWidget(preset_section)
 
-        start_button = QPushButton("지금 시작하기")
+        start_button = QPushButton("설문조사부터 시작하기")
         start_button.setProperty("variant", "primary")
         start_button.setCursor(Qt.CursorShape.PointingHandCursor)
         start_button.setMinimumHeight(48)
