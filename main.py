@@ -2746,7 +2746,7 @@ class SongPreviewEmbed(QFrame):
         self.caption_label.setWordWrap(True)
         layout.addWidget(self.caption_label)
 
-        self.web_view: Optional[QWebEngineView] = None
+        self.web_view: QWebEngineView | None = None
         self._current_embed_url: Optional[str] = None
         if WEB_ENGINE_AVAILABLE:
             self.web_view = QWebEngineView()
