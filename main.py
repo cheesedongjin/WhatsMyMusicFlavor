@@ -1222,7 +1222,7 @@ class PreferenceSummarizer:
     SUBGENRE_TONES = {
         "alt_pop": "대담한 얼터 팝",
         "alternative_r&b": "대체 R&B",
-        "alternative_rock": "험칙한 얼터 록",
+        "alternative_rock": "거친 얼터 록",
         "ambient": "미세한 앰비언트 텍스처",
         "art_pop": "예술적 팝 감각",
         "chillhop": "느긋한 칠합",
