@@ -2445,7 +2445,7 @@ DEFAULT_TOURNAMENT_SIZE = 32
 BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
     "k_pop_quick": {
         "title": "K-POP 퀵 매치",
-        "description": "최신 K-POP과 글로벌 팝을 빠르게 탐색해보세요.",
+        "description": "최신 K-POP과 글로벌 팝을 좋아하시는 분들에게 추천해요.",
         "tournament_size": 16,
         "survey_profile": {
             "genre_scores": {"K-Indie Pop": 5, "Dance Pop": 4, "Electronic": 2},
@@ -2466,7 +2466,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
     },
     "chill_indie": {
         "title": "차분한 인디 감성",
-        "description": "포근한 인디와 어쿠스틱 사운드로 여유롭게 시작해요.",
+        "description": "포근한 인디와 어쿠스틱 사운드를 좋아하시는 분들에게 추천해요.",
         "tournament_size": 16,
         "survey_profile": {
             "genre_scores": {"Indie Folk": 5, "Alternative Rock": 2, "Jazz": 1},
@@ -2487,7 +2487,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
     },
     "global_energy": {
         "title": "글로벌 에너지 믹스",
-        "description": "신스와 리듬이 살아있는 글로벌 댄스 플로어를 느껴보세요.",
+        "description": "신스와 리듬이 살아있는 글로벌 댄스 플로어를 좋아하시는 분들에게 추천해요.",
         "tournament_size": 32,
         "survey_profile": {
             "genre_scores": {"Electronic": 5, "Pop": 3, "Hip Hop": 2},
@@ -2508,7 +2508,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
     },
     "classic_k_rock": {
         "title": "추억의 한국 락",
-        "description": "90-00년대 한국 락과 밴드 사운드의 향수를 느껴보세요.",
+        "description": "90-00년대 한국 락과 밴드 사운드를 좋아하시는 분들에게 추천해요.",
         "tournament_size": 32,
         "survey_profile": {
             "genre_scores": {"Rock": 5, "Classic Rock": 4, "Alternative Rock": 2},
@@ -2529,7 +2529,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
     },
     "nighttime_dreampop": {
         "title": "밤 감성 드림팝",
-        "description": "새벽 감성의 몽환적인 드림팝과 신스 사운드를 만나보세요.",
+        "description": "새벽 감성의 몽환적인 드림팝과 신스 사운드를 좋아하시는 분들에게 추천해요.",
         "tournament_size": 16,
         "survey_profile": {
             "genre_scores": {"Art Pop": 5, "Electronic": 2, "Pop": 1},
