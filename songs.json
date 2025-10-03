@@ -9315,7 +9315,7 @@
     "artist": "2NE1",
     "title": "I Am The Best",
     "title_kor": "내가 제일 잘 나가",
-    "youtube_url": "https://www.youtube.com/watch?v=1qW0h2oQJ7A",
+    "youtube_url": "https://www.youtube.com/watch?v=j7_lSP8Vc3o",
     "genres": [2],
     "tags": {
       "subgenres": [12, 38],
@@ -9636,7 +9636,7 @@
     "artist": "IVE",
     "title": "LOVE DIVE",
     "title_kor": "러브 다이브",
-    "youtube_url": "https://www.youtube.com/watch?v=1bUrF-Z7E9Y",
+    "youtube_url": "https://www.youtube.com/watch?v=Y8JFxS1HlDo",
     "genres": [2],
     "tags": {
       "subgenres": [12, 38],
@@ -9710,6 +9710,530 @@
     "meta": {
       "duration_sec": 240.0,
       "loudness_lufs": -7.0
+    }
+  },
+  {
+    "id": "song_231",
+    "artist": "이문세",
+    "title": "When Autumn Comes",
+    "title_kor": "가을이 오면",
+    "youtube_url": "https://www.youtube.com/watch?v=WDAPcnJJteY",
+    "genres": [2],
+    "tags": {
+      "subgenres": [44],
+      "mood": [37, 44, 53],
+      "energy": 0.5,
+      "valence": 0.5,
+      "tempo_bpm": 139.0,
+      "era_year": 1987,
+      "language": 4,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 5766865,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 240.0,
+      "loudness_lufs": -8.5
+    }
+  },
+  {
+    "id": "song_232",
+    "artist": "김광석",
+    "title": "Loved, But",
+    "title_kor": "사랑했지만",
+    "youtube_url": "https://www.youtube.com/watch?v=ZZEv8ZB6G_s",
+    "genres": [2],
+    "tags": {
+      "subgenres": [44],
+      "mood": [21, 37, 44],
+      "energy": 0.4,
+      "valence": 0.3,
+      "tempo_bpm": 78.0,
+      "era_year": 1991,
+      "language": 4,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.9,
+      "yt_views": 10000000,
+      "regionality": [6, 0]
+    },
+    "meta": {
+      "duration_sec": 286.0,
+      "loudness_lufs": -9.0
+    }
+  },
+  {
+    "id": "song_233",
+    "artist": "임영웅",
+    "title": "Love Always Runs Away",
+    "title_kor": "사랑은 늘 도망가",
+    "youtube_url": "https://www.youtube.com/watch?v=LKQ-18LoFQk",
+    "genres": [2],
+    "tags": {
+      "subgenres": [44],
+      "mood": [21, 37, 53],
+      "energy": 0.45,
+      "valence": 0.4,
+      "tempo_bpm": 66.0,
+      "era_year": 2021,
+      "language": 4,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 21794975,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 236.0,
+      "loudness_lufs": -8.0
+    }
+  },
+  {
+    "id": "song_234",
+    "artist": "BTS",
+    "title": "Spring Day",
+    "title_kor": "봄날",
+    "youtube_url": "https://www.youtube.com/watch?v=xEeFrLSkMm8",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [17, 44, 64],
+      "energy": 0.6,
+      "valence": 0.6,
+      "tempo_bpm": 107.0,
+      "era_year": 2017,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.98,
+      "yt_views": 556683885,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 274.0,
+      "loudness_lufs": -7.0
+    }
+  },
+  {
+    "id": "song_235",
+    "artist": "The Beatles",
+    "title": "Let It Be",
+    "youtube_url": "https://www.youtube.com/watch?v=QDYfEBY9NM4",
+    "genres": [1],
+    "tags": {
+      "subgenres": [51],
+      "mood": [46, 53, 64],
+      "energy": 0.5,
+      "valence": 0.7,
+      "tempo_bpm": 72.0,
+      "era_year": 1970,
+      "language": 0,
+      "instrumentation": [4, 8, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.99,
+      "yt_views": 204041681,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 230.0,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_236",
+    "artist": "Bon Jovi",
+    "title": "Always",
+    "youtube_url": "https://www.youtube.com/watch?v=9BMwcO6_hyA",
+    "genres": [1],
+    "tags": {
+      "subgenres": [45],
+      "mood": [21, 53, 64],
+      "energy": 0.6,
+      "valence": 0.6,
+      "tempo_bpm": 72.0,
+      "era_year": 1994,
+      "language": 0,
+      "instrumentation": [1, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 1112903745,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 353.0,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_237",
+    "artist": "Eagles",
+    "title": "Hotel California",
+    "youtube_url": "https://www.youtube.com/watch?v=09839DpTctU",
+    "genres": [1],
+    "tags": {
+      "subgenres": [19],
+      "mood": [14, 30, 44],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 75.0,
+      "era_year": 1976,
+      "language": 0,
+      "instrumentation": [1, 4, 12]
+    },
+    "popularity": {
+      "awareness_idx": 0.99,
+      "yt_views": 718764767,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 390.0,
+      "loudness_lufs": -7.0
+    }
+  },
+  {
+    "id": "song_238",
+    "artist": "Michael Jackson",
+    "title": "Billie Jean",
+    "youtube_url": "https://www.youtube.com/watch?v=Zi_XLOBDo_Y",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12],
+      "mood": [23, 63, 67],
+      "energy": 0.85,
+      "valence": 0.7,
+      "tempo_bpm": 117.0,
+      "era_year": 1982,
+      "language": 0,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.99,
+      "yt_views": 1940031605,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 294.0,
+      "loudness_lufs": -6.0
+    }
+  },
+  {
+    "id": "song_239",
+    "artist": "Lauv & Troye Sivan",
+    "title": "I'm So Tired...",
+    "youtube_url": "https://www.youtube.com/watch?v=boUl0jPZMdg",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12],
+      "mood": [37, 52, 55],
+      "energy": 0.7,
+      "valence": 0.6,
+      "tempo_bpm": 102.0,
+      "era_year": 2019,
+      "language": 0,
+      "instrumentation": [5, 13, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.9,
+      "yt_views": 20252646,
+      "regionality": [4, 2]
+    },
+    "meta": {
+      "duration_sec": 163.0,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_240",
+    "artist": "Lauv",
+    "title": "Steal The Show",
+    "youtube_url": "https://www.youtube.com/watch?v=q7BmlOUk-II",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12],
+      "mood": [23, 63, 67],
+      "energy": 0.75,
+      "valence": 0.7,
+      "tempo_bpm": 93.0,
+      "era_year": 2023,
+      "language": 0,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 8579784,
+      "regionality": [4, 2]
+    },
+    "meta": {
+      "duration_sec": 192.0,
+      "loudness_lufs": -7.0
+    }
+  },
+  {
+    "id": "song_241",
+    "artist": "Green Day",
+    "title": "Last Night On Earth",
+    "youtube_url": "https://www.youtube.com/watch?v=xg_Y7Or_hWM",
+    "genres": [1],
+    "tags": {
+      "subgenres": [45],
+      "mood": [21, 37, 44],
+      "energy": 0.7,
+      "valence": 0.5,
+      "tempo_bpm": 120.0,
+      "era_year": 2009,
+      "language": 0,
+      "instrumentation": [1, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.85,
+      "yt_views": 43290000,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 236.0,
+      "loudness_lufs": -7.0
+    }
+  },
+  {
+    "id": "song_242",
+    "artist": "The Fray",
+    "title": "How to Save a Life",
+    "youtube_url": "https://www.youtube.com/watch?v=cjVQ36NhbMk",
+    "genres": [2],
+    "tags": {
+      "subgenres": [44],
+      "mood": [21, 37, 44],
+      "energy": 0.6,
+      "valence": 0.4,
+      "tempo_bpm": 122.0,
+      "era_year": 2005,
+      "language": 0,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 500000000,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 262.0,
+      "loudness_lufs": -7.5
+    }
+  },
+  {
+    "id": "song_243",
+    "artist": "Ed Sheeran",
+    "title": "Photograph",
+    "youtube_url": "https://www.youtube.com/watch?v=KKQl-pIRQMY",
+    "genres": [2],
+    "tags": {
+      "subgenres": [44],
+      "mood": [37, 44, 53],
+      "energy": 0.5,
+      "valence": 0.6,
+      "tempo_bpm": 108.0,
+      "era_year": 2014,
+      "language": 0,
+      "instrumentation": [8, 12, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.98,
+      "yt_views": 3500000000,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 259.0,
+      "loudness_lufs": -8.0
+    }
+  },
+  {
+    "id": "song_244",
+    "artist": "Green Day",
+    "title": "Wake Me Up When September Ends",
+    "youtube_url": "https://www.youtube.com/watch?v=pGhwBFYtn1s",
+    "genres": [1],
+    "tags": {
+      "subgenres": [19],
+      "mood": [37, 44, 51],
+      "energy": 0.7,
+      "valence": 0.4,
+      "tempo_bpm": 105.0,
+      "era_year": 2004,
+      "language": 0,
+      "instrumentation": [1, 4, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.97,
+      "yt_views": 500000000,
+      "regionality": [4, 2, 8]
+    },
+    "meta": {
+      "duration_sec": 286.0,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_245",
+    "artist": "aespa",
+    "title": "Armageddon",
+    "youtube_url": "https://www.youtube.com/watch?v=nFYwcndNuOY",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [23, 63, 67],
+      "energy": 0.85,
+      "valence": 0.7,
+      "tempo_bpm": 115.0,
+      "era_year": 2024,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.95,
+      "yt_views": 100000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 213.0,
+      "loudness_lufs": -6.0
+    }
+  },
+  {
+    "id": "song_246",
+    "artist": "aespa",
+    "title": "Spicy",
+    "youtube_url": "https://www.youtube.com/watch?v=Os_heh8vPfs",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [23, 63, 67],
+      "energy": 0.9,
+      "valence": 0.8,
+      "tempo_bpm": 115.0,
+      "era_year": 2023,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.96,
+      "yt_views": 200000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 205.0,
+      "loudness_lufs": -5.5
+    }
+  },
+  {
+    "id": "song_247",
+    "artist": "aespa",
+    "title": "Drama",
+    "youtube_url": "https://www.youtube.com/watch?v=D8VEhcPeSlc",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [23, 63, 67],
+      "energy": 0.85,
+      "valence": 0.75,
+      "tempo_bpm": 131.0,
+      "era_year": 2023,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.94,
+      "yt_views": 200000000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 214.0,
+      "loudness_lufs": -6.0
+    }
+  },
+  {
+    "id": "song_248",
+    "artist": "NMIXX",
+    "title": "Roller Coaster",
+    "youtube_url": "https://www.youtube.com/watch?v=fqBAzCH4-9g",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [23, 63, 67],
+      "energy": 0.8,
+      "valence": 0.7,
+      "tempo_bpm": 120.0,
+      "era_year": 2023,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.9,
+      "yt_views": 36890000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 210.0,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_249",
+    "artist": "aespa",
+    "title": "Better Things",
+    "youtube_url": "https://www.youtube.com/watch?v=gfk3QLU1x0E",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12],
+      "mood": [23, 63, 64],
+      "energy": 0.8,
+      "valence": 0.7,
+      "tempo_bpm": 115.0,
+      "era_year": 2023,
+      "language": 0,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.92,
+      "yt_views": 80380000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 203.0,
+      "loudness_lufs": -6.5
+    }
+  },
+  {
+    "id": "song_250",
+    "artist": "NMIXX",
+    "title": "별별별",
+    "youtube_url": "https://www.youtube.com/watch?v=_Q8Jskeps9w",
+    "genres": [2],
+    "tags": {
+      "subgenres": [12, 38],
+      "mood": [23, 63, 67],
+      "energy": 0.85,
+      "valence": 0.75,
+      "tempo_bpm": 130.0,
+      "era_year": 2024,
+      "language": 4,
+      "instrumentation": [2, 5, 15]
+    },
+    "popularity": {
+      "awareness_idx": 0.93,
+      "yt_views": 31900000,
+      "regionality": [6, 0, 4]
+    },
+    "meta": {
+      "duration_sec": 210.0,
+      "loudness_lufs": -6.0
     }
   }
 ]
