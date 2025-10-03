@@ -2448,7 +2448,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
         "description": "최신 K-POP과 글로벌 팝을 빠르게 탐색해보세요.",
         "tournament_size": 16,
         "survey_profile": {
-            "genre_scores": {"K-Pop": 5, "Pop": 4, "Electronic": 2},
+            "genre_scores": {"K-Indie Pop": 5, "Dance Pop": 4, "Electronic": 2},
             "preferred_era": 2020,
             "preferred_energy": 0.78,
             "preferred_popularity": 0.7,
@@ -2469,7 +2469,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
         "description": "포근한 인디와 어쿠스틱 사운드로 여유롭게 시작해요.",
         "tournament_size": 16,
         "survey_profile": {
-            "genre_scores": {"Indie": 5, "Rock": 2, "Jazz": 1},
+            "genre_scores": {"Indie Folk": 5, "Alternative Rock": 2, "Jazz": 1},
             "preferred_era": 2010,
             "preferred_energy": 0.4,
             "preferred_popularity": 0.35,
@@ -2490,7 +2490,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
         "description": "신스와 리듬이 살아있는 글로벌 댄스 플로어를 느껴보세요.",
         "tournament_size": 32,
         "survey_profile": {
-            "genre_scores": {"Electronic": 5, "Pop": 3, "Hip-Hop": 2},
+            "genre_scores": {"Electronic": 5, "Pop": 3, "Hip Hop": 2},
             "preferred_era": 2018,
             "preferred_energy": 0.88,
             "preferred_popularity": 0.65,
@@ -2500,7 +2500,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
             "preferred_moods": ["energetic", "empowering", "uplifting"],
             "mood_weight": 0.9,
             "preferred_instrumentations": ["synth", "samples", "drums"],
-            "excluded_genres": ["Classical", "Jazz", "Indie"],
+            "excluded_genres": ["Classical", "Jazz", "Indie Folk"],
             "excluded_moods": ["peaceful", "serene", "minimalist"],
             "excluded_instrumentations": ["strings", "piano", "guitar"],
             "regional_focus": "global",
@@ -2511,7 +2511,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
         "description": "90-00년대 한국 락과 밴드 사운드의 향수를 느껴보세요.",
         "tournament_size": 32,
         "survey_profile": {
-            "genre_scores": {"Rock": 5, "Classic Rock": 4, "Indie": 2},
+            "genre_scores": {"Rock": 5, "Classic Rock": 4, "Alternative Rock": 2},
             "preferred_era": 1995,
             "preferred_energy": 0.68,
             "preferred_popularity": 0.4,
@@ -2532,7 +2532,7 @@ BEGINNER_PRESETS: Dict[str, Dict[str, Any]] = {
         "description": "새벽 감성의 몽환적인 드림팝과 신스 사운드를 만나보세요.",
         "tournament_size": 16,
         "survey_profile": {
-            "genre_scores": {"Indie": 5, "Electronic": 2, "Pop": 1},
+            "genre_scores": {"Art Pop": 5, "Electronic": 2, "Pop": 1},
             "preferred_era": 2020,
             "preferred_energy": 0.15,
             "preferred_popularity": 0.3,
