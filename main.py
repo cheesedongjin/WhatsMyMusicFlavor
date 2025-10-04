@@ -845,6 +845,62 @@ class CandidateSelector:
         self.songs = songs
         self.profile = survey_profile
         self.seed_scores: Dict[str, float] = {}
+        self.estimated_ratings: Dict[str, float] = {}
+
+    @staticmethod
+    def _jaccard_similarity(a: Set[str], b: Set[str]) -> float:
+        if not a or not b:
+            return 0.0
+        union = a | b
+        if not union:
+            return 0.0
+        intersection = a & b
+        return len(intersection) / len(union)
+
+    def _diversity_penalty(self, song: Song, selected: List[Song]) -> float:
+        if not selected:
+            return 0.0
+
+        song_genres = {genre for genre in (song.genres or []) if isinstance(genre, str)}
+        song_moods = {mood for mood in (song.tags.get('mood') or []) if isinstance(mood, str)}
+        song_insts = {inst for inst in (song.tags.get('instrumentation') or []) if isinstance(inst, str)}
+        song_regions = {region for region in (song.popularity.get('regionality') or []) if isinstance(region, str)}
+
+        penalties: List[float] = []
+        for other in selected:
+            overlap = 0.0
+            if other.artist == song.artist:
+                overlap += 0.6
+
+            other_genres = {genre for genre in (other.genres or []) if isinstance(genre, str)}
+            other_moods = {mood for mood in (other.tags.get('mood') or []) if isinstance(mood, str)}
+            other_insts = {inst for inst in (other.tags.get('instrumentation') or []) if isinstance(inst, str)}
+            other_regions = {region for region in (other.popularity.get('regionality') or []) if isinstance(region, str)}
+
+            overlap += 0.4 * self._jaccard_similarity(song_genres, other_genres)
+            overlap += 0.3 * self._jaccard_similarity(song_moods, other_moods)
+            overlap += 0.2 * self._jaccard_similarity(song_insts, other_insts)
+            overlap += 0.1 * self._jaccard_similarity(song_regions, other_regions)
+
+            penalties.append(overlap)
+
+        return max(penalties) if penalties else 0.0
+
+    def _estimate_rating_from_scores(self, scored_songs: List[Tuple[Song, float]]) -> Dict[str, float]:
+        if not scored_songs:
+            return {}
+
+        scores = np.array([score for _, score in scored_songs], dtype=float)
+        mean = float(np.mean(scores))
+        std = float(np.std(scores))
+        if std < 1e-6:
+            std = 1.0
+
+        estimated: Dict[str, float] = {}
+        for song, score in scored_songs:
+            z = (score - mean) / std
+            estimated[song.id] = 1500 + z * 120
+        return estimated
 
     def compute_base_score(self, song: Song, language_whitelist: Set[str], language_strict: bool) -> float:
         """설문 기반 초기 점수 계산"""
@@ -991,23 +1047,38 @@ class CandidateSelector:
 
         scored_songs.sort(key=lambda x: x[1], reverse=True)
         self.seed_scores = {song.id: score for song, score in scored_songs}
+        self.estimated_ratings = self._estimate_rating_from_scores(scored_songs)
 
-        pool = scored_songs[:min(k*2, len(scored_songs))]
+        pool = scored_songs[:min(k * 3, len(scored_songs))]
+        remaining = pool[:]
         selected: List[Song] = []
 
-        for song, _ in pool:
-            if len(selected) >= k:
-                break
-            same_artist = sum(1 for s in selected if s.artist == song.artist)
-            if same_artist < 2:
-                selected.append(song)
+        while remaining and len(selected) < k:
+            best_index = None
+            best_adjusted = float('-inf')
 
-        while len(selected) < k and len(pool) > len(selected):
-            for song, _ in pool:
+            for idx, (song, base_score) in enumerate(remaining):
+                penalty = self._diversity_penalty(song, selected)
+                same_artist = sum(1 for s in selected if s.artist == song.artist)
+                artist_penalty = 0.35 * same_artist
+                adjusted = base_score - penalty - artist_penalty
+
+                if adjusted > best_adjusted:
+                    best_adjusted = adjusted
+                    best_index = idx
+
+            if best_index is None:
+                break
+
+            song, _ = remaining.pop(best_index)
+            selected.append(song)
+
+        if len(selected) < k:
+            for song, _ in scored_songs:
                 if song not in selected:
                     selected.append(song)
-                    if len(selected) >= k:
-                        break
+                if len(selected) >= k:
+                    break
 
         print(f"\n✓ {len(selected)}개 후보곡 선정 완료")
         return selected
@@ -1015,6 +1086,10 @@ class CandidateSelector:
     def get_seed_scores(self) -> Dict[str, float]:
         """시드 배치를 위해 계산된 점수를 반환"""
         return dict(self.seed_scores)
+
+    def get_estimated_ratings(self) -> Dict[str, float]:
+        """후보곡의 예상 레이팅을 반환"""
+        return dict(self.estimated_ratings)
 
 
 class BracketGenerator:
@@ -1054,23 +1129,35 @@ class BracketGenerator:
 # ============================================================================
 
 class TournamentEngine:
-    def __init__(self, initial_rating: float = 1500.0, k_factor: float = 32.0):
+    def __init__(self, initial_rating: float = 1500.0, k_factor: float = 32.0, prior_ratings: Optional[Dict[str, float]] = None):
         self.initial_rating = initial_rating
         self.k_factor = k_factor
         self.match_history = []
-        
-    def expected_score(self, rating_a: float, rating_b: float) -> float:
-        """Elo 기대 승률"""
-        return 1 / (1 + math.pow(10, (rating_b - rating_a) / 400))
-    
+        self.prior_ratings: Dict[str, float] = dict(prior_ratings or {})
+
+    def expected_score(self, rating_a: float, rating_b: float, matches_a: int = 0, matches_b: int = 0) -> float:
+        """Elo 기대 승률 (경험 기반 동적 스케일)"""
+        if rating_a <= 0:
+            rating_a = self.initial_rating
+        if rating_b <= 0:
+            rating_b = self.initial_rating
+
+        experience = max(matches_a + matches_b, 0)
+        scale = 400.0 - min(160.0, math.log1p(experience) * 45.0)
+        scale = max(260.0, scale)
+
+        exponent = (rating_b - rating_a) / scale
+        exponent = max(-6.0, min(6.0, exponent))
+        return 1 / (1 + math.pow(10, exponent))
+
     def update_ratings(self, song_a: Song, song_b: Song, result: str):
         """Elo 레이팅 업데이트"""
         if song_a.rating == 0:
-            song_a.rating = self.initial_rating
+            song_a.rating = self.prior_ratings.get(song_a.id, self.initial_rating)
         if song_b.rating == 0:
-            song_b.rating = self.initial_rating
-        
-        expected_a = self.expected_score(song_a.rating, song_b.rating)
+            song_b.rating = self.prior_ratings.get(song_b.id, self.initial_rating)
+
+        expected_a = self.expected_score(song_a.rating, song_b.rating, song_a.matches, song_b.matches)
         
         if result == 'A':
             actual_a = 1.0
@@ -1099,6 +1186,10 @@ class TournamentEngine:
         print(f"   [{match.song_a.youtube_url[:50]}...]")
         print(f"\nB. {match.song_b}")
         print(f"   [{match.song_b.youtube_url[:50]}...]")
+        rating_a = match.song_a.rating if match.song_a.rating else self.prior_ratings.get(match.song_a.id, self.initial_rating)
+        rating_b = match.song_b.rating if match.song_b.rating else self.prior_ratings.get(match.song_b.id, self.initial_rating)
+        expected_a = self.expected_score(rating_a, rating_b, match.song_a.matches, match.song_b.matches)
+        print(f"\n예상 승률 → A: {expected_a * 100:.1f}% · B: {(1 - expected_a) * 100:.1f}%")
         print("-"*60)
         
         while True:
@@ -2603,6 +2694,7 @@ class MusicTournamentApp:
         self.candidates = []
         self.champion = None
         self.seed_scores: Dict[str, float] = {}
+        self.estimated_ratings: Dict[str, float] = {}
         self.tournament_size = DEFAULT_TOURNAMENT_SIZE
 
     def run(self):
@@ -2643,6 +2735,7 @@ class MusicTournamentApp:
         selector = CandidateSelector(self.songs, self.survey_profile)
         self.candidates = selector.select_candidates(k=effective_size)
         self.seed_scores = selector.get_seed_scores()
+        self.estimated_ratings = selector.get_estimated_ratings()
 
         if len(self.candidates) < 2:
             print("✗ 토너먼트를 진행하기에 곡이 부족합니다. 프로그램을 종료합니다.")
@@ -2652,6 +2745,7 @@ class MusicTournamentApp:
             removed = self.candidates.pop()
             if removed:
                 self.seed_scores.pop(removed.id, None)
+                self.estimated_ratings.pop(removed.id, None)
                 print(
                     f"⚠️ 홀수 후보 조정을 위해 {removed.artist} - {removed.get_display_title()} 곡을 제외합니다."
                 )
@@ -2669,7 +2763,7 @@ class MusicTournamentApp:
         print("\n5️⃣ 토너먼트 진행")
         input("\n준비되셨으면 Enter를 눌러주세요...")
         
-        engine = TournamentEngine()
+        engine = TournamentEngine(prior_ratings=self.estimated_ratings)
         self.champion = engine.run_tournament(bracket)
         
         # 6. 결과 분석
@@ -3509,6 +3603,7 @@ QHeaderView::section {
         self.report: Dict[str, Any] = {}
         self.recommendations: Dict[str, List[Dict[str, Any]]] = {"core": [], "fresh": []}
         self.seed_scores: Dict[str, float] = {}
+        self.estimated_ratings: Dict[str, float] = {}
         self.history_show_all = False
         self.tournament_size_combo = None
         self.selected_tournament_size = DEFAULT_TOURNAMENT_SIZE
@@ -4125,6 +4220,7 @@ QHeaderView::section {
         selector = CandidateSelector(self.songs, self.survey_profile)
         self.candidates = selector.select_candidates(k=effective_size)
         self.seed_scores = selector.get_seed_scores()
+        self.estimated_ratings = selector.get_estimated_ratings()
 
         if len(self.candidates) < 2:
             QMessageBox.warning(self, "후보 부족", "토너먼트를 진행하기에 곡이 부족합니다. 데이터를 확인해주세요.")
@@ -4135,10 +4231,11 @@ QHeaderView::section {
             removed = self.candidates.pop()
             if removed:
                 self.seed_scores.pop(removed.id, None)
+                self.estimated_ratings.pop(removed.id, None)
 
         self.selected_tournament_size = len(self.candidates)
 
-        self.engine = TournamentEngine()
+        self.engine = TournamentEngine(prior_ratings=self.estimated_ratings)
         bracket_gen = BracketGenerator()
         self.bracket = bracket_gen.create_bracket(self.candidates, self.seed_scores)
         if not self.bracket:
@@ -4447,11 +4544,22 @@ QHeaderView::section {
             "button": select_button,
         }
 
+    def get_display_rating(self, song: Song) -> float:
+        if song.rating:
+            return song.rating
+        if hasattr(self, "estimated_ratings"):
+            estimate = self.estimated_ratings.get(song.id)
+            if isinstance(estimate, (int, float)):
+                return float(estimate)
+        return 1500.0
 
-    def update_song_card(self, card: Dict[str, Any], song: Song) -> None:
+    def update_song_card(self, card: Dict[str, Any], song: Song, expected_win: Optional[float] = None) -> None:
         card["title"].setText(song.get_display_title())
-        rating = song.rating if song.rating else 1500
-        card["meta"].setText(f"{song.artist} · 예상 레이팅 {rating:.0f}")
+        rating = self.get_display_rating(song)
+        meta_parts = [f"{song.artist}", f"예상 레이팅 {rating:.0f}"]
+        if expected_win is not None:
+            meta_parts.append(f"승률 예상 {expected_win * 100:.0f}%")
+        card["meta"].setText(" · ".join(meta_parts))
         summary_info = self.format_song_summary(song)
         lines: List[str] = []
         summary_text = summary_info.get("summary")
@@ -4522,8 +4630,14 @@ QHeaderView::section {
         self.helper_label.setText(
             f"{match.song_a.get_display_title()} vs {match.song_b.get_display_title()}\n키보드 A/B/T/S로도 빠르게 선택할 수 있어요."
         )
-        self.update_song_card(self.card_a, match.song_a)
-        self.update_song_card(self.card_b, match.song_b)
+        expected_a = expected_b = None
+        if self.engine:
+            rating_a = self.get_display_rating(match.song_a)
+            rating_b = self.get_display_rating(match.song_b)
+            expected_a = self.engine.expected_score(rating_a, rating_b, match.song_a.matches, match.song_b.matches)
+            expected_b = 1 - expected_a
+        self.update_song_card(self.card_a, match.song_a, expected_a)
+        self.update_song_card(self.card_b, match.song_b, expected_b)
         progress_ratio = len(self.engine.match_history) / self.total_matches if self.total_matches else 0
         self.progress_bar.setValue(int(progress_ratio * 100))
         if hasattr(self, "progress_summary_label"):
