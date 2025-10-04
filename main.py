@@ -1593,8 +1593,8 @@ class PreferenceSummarizer:
             if clause:
                 body_clauses.append(clause)
         exclusion_clause = self._describe_exclusions(profile_info)
-        if exclusion_clause:
-            body_clauses.append(exclusion_clause)
+        # if exclusion_clause:
+        #     body_clauses.append(exclusion_clause)
 
         tail = self._tail_clause(features)
 
